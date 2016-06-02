@@ -10,11 +10,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = combustion
 TEMPLATE = app
-
+DESTDIR += ../bin
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    parserpuzzlefile.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    parserpuzzlefile.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    INFO/given_pussle.txt
