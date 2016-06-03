@@ -65,7 +65,7 @@ void ParserPuzzleFile::parse(const QString& fileName) {
         // Список пожеланий водителей на расписание
         QStringList wishesOnSchedule = ParserPuzzleFile::getSublist(dataRow, 3);
         if (days.size() != wishesOnSchedule.size()) {
-            qCritical() << "Количество дней и количество дней в пожеланиях водителей в расписании количествено отличаются.";
+            qCritical() << "Общее количество дней и количество дней в пожеланиях водителей в расписании количествено отличаются.";
             return;
         }
 
@@ -75,6 +75,30 @@ void ParserPuzzleFile::parse(const QString& fileName) {
         // Выбор линии маршрута водителя
         QString selectLines = dataRow[2].remove('0');
         qDebug() << dataRow[0] << busNum << selectLines << wishesOnSchedule << wishesOnSchedule.size();
+    }
+
+    if (indexEndTable == -1) {
+        qWarning() << "Индекс конца таблицы неизвестен. Что-то пошло не так.";
+        return;
+    }
+
+    // Получаем строку с SCORE и вытаскиваем его значение
+    QString score = lines.at(indexEndTable + 1).split(":")[1];
+    qDebug() << score;
+
+    QMap<QString, QString> valueDescriptionMap;
+    // Перебор обозначений в таблице
+    for (int i = indexEndTable + 3; i < lines.size(); i++) {
+        QString line = lines.at(i);
+        QStringList temps = line.split(" - ");
+
+        valueDescriptionMap[temps[0]] = temps[1];
+    }
+
+    QMapIterator<QString, QString> it(valueDescriptionMap);
+    while (it.hasNext()) {
+        it.next();
+        qDebug() << QString("%1: %2").arg(it.key()).arg(it.value());
     }
 
 //    qDebug();
