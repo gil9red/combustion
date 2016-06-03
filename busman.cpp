@@ -5,8 +5,7 @@
 #include <QDebug>
 
 
-Busman::Busman()
-{
+Busman::Busman() {
 
 }
 

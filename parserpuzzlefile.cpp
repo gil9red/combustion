@@ -6,8 +6,7 @@
 #include <QDebug>
 
 
-ParserPuzzleFile::ParserPuzzleFile()
-{
+ParserPuzzleFile::ParserPuzzleFile() {
 
 }
 
@@ -16,7 +15,7 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName) throw(std::excep
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        throw std::logic_error(QString("Не найден файл: %s.").arg(fileName).toStdString());
+        throw std::logic_error(QString("Не найден файл: %1.").arg(fileName).toStdString());
     }
 
     QStringList lines;

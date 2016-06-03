@@ -1,27 +1,25 @@
 #include "mainwindow.h"
 #include <QApplication>
-
-#include <parserpuzzlefile.h>
+#include <QMessageBox>
 #include <QDebug>
+
 
 int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+
     try {
-        QList<Busman*> busmanList = ParserPuzzleFile::parse("../combustion/INFO/given_pussle.txt");
-        qDebug() << busmanList.size();
-        foreach (Busman *busman, busmanList) {
-            qDebug() << busman->busNum << busman->selectLines;
-        }
+        MainWindow w;
+        w.show();
+        w.load("../combustion/INFO/given_pussle.txt");
 
-    } catch(std::exception& e) {
-        qCritical() << e.what();
+        return a.exec();
+
+    } catch (std::exception& e) {
+        QString text = QString("ERROR: %1.").arg(e.what());
+        QMessageBox::critical(NULL, QString(), text);
+        qCritical() << text;
+        a.quit();
+        return 1;
     }
-
-    return 0;
-
-//    QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
-
-//    return a.exec();
 }

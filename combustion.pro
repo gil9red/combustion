@@ -15,11 +15,13 @@ DESTDIR += ../bin
 SOURCES += main.cpp\
         mainwindow.cpp \
     parserpuzzlefile.cpp \
-    busman.cpp
+    busman.cpp \
+    busmantablemodel.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
-    busman.h
+    busman.h \
+    busmantablemodel.h
 
 FORMS    += mainwindow.ui
 
