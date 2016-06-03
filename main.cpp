@@ -2,10 +2,20 @@
 #include <QApplication>
 
 #include <parserpuzzlefile.h>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
-    ParserPuzzleFile::parse("../combustion/INFO/given_pussle.txt");
+    try {
+        QList<Busman*> busmanList = ParserPuzzleFile::parse("../combustion/INFO/given_pussle.txt");
+        qDebug() << busmanList.size();
+        foreach (Busman *busman, busmanList) {
+            qDebug() << busman->busNum << busman->selectLines;
+        }
+
+    } catch(std::exception& e) {
+        qCritical() << e.what();
+    }
 
     return 0;
 

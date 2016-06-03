@@ -14,10 +14,12 @@ DESTDIR += ../bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    parserpuzzlefile.cpp
+    parserpuzzlefile.cpp \
+    busman.cpp
 
 HEADERS  += mainwindow.h \
-    parserpuzzlefile.h
+    parserpuzzlefile.h \
+    busman.h
 
 FORMS    += mainwindow.ui
 
