@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    ParserPuzzleFile::parse("../INFO/given_pussle.txt");
+    ParserPuzzleFile::parse("../combustion/INFO/given_pussle.txt");
 
     return 0;
 

@@ -35,6 +35,8 @@ class ParserPuzzleFile
 {
     public:
         ParserPuzzleFile();
+        static QStringList getSublist(QStringList list, int begin, int end);
+        static QStringList getSublist(QStringList list, int begin);
         static void parse(const QString& fileName);
 };
 
