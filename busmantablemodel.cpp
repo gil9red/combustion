@@ -1,10 +1,26 @@
 #include "busmantablemodel.h"
 #include <parserpuzzlefile.h>
 #include <QDebug>
-
+#include <QColor>
+#include <QLinearGradient>
 
 BusmanTableModel::BusmanTableModel() {
+//    view = 0;
 
+//    dayKindBackgroundColorMap["RR"] = QBrush(Qt::gray);
+
+//////    QGradient gradient(0.0, 0.0, 0.0, 1.0);
+//////    gradient.setColorAt(0, Qt::black);
+//////    gradient.setColorAt(1, Qt::white);
+////    QLinearGradient gradient(QPointF(0, 0), QPointF(1, 1));
+////    gradient.setSpread(QGradient::RepeatSpread);
+////    gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
+////    gradient.setColorAt(0, Qt::black);
+////    gradient.setColorAt(1, Qt::white);
+////    dayKindColorMap["XX"] = QBrush(gradient);
+//    dayKindBackgroundColorMap["XX"] = QBrush(Qt::black);
+
+////    dayKindTextColorMap["XX"] = QBrush(Qt::white);
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
@@ -19,7 +35,7 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
 //        qDebug() << busman->busNum << busman->selectLines;
 //    }
 
-    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName);
+    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName, valueDescriptionMap);
     qDebug() << newBusmanList.size();
     foreach (Busman *busman, newBusmanList) {
 //        insertItem(busman);
@@ -64,26 +80,64 @@ int BusmanTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
-    if (role == Qt::DisplayRole) {
-        int row = index.row();
-        Busman* busman = busmanList.at(row);
+//    qDebug() << view->visualRect(index).size();
 
-        int column = index.column();
-        switch (column) {
-            case COLUMN::NUMBER:
-                return busman->busNum;
+    const int row = index.row();
+    const int column = index.column();
 
-            case COLUMN::LINES:
-                return busman->selectLines;
+    Busman* busman = busmanList.at(row);
 
-            default:
-                // Минус 2: Номер автобуса + Выбор линии маршрута
-                return busman->wishesOnSchedule.at(column - 2);
+    switch (role) {
+        case Qt::DisplayRole: {
+            switch (column) {
+                case COLUMN::NUMBER:
+                    return busman->busNum;
+
+                case COLUMN::LINES:
+                    return busman->selectLines;
+
+                default:
+                    // Минус 2: Номер автобуса + Выбор линии маршрута
+                    return busman->wishesOnSchedule.at(column - 2);
+            }
+            break;
         }
 
-//        QString unswer = QString("row = ") + QString::number(index.row()) + "  col = " + QString::number(index.column());
-//        // строкой выше мы формируем ответ. QString::number преобразует число в текст
-//        return QVariant(unswer);
+//        case Qt::BackgroundRole: {
+//            switch (column) {
+//                case COLUMN::NUMBER:
+//                case COLUMN::LINES:
+//                    break;
+
+//                default:
+//                    // Минус 2: Номер автобуса + Выбор линии маршрута
+//                    QString day = busman->wishesOnSchedule.at(column - 2);
+//                    if (dayKindBackgroundColorMap.contains(day)) {
+//                        return dayKindBackgroundColorMap[day];
+//                    }
+//                    break;
+//            }
+//            break;
+//        }
+
+        // TODO: хорошо бы в делегате реализовать отрисовку текста
+        case Qt::ForegroundRole: {
+            switch (column) {
+                case COLUMN::NUMBER:
+                case COLUMN::LINES:
+                    break;
+
+                default:
+                    // Минус 2: Номер автобуса + Выбор линии маршрута
+                    QString day = busman->wishesOnSchedule.at(column - 2);
+                    if (day == "XX") {
+                        return QBrush(Qt::white);
+                    } else {
+                        return QBrush(Qt::black);
+                    }
+            }
+            break;
+        }
     }
     return QVariant();
 }

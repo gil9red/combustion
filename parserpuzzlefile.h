@@ -3,6 +3,8 @@
 
 
 #include <QString>
+#include <QMap>
+
 #include "busman.h"
 
 // Класс для разбора файлов паззла
@@ -36,7 +38,7 @@ class ParserPuzzleFile
 {
     public:
         ParserPuzzleFile();
-        static QList<Busman*> parse(const QString& fileName) throw(std::exception);
+        static QList<Busman*> parse(const QString& fileName, QMap<QString, QString>& valueDescriptionMap) throw(std::exception);
 };
 
 #endif // PARSERPUZZLEFILE_H

@@ -10,7 +10,7 @@ ParserPuzzleFile::ParserPuzzleFile() {
 
 }
 
-QList<Busman*> ParserPuzzleFile::parse(const QString& fileName) throw(std::exception) {
+QList<Busman*> ParserPuzzleFile::parse(const QString& fileName, QMap<QString, QString>& valueDescriptionMap) throw(std::exception) {
     QList<Busman*> busmanList;
 
     QFile file(fileName);
@@ -48,28 +48,29 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName) throw(std::excep
         throw std::logic_error(QString("Индекс конца таблицы неизвестен. Что-то пошло не так.").toStdString());
     }
 
-    // Получаем строку с SCORE и вытаскиваем его значение
-    QString score = lines.at(indexEndTable + 1).split(":")[1];
-    qDebug() << score;
+//    // Получаем строку с SCORE и вытаскиваем его значение
+//    QString score = lines.at(indexEndTable + 1).split(":")[1];
+//    qDebug() << score;
 
-    QMap<QString, QString> valueDescriptionMap;
-    // Перебор обозначений в таблице
-    for (int i = indexEndTable + 3; i < lines.size(); i++) {
-        QString line = lines.at(i);
-        QStringList temps = line.split(" - ");
+////    QMap<QString, QString> valueDescriptionMap;
+//    valueDescriptionMap.clear();
+//    // Перебор обозначений в таблице
+//    for (int i = indexEndTable + 3; i < lines.size(); i++) {
+//        QString line = lines.at(i);
+//        QStringList temps = line.split(" - ");
 
-        valueDescriptionMap[temps[0]] = temps[1];
-    }
-
-    QMapIterator<QString, QString> it(valueDescriptionMap);
-    while (it.hasNext()) {
-        it.next();
-        qDebug() << QString("%1: %2").arg(it.key()).arg(it.value());
-    }
-
-//    qDebug();
-//    foreach (QString line, lines) {
-//        qDebug() << line;
+//        valueDescriptionMap[temps[0]] = temps[1];
 //    }
+
+//    QMapIterator<QString, QString> it(valueDescriptionMap);
+//    while (it.hasNext()) {
+//        it.next();
+//        qDebug() << QString("%1: %2").arg(it.key()).arg(it.value());
+//    }
+
+////    qDebug();
+////    foreach (QString line, lines) {
+////        qDebug() << line;
+////    }
     return busmanList;
 }

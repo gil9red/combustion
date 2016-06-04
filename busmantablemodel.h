@@ -4,6 +4,11 @@
 #include <QAbstractTableModel>
 #include "busman.h"
 
+#include <QMap>
+#include <QBrush>
+#include <QTableView>
+
+
 class BusmanTableModel : public QAbstractTableModel
 {
     public:
@@ -31,6 +36,12 @@ class BusmanTableModel : public QAbstractTableModel
 
     private:
         QList<Busman*> busmanList;
+        QMap<QString, QBrush> dayKindBackgroundColorMap;
+//        QMap<QString, QBrush> dayKindTextColorMap;
+
+    public:
+        QMap<QString, QString> valueDescriptionMap;
+//        QTableView *view;
 
     private:
         int rowCount(const QModelIndex &parent=QModelIndex()) const;

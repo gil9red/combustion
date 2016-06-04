@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     parserpuzzlefile.cpp \
     busman.cpp \
-    busmantablemodel.cpp
+    busmantablemodel.cpp \
+    celldelegate.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
     busman.h \
-    busmantablemodel.h
+    busmantablemodel.h \
+    celldelegate.h
 
 FORMS    += mainwindow.ui
 
