@@ -17,6 +17,11 @@ class BusmanTableModel : public QAbstractTableModel
             LINES,
         };
 
+        enum CustomRole {
+            BusmanRole = Qt::UserRole,
+            WishDayRole = Qt::UserRole + 1,
+        };
+
     public:
         BusmanTableModel();
         void load(const QString& fileName) throw (std::exception);
@@ -34,6 +39,11 @@ class BusmanTableModel : public QAbstractTableModel
 //            return true;
 //        }
 
+        int rowCount(const QModelIndex &parent=QModelIndex()) const;
+        int columnCount(const QModelIndex &parent=QModelIndex()) const;
+
+        void sayViewUpdate();
+
     private:
         QList<Busman*> busmanList;
         QMap<QString, QBrush> dayKindBackgroundColorMap;
@@ -43,9 +53,12 @@ class BusmanTableModel : public QAbstractTableModel
         QMap<QString, QString> valueDescriptionMap;
 //        QTableView *view;
 
+        // TODO: сделать private обернуть в функции set/get + при изменении значения
+        // уведомлять об этом представление
+        // Показывать текст ячеек с расписанием: XX, 00, DD и т.п.
+        bool isVisibleCellText;
+
     private:
-        int rowCount(const QModelIndex &parent=QModelIndex()) const;
-        int columnCount(const QModelIndex &parent=QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
 
 //        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole )

@@ -19,6 +19,16 @@ class Busman
         QString busNum;
         QString selectLines;
         QStringList wishesOnSchedule;
+
+        // Список рабочих дней
+        QStringList workingDays;
 };
+
+
+// Регистрация типа для использования в QVariant
+#include <QVariant>
+
+Q_DECLARE_METATYPE(Busman*)
+
 
 #endif // BUSMAN_H

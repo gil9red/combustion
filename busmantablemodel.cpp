@@ -4,7 +4,10 @@
 #include <QColor>
 #include <QLinearGradient>
 
+
 BusmanTableModel::BusmanTableModel() {
+    isVisibleCellText = true;
+
 //    view = 0;
 
 //    dayKindBackgroundColorMap["RR"] = QBrush(Qt::gray);
@@ -50,8 +53,7 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
     beginInsertColumns(QModelIndex(), 0, columnCount() - 1);
     endInsertColumns();
 
-    // Говорим представлению обновиться
-    emit dataChanged(createIndex(0, 0), createIndex(busmanList.count() - 1, columnCount() - 1));
+    sayViewUpdate();
 
 //    try {
 //        busmanList = ParserPuzzleFile::parse(fileName);
@@ -63,6 +65,11 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
 //    } catch(std::exception& e) {
 //        qCritical() << e.what();
 //    }
+}
+
+void BusmanTableModel::sayViewUpdate() {
+    // Говорим представлению обновиться
+    emit dataChanged(createIndex(0, 0), createIndex(busmanList.count() - 1, columnCount() - 1));
 }
 
 int BusmanTableModel::rowCount(const QModelIndex &parent) const {
@@ -87,23 +94,99 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
 
     Busman* busman = busmanList.at(row);
 
-    switch (role) {
-        case Qt::DisplayRole: {
-            switch (column) {
-                case COLUMN::NUMBER:
-                    return busman->busNum;
+    if (role == Qt::DisplayRole) {
+        if (column == COLUMN::NUMBER) {
+            return busman->busNum;
 
-                case COLUMN::LINES:
-                    return busman->selectLines;
+        } else if (column == COLUMN::LINES) {
+            return busman->selectLines;
 
-                default:
-                    // Минус 2: Номер автобуса + Выбор линии маршрута
-                    return busman->wishesOnSchedule.at(column - 2);
+        } else {
+            if (isVisibleCellText) {
+                // TODO: дубликат
+                // Минус 2: Номер автобуса + Выбор линии маршрута
+                return busman->wishesOnSchedule.at(column - 2);
             }
-            break;
         }
 
-//        case Qt::BackgroundRole: {
+    } else if (role == WishDayRole) {
+        switch (column) {
+            case COLUMN::NUMBER:
+            case COLUMN::LINES:
+                break;
+
+            default: {
+                // TODO: дубликат
+                // Минус 2: Номер автобуса + Выбор линии маршрута
+                return busman->wishesOnSchedule.at(column - 2);
+            }
+        }
+
+        // TODO: хорошо бы в делегате реализовать отрисовку текста
+    } else if (role == Qt::ForegroundRole) {
+        switch (column) {
+            case COLUMN::NUMBER:
+            case COLUMN::LINES:
+                break;
+
+            default: {
+                // Минус 2: Номер автобуса + Выбор линии маршрута
+                QString day = busman->wishesOnSchedule.at(column - 2);
+                if (day == "XX") {
+                    return QBrush(Qt::white);
+                } else {
+                    return QBrush(Qt::black);
+                }
+            }
+        }
+
+    // Текст в ячейках располагается по центру
+    } else if (role == Qt::TextAlignmentRole) {
+        return Qt::AlignCenter;
+
+    } else if (role == BusmanRole) {
+        QVariant v;
+        v.setValue(busman);
+        return v;
+    }
+
+//    switch (role) {
+//        case Qt::DisplayRole:
+//        case WishDayRole: {
+//            switch (column) {
+//                // TODO: NUMBER и LINES не относятся к расписанию (т.е. к WishDayRole)
+//                case COLUMN::NUMBER:
+//                    return busman->busNum;
+
+//                case COLUMN::LINES:
+//                    return busman->selectLines;
+
+//                default:
+//                    // Минус 2: Номер автобуса + Выбор линии маршрута
+//                    return busman->wishesOnSchedule.at(column - 2);
+//            }
+//            break;
+//        }
+
+////        case Qt::BackgroundRole: {
+////            switch (column) {
+////                case COLUMN::NUMBER:
+////                case COLUMN::LINES:
+////                    break;
+
+////                default:
+////                    // Минус 2: Номер автобуса + Выбор линии маршрута
+////                    QString day = busman->wishesOnSchedule.at(column - 2);
+////                    if (dayKindBackgroundColorMap.contains(day)) {
+////                        return dayKindBackgroundColorMap[day];
+////                    }
+////                    break;
+////            }
+////            break;
+////        }
+
+//        // TODO: хорошо бы в делегате реализовать отрисовку текста
+//        case Qt::ForegroundRole: {
 //            switch (column) {
 //                case COLUMN::NUMBER:
 //                case COLUMN::LINES:
@@ -112,32 +195,20 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
 //                default:
 //                    // Минус 2: Номер автобуса + Выбор линии маршрута
 //                    QString day = busman->wishesOnSchedule.at(column - 2);
-//                    if (dayKindBackgroundColorMap.contains(day)) {
-//                        return dayKindBackgroundColorMap[day];
+//                    if (day == "XX") {
+//                        return QBrush(Qt::white);
+//                    } else {
+//                        return QBrush(Qt::black);
 //                    }
-//                    break;
 //            }
 //            break;
 //        }
 
-        // TODO: хорошо бы в делегате реализовать отрисовку текста
-        case Qt::ForegroundRole: {
-            switch (column) {
-                case COLUMN::NUMBER:
-                case COLUMN::LINES:
-                    break;
+//        case BusmanRole:
+//            QVariant v;
+//            v.setValue(busman);
+//            return v;
+//    }
 
-                default:
-                    // Минус 2: Номер автобуса + Выбор линии маршрута
-                    QString day = busman->wishesOnSchedule.at(column - 2);
-                    if (day == "XX") {
-                        return QBrush(Qt::white);
-                    } else {
-                        return QBrush(Qt::black);
-                    }
-            }
-            break;
-        }
-    }
     return QVariant();
 }

@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->setModel(&model);
     ui->tableView->setItemDelegate(new CellDelegate());
 
+    connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
+
 //    model.view = ui->tableView;
 }
 
@@ -25,4 +27,11 @@ void MainWindow::load(const QString& fileName) {
 //        ui->tableView->horizontalHeader()->resizeSection(i, size);
 //    }
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+}
+
+void MainWindow::setVisibleCellText(bool visible) {
+    model.isVisibleCellText = visible;
+
+    // Говорим представлению обновиться
+    model.sayViewUpdate();
 }

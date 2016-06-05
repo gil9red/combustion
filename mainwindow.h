@@ -16,7 +16,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
     void load(const QString& fileName);
+
+    void setVisibleCellText(bool visible);
 
 private:
     Ui::MainWindow *ui;

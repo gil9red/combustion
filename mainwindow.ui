@@ -53,6 +53,8 @@
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="actionSaveAs"/>
+   <addaction name="separator"/>
+   <addaction name="actionShowCellText"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
@@ -77,6 +79,20 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionShowCellText">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Показать текст ячеек</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
  </widget>

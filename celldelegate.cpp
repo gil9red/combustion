@@ -3,6 +3,9 @@
 #include <QPainter>
 #include <QDebug>
 
+#include "busman.h"
+#include "busmantablemodel.h"
+
 
 CellDelegate::CellDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -31,9 +34,16 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QColor textColor = Qt::black;
     QRect rect = viewOption.rect;
 
-    QString textCell = index.model()->data(index, Qt::DisplayRole).toString();
+//    QString textCell = index.model()->data(index, Qt::DisplayRole).toString();
+    Busman* busman = index.model()->data(index, BusmanTableModel::BusmanRole).value<Busman*>();
+    QString textCell = index.model()->data(index, BusmanTableModel::WishDayRole).toString();
+//    if (busman == 0) {
+//        return;
+//    }
 
-    qDebug() << "Value:" << textCell << rect.size().width();
+//    QString textCell = busman->wishesOnSchedule.at(index.)
+
+    qDebug() << "Value:" << textCell << rect.size().width() << busman;
     if (textCell == "RR") {
         brush = QBrush(Qt::lightGray);
 
