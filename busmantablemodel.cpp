@@ -27,6 +27,16 @@ BusmanTableModel::BusmanTableModel() {
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
+    if (rowCount() > 0 || columnCount() > 0) {
+        // TODO: обернуть в метод, посмотреть аналоги в Q*View
+        // Говорим моделе сбросить данные
+        beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+        endRemoveRows();
+
+        beginRemoveColumns(QModelIndex(), 0, columnCount() - 1);
+        endRemoveColumns();
+    }
+
     foreach (Busman* busman, busmanList) {
         delete busman;
     }

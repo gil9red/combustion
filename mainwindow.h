@@ -19,6 +19,8 @@ public:
 public slots:
     void load(const QString& fileName);
 
+    void open();
+
     void setVisibleCellText(bool visible);
 
 private:
