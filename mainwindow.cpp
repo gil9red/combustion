@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "celldelegate.h"
 #include <QFileDialog>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
 
     connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
+    connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
 //    model.view = ui->tableView;
 }
 
@@ -37,6 +39,14 @@ void MainWindow::open() {
         return;
 
     load(fileName);
+}
+
+void MainWindow::saveAs() {
+    const QString& fileName = QFileDialog::getSaveFileName(this);
+    if (fileName.isEmpty())
+        return;
+
+    model.saveAs(fileName);
 }
 
 void MainWindow::setVisibleCellText(bool visible) {

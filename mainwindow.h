@@ -20,6 +20,7 @@ public slots:
     void load(const QString& fileName);
 
     void open();
+    void saveAs();
 
     void setVisibleCellText(bool visible);
 

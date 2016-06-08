@@ -26,7 +26,7 @@ class BusmanTableModel : public QAbstractTableModel
         BusmanTableModel();
 
         void load(const QString& fileName) throw (std::exception);
-//        void saveAs(const QString& fileName) throw (std::exception);
+        void saveAs(const QString& fileName) throw (std::exception);
 
         void clear();
 

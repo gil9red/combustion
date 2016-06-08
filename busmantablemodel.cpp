@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QColor>
 #include <QLinearGradient>
+#include <QFile>
 
 
 BusmanTableModel::BusmanTableModel() {
@@ -36,11 +37,11 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
 //    }
 
     QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName, valueDescriptionMap);
-    qDebug() << newBusmanList.size();
+//    qDebug() << newBusmanList.size();
     foreach (Busman *busman, newBusmanList) {
 //        insertItem(busman);
         busmanList.append(busman);
-        qDebug() << busman->busNum << busman->selectLines;
+//        qDebug() << busman->busNum << busman->selectLines;
     }
 
     // Говорим моделе о новых строках и столбцах
@@ -62,6 +63,39 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
 //    } catch(std::exception& e) {
 //        qCritical() << e.what();
 //    }
+}
+
+void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        throw std::logic_error(QString("Не найден файл: %1.").arg(fileName).toStdString());
+
+    QTextStream out(&file);
+    out << "GIVEN PUZZLE" << "\n";
+    out << "---------------------------------------------------+" << "\n";
+
+    out << "_________|";
+    // TODO: магическое число нужно убрать
+    for (int i = 0; i < columnCount() - 2; i++) {
+        out << QString::number(i + 1).rightJustified(2, '0') << "|";
+    }
+    out << "\n";
+
+    // 01|A|100||RR|NN|XX|XX|00|00|RR|00|00|XX|XX|NN|00|00|
+    for (int i = 0; i < busmanList.size(); i++) {
+         Busman* busman = busmanList.at(i);
+         out << QString::number(i + 1).rightJustified(2, '0') << "|"
+             << busman->busNum << "|"
+             // TODO: формат может поменять с строки на другой тип
+             << busman->selectLines.rightJustified(3, '0') << "||";
+
+         foreach (QString wishDay, busman->wishesOnSchedule) {
+             out << wishDay << "|";
+         }
+         out << "\n";
+    }
+
+    out << "---------------------------------------------------+" << "\n";
 }
 
 void BusmanTableModel::clear() {
