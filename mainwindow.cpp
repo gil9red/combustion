@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
     connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
-//    model.view = ui->tableView;
 }
 
 MainWindow::~MainWindow() {

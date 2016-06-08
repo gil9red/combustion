@@ -69,6 +69,26 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     painter->fillRect(rect, brush);
 
+//    if (busman) {
+//        // TODO: Номер автобуса + Выбор линии маршрута + количесто дней в расписании
+//        int dayNumber = index.column() - 2;
+//        qDebug() << "dayNumber: " << dayNumber;
+
+//        // Если день у водителя выбран
+//        if (busman->workingDays.contains(dayNumber)) {
+//            Busman::DayKind dayKind = busman->workingDays[dayNumber];
+//            switch (dayKind) {
+//                case Busman::DayKind::LINE_1_DAY:
+//                case Busman::DayKind::LINE_1_NIGHT:
+//                case Busman::DayKind::LINE_2_DAY:
+//                case Busman::DayKind::LINE_2_NIGHT:
+//                case Busman::DayKind::LINE_3_DAY:
+//                case Busman::DayKind::LINE_3_NIGHT:
+//                    break;
+//            }
+//        }
+//    }
+
 //    if (value != "00") {
 //        painter->setPen(QPen(textColor));
 //        QRect rect = viewOption.rect;

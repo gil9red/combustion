@@ -1,13 +1,6 @@
 #include "busman.h"
-
 #include <stdexcept>
-
 #include <QDebug>
-
-
-Busman::Busman() {
-
-}
 
 
 QStringList getSublist(QStringList list, int begin, int end) {
@@ -28,6 +21,10 @@ QStringList getSublist(QStringList list, int begin) {
     return getSublist(list, begin, list.size() - 1);
 }
 
+
+//Busman::Busman() {
+
+//}
 
 Busman* Busman::fromString(const QString& str, const QStringList& days) {
     QStringList dataRow = str.split('|');

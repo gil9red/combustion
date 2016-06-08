@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="moon">icons/png/moon.png</file>
+        <file alias="sun">icons/png/sun.png</file>
+    </qresource>
+</RCC>

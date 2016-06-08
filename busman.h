@@ -4,13 +4,14 @@
 
 #include <QString>
 #include <QStringList>
+#include <QMap>
 
 
 // Класс, описывающий водителя автобуса
 class Busman
 {
     public:
-        Busman();
+//        Busman();
 
         // Функция парсит указанную строку и пытается создать из нее объект Busman
         static Busman* fromString(const QString& str, const QStringList & days);
@@ -21,7 +22,17 @@ class Busman
         QStringList wishesOnSchedule;
 
         // Список рабочих дней
-        QStringList workingDays;
+        // Варианты значения для рабочего дня:
+        // TODO: название лучше более смысловое
+        enum DayKind {
+            LINE_1_DAY,
+            LINE_1_NIGHT,
+            LINE_2_DAY,
+            LINE_2_NIGHT,
+            LINE_3_DAY,
+            LINE_3_NIGHT,
+        };
+        QMap<int, DayKind> workingDays;
 };
 
 

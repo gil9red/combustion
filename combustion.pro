@@ -29,3 +29,6 @@ FORMS    += mainwindow.ui
 
 DISTFILES += \
     INFO/given_pussle.txt
+
+RESOURCES += \
+    resource.qrc
