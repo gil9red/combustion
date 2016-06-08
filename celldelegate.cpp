@@ -43,7 +43,7 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
 //    QString textCell = busman->wishesOnSchedule.at(index.)
 
-    qDebug() << "Value:" << textCell << rect.size().width() << busman;
+//    qDebug() << "Value:" << textCell << rect.size().width() << busman;
     if (textCell == "RR") {
         brush = QBrush(Qt::lightGray);
 
