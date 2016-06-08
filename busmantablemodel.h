@@ -24,7 +24,11 @@ class BusmanTableModel : public QAbstractTableModel
 
     public:
         BusmanTableModel();
+
         void load(const QString& fileName) throw (std::exception);
+//        void saveAs(const QString& fileName) throw (std::exception);
+
+        void clear();
 
 //        bool insertItem(Busman* busman) {
 //            beginInsertRows(QModelIndex(), busmanList.count(), busmanList.count());
