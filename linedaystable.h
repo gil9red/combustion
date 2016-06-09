@@ -71,7 +71,7 @@ namespace LineDaysTableNS {
             }
 
             void clear() {
-                qDebug() << "Call clear()";
+                qDebug() << "Call clear()" ;
 
                 // Проверяем наличие по первому подсписку
                 if (linesList.length() > 0 && linesList[0].length() > 0) {
@@ -85,7 +85,8 @@ namespace LineDaysTableNS {
 
                     // Очищение дней в списке линий
                     for (auto subList: linesList) {
-                        subList.clear();
+//                        subList.clear();
+                        linesList.clear();
                     }
                 }
             }
