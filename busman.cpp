@@ -1,13 +1,6 @@
 #include "busman.h"
-
 #include <stdexcept>
-
 #include <QDebug>
-
-
-Busman::Busman() {
-
-}
 
 
 QStringList getSublist(QStringList list, int begin, int end) {

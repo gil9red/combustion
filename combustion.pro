@@ -17,15 +17,20 @@ SOURCES += main.cpp\
     parserpuzzlefile.cpp \
     busman.cpp \
     busmantablemodel.cpp \
-    celldelegate.cpp
+    celldelegate.cpp \
+    linedaystable.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
     busman.h \
     busmantablemodel.h \
-    celldelegate.h
+    celldelegate.h \
+    linedaystable.h
 
 FORMS    += mainwindow.ui
 
 DISTFILES += \
     INFO/given_pussle.txt
+
+RESOURCES += \
+    resource.qrc

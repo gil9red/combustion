@@ -22,6 +22,12 @@ class BusmanTableModel : public QAbstractTableModel
             WishDayRole = Qt::UserRole + 1,
         };
 
+        enum Lines {
+            Line_1 = 0,
+            Line_2,
+            Line_3,
+        };
+
     public:
         BusmanTableModel();
 
@@ -30,42 +36,34 @@ class BusmanTableModel : public QAbstractTableModel
 
         void clear();
 
-//        bool insertItem(Busman* busman) {
-//            beginInsertRows(QModelIndex(), busmanList.count(), busmanList.count());
-//            busmanList.append(busman);
-//            endInsertRows();
-
-////            QModelIndex itemIndex = createIndex(parentItem->IndexOfChild(item), 0, item);
-////            QModelIndex itemIndex = createIndex(parentItem->IndexOfChild(item), 0, item);
-////                emit dataChanged(itemIndex, itemIndex)
-//            emit dataChanged(createIndex(busmanList.count() - 1, 0), createIndex(busmanList.count() - 1, columnCount() - 1));
-
-//            return true;
-//        }
-
         int rowCount(const QModelIndex &parent=QModelIndex()) const;
         int columnCount(const QModelIndex &parent=QModelIndex()) const;
+
+        QVariant data(const QModelIndex &index, int role) const;
 
         void sayViewUpdate();
 
     private:
         QList<Busman*> busmanList;
         QMap<QString, QBrush> dayKindBackgroundColorMap;
-//        QMap<QString, QBrush> dayKindTextColorMap;
 
     public:
-        QMap<QString, QString> valueDescriptionMap;
-//        QTableView *view;
+        // TODO:
+//        QMap<QString, QString> valueDescriptionMap;
 
         // TODO: сделать private обернуть в функции set/get + при изменении значения
         // уведомлять об этом представление
         // Показывать текст ячеек с расписанием: XX, 00, DD и т.п.
         bool isVisibleCellText;
 
-    private:
-        QVariant data(const QModelIndex &index, int role) const;
+        // Словарь содержит иконки для обозначения цветом линии (1, 2 и 3) и рабочие смены (день и ночь),
+        // по перечислению Busman::DayKind
+        QMap<Busman::DayKind, QImage> lineDaysIconsMap;
 
-//        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole )
+        // Словарь содержит описание цвета для линий.
+        QMap<Lines, QColor> linesColorMap;
+
+        QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
 };
 
 #endif // BUSMANTABLEMODEL_H
