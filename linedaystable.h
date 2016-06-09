@@ -59,7 +59,16 @@ namespace LineDaysTableNS {
 
                 return QVariant();
             }
-            //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole )
+
+            QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const {
+                // TODO: магичкеское число
+                if (section >= 2 && role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+                    // TODO: магичкеское число
+                    return QString("День %1").arg(section + 1 - 2);
+                }
+
+                return QVariant();
+            }
 
             void clear() {
                 qDebug() << "Call clear()";
@@ -75,8 +84,9 @@ namespace LineDaysTableNS {
                     endRemoveColumns();
 
                     // Очищение дней в списке линий
-                    for (auto subList: linesList)
+                    for (auto subList: linesList) {
                         subList.clear();
+                    }
                 }
             }
 

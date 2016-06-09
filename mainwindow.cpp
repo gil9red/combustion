@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView.setModel(&model);
     tableView.setItemDelegate(new CellDelegate());
 
+    // Заголовок будет в lineDaysTable
+    tableView.horizontalHeader()->hide();
+
     // TODO: привести в нормальный вид, пока все запутанно и похоже на костыль
     lineDaysTable.model.busmanTableModel = &model;
 
