@@ -4,6 +4,9 @@ LineDaysTable::LineDaysTable() : QTableView()
 {
     setModel(&model);
     setItemDelegate(new LineDaysTableNS::CellDelegate());
+
+    setSelectionBehavior(QAbstractItemView::SelectItems);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 //void LineDaysTableNS::CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {

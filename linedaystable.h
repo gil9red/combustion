@@ -168,11 +168,9 @@ namespace LineDaysTableNS {
             void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
                 // TODO: магическое число
                 if (index.column() >= 2) {
-                    QStyleOptionViewItemV4 viewOption = option;
-
                     painter->save();
 
-                    QRect rect = viewOption.rect;
+                    QRect rect = option.rect;
 
                     QImage dayImage = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<QImage>();
                     QImage nightImage = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<QImage>();
@@ -190,8 +188,19 @@ namespace LineDaysTableNS {
                     painter->restore();
                 }
 
-                // Здесь дорисовываются стандартные вещи вроде текста, которые берутся из модели
-                QStyledItemDelegate::paint(painter, option, index);
+                // Цвет выделения полупрозрачный, чтобы были видно что в ячейке
+                QStyleOptionViewItem itemOption(option);
+                initStyleOption(&itemOption, index);
+
+                if ((itemOption.state & QStyle::State_Selected) && (itemOption.state & QStyle::State_Active)) {
+                    auto color = itemOption.palette.color(QPalette::Highlight);
+                    color.setAlpha(180);
+                    itemOption.palette.setColor(QPalette::Highlight, color);
+                }
+
+                QStyledItemDelegate::paint(painter, itemOption, index);
+
+//                QStyledItemDelegate::paint(painter, option, index);
             }
     };
 }
