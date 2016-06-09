@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Заголовок будет в lineDaysTable
     tableView.horizontalHeader()->hide();
 
+    tableView.setSelectionBehavior(QAbstractItemView::SelectItems);
+    tableView.setSelectionMode(QAbstractItemView::SingleSelection);
+
     // TODO: привести в нормальный вид, пока все запутанно и похоже на костыль
     lineDaysTable.model.busmanTableModel = &model;
 
