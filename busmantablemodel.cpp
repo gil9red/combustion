@@ -44,15 +44,22 @@ BusmanTableModel::BusmanTableModel() {
 
     QColor line1Color = Qt::yellow;
     QColor line2Color = Qt::green;
-    QColor line3Color = Qt::blue;
-    line3Color.setAlpha(100);
+    QColor line3Color = Qt::cyan;
 
-    lineDaysIconsMap[Busman::DayKind::LINE_1_DAY]   = drawBackground(sun, line1Color);
-    lineDaysIconsMap[Busman::DayKind::LINE_1_NIGHT] = drawBackground(moon, line1Color);
-    lineDaysIconsMap[Busman::DayKind::LINE_2_DAY]   = drawBackground(sun, line2Color);
-    lineDaysIconsMap[Busman::DayKind::LINE_2_NIGHT] = drawBackground(moon, line2Color);
-    lineDaysIconsMap[Busman::DayKind::LINE_3_DAY]   = drawBackground(sun, line3Color);
-    lineDaysIconsMap[Busman::DayKind::LINE_3_NIGHT] = drawBackground(moon, line3Color);
+    linesColorMap[Lines::Line_1] = line1Color;
+    linesColorMap[Lines::Line_2] = line2Color;
+    linesColorMap[Lines::Line_3] = line3Color;
+
+    linesPairDayKindMap[Lines::Line_1] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_1_DAY, Busman::DayKind::LINE_1_NIGHT);
+    linesPairDayKindMap[Lines::Line_2] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_2_DAY, Busman::DayKind::LINE_2_NIGHT);
+    linesPairDayKindMap[Lines::Line_3] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_3_DAY, Busman::DayKind::LINE_3_NIGHT);
+
+    lineDaysIconsMap[Busman::DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
+    lineDaysIconsMap[Busman::DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
+    lineDaysIconsMap[Busman::DayKind::LINE_2_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_2]);
+    lineDaysIconsMap[Busman::DayKind::LINE_2_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_2]);
+    lineDaysIconsMap[Busman::DayKind::LINE_3_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_3]);
+    lineDaysIconsMap[Busman::DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
@@ -147,18 +154,18 @@ void BusmanTableModel::clear() {
 
 void BusmanTableModel::sayViewUpdate() {
     // Говорим представлению обновиться
-    emit dataChanged(createIndex(0, 0), createIndex(busmanList.count() - 1, columnCount() - 1));
+    emit dataChanged(createIndex(0, 0), createIndex(rowCount() - 1, columnCount() - 1));
 }
 
 int BusmanTableModel::rowCount(const QModelIndex &parent) const {
-    return busmanList.size();
+    return busmanList.length();
 }
 
 int BusmanTableModel::columnCount(const QModelIndex &parent) const {
-    if (busmanList.size() > 0) {
+    if (busmanList.length() > 0) {
         Busman* busman = busmanList.at(0);
         // Номер автобуса + Выбор линии маршрута + количесто дней в расписании
-        return 2 + busman->wishesOnSchedule.size();
+        return 2 + busman->wishesOnSchedule.length();
     }
 
     return 0;

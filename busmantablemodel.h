@@ -22,6 +22,12 @@ class BusmanTableModel : public QAbstractTableModel
             WishDayRole = Qt::UserRole + 1,
         };
 
+        enum Lines {
+            Line_1 = 0,
+            Line_2,
+            Line_3,
+        };
+
     public:
         BusmanTableModel();
 
@@ -46,6 +52,8 @@ class BusmanTableModel : public QAbstractTableModel
         int rowCount(const QModelIndex &parent=QModelIndex()) const;
         int columnCount(const QModelIndex &parent=QModelIndex()) const;
 
+        QVariant data(const QModelIndex &index, int role) const;
+
         void sayViewUpdate();
 
     private:
@@ -66,8 +74,10 @@ class BusmanTableModel : public QAbstractTableModel
         // по перечислению Busman::DayKind
         QMap<Busman::DayKind, QImage> lineDaysIconsMap;
 
-    private:
-        QVariant data(const QModelIndex &index, int role) const;
+        // Словарь содержит описание цвета для линий.
+        QMap<Lines, QColor> linesColorMap;
+
+        QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
 
 //        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole )
 };

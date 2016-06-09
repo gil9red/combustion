@@ -15,19 +15,8 @@ CellDelegate::CellDelegate(QObject *parent) :
 
 void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    //такой себе костыль, чтобы побороть баг в старых версиях Qt
     QStyleOptionViewItemV4 viewOption = option;
 
-//    //получаем текущую кисть, которой ячейка была бы зарисована, если бы мы не влезли в процесс
-//    //смешиваем цвета (в миксе еще устанавливается альфа канал)
-//    QBrush brush = viewOption.backgroundBrush;
-////    QColor color = MixColors(brush.color(), Qt::GlobalColor::lightGray);
-
-////    //устанавливаем новый цвет и обязательно тип кисти (она изначально выставлена в None)
-////    brush.setColor(color);
-////    brush.setStyle(Qt::BrushStyle::SolidPattern);
-
-    //сохраняем состояние полотна, рисуем фон, восстанавливаем полотно
     painter->save();
 
     QBrush brush = viewOption.backgroundBrush;
@@ -105,7 +94,7 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     painter->restore();
 
-    //здесь дорисовываются стандартные вещи вроде текста, которые берется из модели
+    // Здесь дорисовываются стандартные вещи вроде текста, которые берутся из модели
     QStyledItemDelegate::paint( painter, option, index );
 }
 

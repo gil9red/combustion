@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     try {
         MainWindow w;
+        w.resize(1100, 700);
         w.show();
         w.load("../combustion/INFO/given_pussle.txt");
 

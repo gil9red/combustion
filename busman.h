@@ -21,10 +21,13 @@ class Busman
         QString selectLines;
         QStringList wishesOnSchedule;
 
+        // TODO: мне кажется, это перечисление или должно быть глобальным -- в отдельном файле,
+        // или принадлежать модели -- больше подходит.
         // Список рабочих дней
         // Варианты значения для рабочего дня:
         // TODO: название лучше более смысловое
         enum DayKind {
+            NONE,
             LINE_1_DAY,
             LINE_1_NIGHT,
             LINE_2_DAY,

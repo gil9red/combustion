@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include "busmantablemodel.h"
-//#include "linedaystable.h"
+#include "linedaystable.h"
+#include <QResizeEvent>
 
 
 namespace Ui {
@@ -14,24 +15,28 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    public:
+        explicit MainWindow(QWidget *parent = 0);
+        ~MainWindow();
 
-public slots:
-    void load(const QString& fileName);
+    public slots:
+        void load(const QString& fileName);
 
-    void open();
-    void saveAs();
+        void open();
+        void saveAs();
 
-//    void setVisibleCellText(bool visible);
+    //    void setVisibleCellText(bool visible);
 
-private:
-    Ui::MainWindow *ui;
+    private:
+        Ui::MainWindow *ui;
 
-//    LineDaysTable lineDaysTable;
-    QTableView tableView;
-    BusmanTableModel model;
+        LineDaysTable lineDaysTable;
+        QTableView tableView;
+        BusmanTableModel model;
+
+        void resizeEvent(QResizeEvent*) {
+            qDebug() << size();
+        }
 };
 
 #endif // MAINWINDOW_H
