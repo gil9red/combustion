@@ -16,7 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 //    connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
 //    connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
 
-    connect(ui->actionShowCellText, &QAction::triggered, this, &MainWindow::setVisibleCellText);
+//    connect(ui->actionShowCellText, &QAction::triggered, this, &MainWindow::setVisibleCellText);
+    connect(ui->actionShowCellText, &QAction::triggered, [=](bool visible) {
+        model.isVisibleCellText = visible;
+
+        // Говорим представлению обновиться
+        model.sayViewUpdate();
+    });
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
     connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveAs);
@@ -60,9 +66,9 @@ void MainWindow::saveAs() {
     model.saveAs(fileName);
 }
 
-void MainWindow::setVisibleCellText(bool visible) {
-    model.isVisibleCellText = visible;
+//void MainWindow::setVisibleCellText(bool visible) {
+//    model.isVisibleCellText = visible;
 
-    // Говорим представлению обновиться
-    model.sayViewUpdate();
-}
+//    // Говорим представлению обновиться
+//    model.sayViewUpdate();
+//}
