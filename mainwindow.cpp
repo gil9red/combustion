@@ -8,8 +8,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    ui->tableView->setModel(&model);
-    ui->tableView->setItemDelegate(new CellDelegate());
+//    ui->tableView->setModel(&model);
+//    ui->tableView->setItemDelegate(new CellDelegate());
+
+    tableView.setModel(&model);
+    tableView.setItemDelegate(new CellDelegate());
+
+    auto mainLayout = new QVBoxLayout();
+//    mainLayout->addWidget(&lineDaysTable);
+    mainLayout->addWidget(&tableView);
+
+    auto centralWidget = new QWidget();
+    centralWidget->setLayout(mainLayout);
+
+    setCentralWidget(centralWidget);
 
 //    connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
 //
@@ -27,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
     connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveAs);
 
-    ui->dayLinesTableWidget->hide();
+//    ui->dayLinesTableWidget->hide();
 //    for (auto key: model.lineDaysIconsMap.keys()) {
 //        QImage icon = model.lineDaysIconsMap[key];
 //        QListWidgetItem* item = new QListWidgetItem(QIcon(QPixmap::fromImage(icon)), "");
@@ -41,17 +53,19 @@ MainWindow::~MainWindow() {
 
 void MainWindow::load(const QString& fileName) {
     model.load(fileName);
-    ui->tableView->resizeColumnsToContents();
+//    ui->tableView->resizeColumnsToContents();
+    tableView.resizeColumnsToContents();
+    tableView.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
 //    static const int size = 200;
 //    for (int i = 0; i < ui->tableView->colorCount(); i++) {
 //        ui->tableView->horizontalHeader()->resizeSection(i, size);
 //    }
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+//    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
 void MainWindow::open() {
-    const QString& fileName = QFileDialog::getOpenFileName(this);
+    auto fileName = QFileDialog::getOpenFileName(this);
     if (fileName.isEmpty())
         return;
 
@@ -59,7 +73,7 @@ void MainWindow::open() {
 }
 
 void MainWindow::saveAs() {
-    const QString& fileName = QFileDialog::getSaveFileName(this);
+    auto fileName = QFileDialog::getSaveFileName(this);
     if (fileName.isEmpty())
         return;
 

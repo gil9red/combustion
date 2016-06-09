@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "busmantablemodel.h"
+//#include "linedaystable.h"
+
 
 namespace Ui {
     class MainWindow;
@@ -22,10 +24,13 @@ public slots:
     void open();
     void saveAs();
 
-    void setVisibleCellText(bool visible);
+//    void setVisibleCellText(bool visible);
 
 private:
     Ui::MainWindow *ui;
+
+//    LineDaysTable lineDaysTable;
+    QTableView tableView;
     BusmanTableModel model;
 };
 
