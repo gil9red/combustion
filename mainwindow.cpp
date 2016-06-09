@@ -11,10 +11,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->setModel(&model);
     ui->tableView->setItemDelegate(new CellDelegate());
 
-    connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
+//    connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
+//
+//    connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
+//    connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
 
-    connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
-    connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
+    connect(ui->actionShowCellText, &QAction::triggered, this, &MainWindow::setVisibleCellText);
+
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
+    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveAs);
+
+    ui->dayLinesTableWidget->hide();
+//    for (auto key: model.lineDaysIconsMap.keys()) {
+//        QImage icon = model.lineDaysIconsMap[key];
+//        QListWidgetItem* item = new QListWidgetItem(QIcon(QPixmap::fromImage(icon)), "");
+//        ui->listWidget->addItem(item);
+//    }
 }
 
 MainWindow::~MainWindow() {
