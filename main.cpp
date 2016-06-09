@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
         MainWindow w;
         w.resize(1100, 700);
         w.show();
+
+        // FIXME: linedaystable исправить баг при повторной загрузке
         w.load("../combustion/INFO/given_pussle.txt");
 
         return a.exec();
