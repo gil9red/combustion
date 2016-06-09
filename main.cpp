@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    // TODO: помнить размеры, положение и состояние виджетов
     try {
         MainWindow w;
         w.resize(1100, 700);

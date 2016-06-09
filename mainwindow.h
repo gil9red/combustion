@@ -25,18 +25,12 @@ class MainWindow : public QMainWindow
         void open();
         void saveAs();
 
-    //    void setVisibleCellText(bool visible);
-
     private:
         Ui::MainWindow *ui;
 
         LineDaysTable lineDaysTable;
         QTableView tableView;
         BusmanTableModel model;
-
-        void resizeEvent(QResizeEvent*) {
-            qDebug() << size();
-        }
 };
 
 #endif // MAINWINDOW_H

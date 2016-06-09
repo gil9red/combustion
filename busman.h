@@ -11,8 +11,6 @@
 class Busman
 {
     public:
-//        Busman();
-
         // Функция парсит указанную строку и пытается создать из нее объект Busman
         static Busman* fromString(const QString& str, const QStringList & days);
 

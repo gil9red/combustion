@@ -7,12 +7,6 @@
 #include "busmantablemodel.h"
 
 
-CellDelegate::CellDelegate(QObject *parent) :
-    QStyledItemDelegate(parent)
-{
-}
-
-
 void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 viewOption = option;
@@ -23,16 +17,11 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QColor textColor = Qt::black;
     QRect rect = viewOption.rect;
 
+    // TODO:
 //    QString textCell = index.model()->data(index, Qt::DisplayRole).toString();
-    Busman* busman = index.model()->data(index, BusmanTableModel::BusmanRole).value<Busman*>();
+//    Busman* busman = index.model()->data(index, BusmanTableModel::BusmanRole).value<Busman*>();
     QString textCell = index.model()->data(index, BusmanTableModel::WishDayRole).toString();
-//    if (busman == 0) {
-//        return;
-//    }
 
-//    QString textCell = busman->wishesOnSchedule.at(index.)
-
-//    qDebug() << "Value:" << textCell << rect.size().width() << busman;
     if (textCell == "RR") {
         brush = QBrush(Qt::lightGray);
 
@@ -58,52 +47,8 @@ void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     painter->fillRect(rect, brush);
 
-//    if (busman) {
-//        // TODO: Номер автобуса + Выбор линии маршрута + количесто дней в расписании
-//        int dayNumber = index.column() - 2;
-//        qDebug() << "dayNumber: " << dayNumber;
-
-//        // Если день у водителя выбран
-//        if (busman->workingDays.contains(dayNumber)) {
-//            Busman::DayKind dayKind = busman->workingDays[dayNumber];
-//            switch (dayKind) {
-//                case Busman::DayKind::LINE_1_DAY:
-//                case Busman::DayKind::LINE_1_NIGHT:
-//                case Busman::DayKind::LINE_2_DAY:
-//                case Busman::DayKind::LINE_2_NIGHT:
-//                case Busman::DayKind::LINE_3_DAY:
-//                case Busman::DayKind::LINE_3_NIGHT:
-//                    break;
-//            }
-//        }
-//    }
-
-//    if (value != "00") {
-//        painter->setPen(QPen(textColor));
-//        QRect rect = viewOption.rect;
-//        Qt::Alignment alignText = Qt::AlignCenter;
-//        painter->drawText(rect, alignText, value);
-//    }
-
-// TODO: непонятно как иначе нарисовать текст -- нужно указать цвет текста
-// и при ручной отрисовке с этим проблем нет, но как сделать стандартными средствами
-//    painter->setPen(QPen(textColor));
-//    QRect rect = viewOption.rect;
-//    Qt::Alignment alignText = Qt::AlignCenter;
-//    painter->drawText(rect, alignText, value);
-
     painter->restore();
 
     // Здесь дорисовываются стандартные вещи вроде текста, которые берутся из модели
     QStyledItemDelegate::paint( painter, option, index );
 }
-
-//QColor& QSomeColumnDelegate::MixColors(const QColor ColorA, const QColor ColorB) const{
-//    QColor result = QColor(ColorA.rgba());
-//    result.setRed(   (result.red() + ColorB.red() )    / 2);
-//    result.setGreen( (result.green() + ColorB.green() )/ 2);
-//    result.setBlue(  (result.blue() + ColorB.blue() )  / 2);
-//    result.setAlpha(30);
-
-//    return result;
-//}

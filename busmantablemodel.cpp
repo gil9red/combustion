@@ -8,6 +8,7 @@
 
 #include <QPainter>
 
+
 QImage drawBackground(const QImage& im, const QColor& background) {
     QImage image(im.size(), QImage::Format_ARGB32_Premultiplied);
     image.fill(background);
@@ -21,23 +22,6 @@ QImage drawBackground(const QImage& im, const QColor& background) {
 
 BusmanTableModel::BusmanTableModel() {
     isVisibleCellText = true;
-
-//    view = 0;
-
-//    dayKindBackgroundColorMap["RR"] = QBrush(Qt::gray);
-
-//////    QGradient gradient(0.0, 0.0, 0.0, 1.0);
-//////    gradient.setColorAt(0, Qt::black);
-//////    gradient.setColorAt(1, Qt::white);
-////    QLinearGradient gradient(QPointF(0, 0), QPointF(1, 1));
-////    gradient.setSpread(QGradient::RepeatSpread);
-////    gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
-////    gradient.setColorAt(0, Qt::black);
-////    gradient.setColorAt(1, Qt::white);
-////    dayKindColorMap["XX"] = QBrush(gradient);
-//    dayKindBackgroundColorMap["XX"] = QBrush(Qt::black);
-
-////    dayKindTextColorMap["XX"] = QBrush(Qt::white);
 
     QImage sun(":/sun");
     QImage moon(":/moon");
@@ -65,18 +49,10 @@ BusmanTableModel::BusmanTableModel() {
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
     clear();
 
-//    busmanList = ParserPuzzleFile::parse(fileName);
-//    qDebug() << busmanList.size();
-//    foreach (Busman *busman, busmanList) {
-//        qDebug() << busman->busNum << busman->selectLines;
-//    }
-
-    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName, valueDescriptionMap);
-//    qDebug() << newBusmanList.size();
+    // TODO
+    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName/*, valueDescriptionMap*/);
     foreach (Busman *busman, newBusmanList) {
-//        insertItem(busman);
         busmanList.append(busman);
-//        qDebug() << busman->busNum << busman->selectLines;
     }
 
     // Говорим моделе о новых строках и столбцах
@@ -87,17 +63,6 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
     endInsertColumns();
 
     sayViewUpdate();
-
-//    try {
-//        busmanList = ParserPuzzleFile::parse(fileName);
-//        qDebug() << busmanList.size();
-//        foreach (Busman *busman, busmanList) {
-//            qDebug() << busman->busNum << busman->selectLines;
-//        }
-
-//    } catch(std::exception& e) {
-//        qCritical() << e.what();
-//    }
 }
 
 void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
@@ -116,7 +81,6 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
     }
     out << "\n";
 
-    // 01|A|100||RR|NN|XX|XX|00|00|RR|00|00|XX|XX|NN|00|00|
     for (int i = 0; i < busmanList.size(); i++) {
          Busman* busman = busmanList.at(i);
          out << QString::number(i + 1).rightJustified(2, '0') << "|"
@@ -172,8 +136,6 @@ int BusmanTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
-//    qDebug() << view->visualRect(index).size();
-
     const int row = index.row();
     const int column = index.column();
 
@@ -234,66 +196,6 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         v.setValue(busman);
         return v;
     }
-
-//    switch (role) {
-//        case Qt::DisplayRole:
-//        case WishDayRole: {
-//            switch (column) {
-//                // TODO: NUMBER и LINES не относятся к расписанию (т.е. к WishDayRole)
-//                case COLUMN::NUMBER:
-//                    return busman->busNum;
-
-//                case COLUMN::LINES:
-//                    return busman->selectLines;
-
-//                default:
-//                    // Минус 2: Номер автобуса + Выбор линии маршрута
-//                    return busman->wishesOnSchedule.at(column - 2);
-//            }
-//            break;
-//        }
-
-////        case Qt::BackgroundRole: {
-////            switch (column) {
-////                case COLUMN::NUMBER:
-////                case COLUMN::LINES:
-////                    break;
-
-////                default:
-////                    // Минус 2: Номер автобуса + Выбор линии маршрута
-////                    QString day = busman->wishesOnSchedule.at(column - 2);
-////                    if (dayKindBackgroundColorMap.contains(day)) {
-////                        return dayKindBackgroundColorMap[day];
-////                    }
-////                    break;
-////            }
-////            break;
-////        }
-
-//        // TODO: хорошо бы в делегате реализовать отрисовку текста
-//        case Qt::ForegroundRole: {
-//            switch (column) {
-//                case COLUMN::NUMBER:
-//                case COLUMN::LINES:
-//                    break;
-
-//                default:
-//                    // Минус 2: Номер автобуса + Выбор линии маршрута
-//                    QString day = busman->wishesOnSchedule.at(column - 2);
-//                    if (day == "XX") {
-//                        return QBrush(Qt::white);
-//                    } else {
-//                        return QBrush(Qt::black);
-//                    }
-//            }
-//            break;
-//        }
-
-//        case BusmanRole:
-//            QVariant v;
-//            v.setValue(busman);
-//            return v;
-//    }
 
     return QVariant();
 }

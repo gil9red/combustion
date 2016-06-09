@@ -36,19 +36,6 @@ class BusmanTableModel : public QAbstractTableModel
 
         void clear();
 
-//        bool insertItem(Busman* busman) {
-//            beginInsertRows(QModelIndex(), busmanList.count(), busmanList.count());
-//            busmanList.append(busman);
-//            endInsertRows();
-
-////            QModelIndex itemIndex = createIndex(parentItem->IndexOfChild(item), 0, item);
-////            QModelIndex itemIndex = createIndex(parentItem->IndexOfChild(item), 0, item);
-////                emit dataChanged(itemIndex, itemIndex)
-//            emit dataChanged(createIndex(busmanList.count() - 1, 0), createIndex(busmanList.count() - 1, columnCount() - 1));
-
-//            return true;
-//        }
-
         int rowCount(const QModelIndex &parent=QModelIndex()) const;
         int columnCount(const QModelIndex &parent=QModelIndex()) const;
 
@@ -59,11 +46,10 @@ class BusmanTableModel : public QAbstractTableModel
     private:
         QList<Busman*> busmanList;
         QMap<QString, QBrush> dayKindBackgroundColorMap;
-//        QMap<QString, QBrush> dayKindTextColorMap;
 
     public:
-        QMap<QString, QString> valueDescriptionMap;
-//        QTableView *view;
+        // TODO:
+//        QMap<QString, QString> valueDescriptionMap;
 
         // TODO: сделать private обернуть в функции set/get + при изменении значения
         // уведомлять об этом представление
@@ -78,8 +64,6 @@ class BusmanTableModel : public QAbstractTableModel
         QMap<Lines, QColor> linesColorMap;
 
         QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
-
-//        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole )
 };
 
 #endif // BUSMANTABLEMODEL_H

@@ -6,11 +6,8 @@
 #include <QDebug>
 
 
-ParserPuzzleFile::ParserPuzzleFile() {
-
-}
-
-QList<Busman*> ParserPuzzleFile::parse(const QString& fileName, QMap<QString, QString>& valueDescriptionMap) throw(std::exception) {
+// TODO:
+QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, QString>& valueDescriptionMap*/) throw(std::exception) {
     QList<Busman*> busmanList;
 
     QFile file(fileName);
@@ -52,7 +49,6 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName, QMap<QString, QS
 //    QString score = lines.at(indexEndTable + 1).split(":")[1];
 //    qDebug() << score;
 
-////    QMap<QString, QString> valueDescriptionMap;
 //    valueDescriptionMap.clear();
 //    // Перебор обозначений в таблице
 //    for (int i = indexEndTable + 3; i < lines.size(); i++) {
@@ -68,9 +64,5 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName, QMap<QString, QS
 //        qDebug() << QString("%1: %2").arg(it.key()).arg(it.value());
 //    }
 
-////    qDebug();
-////    foreach (QString line, lines) {
-////        qDebug() << line;
-////    }
     return busmanList;
 }

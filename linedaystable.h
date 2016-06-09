@@ -13,6 +13,7 @@
 
 
 namespace LineDaysTableNS {
+    // TODO: перенести определение в cpp
     class LineDaysTableModel : public QAbstractTableModel
     {
         public:
@@ -21,27 +22,16 @@ namespace LineDaysTableNS {
             }
 
             int rowCount(const QModelIndex &parent=QModelIndex()) const {
-//                qDebug() << "row";
-
-//                if (busmanTableModel /*&& linesList.length() > 0 && linesList[0].length() > 0*/) {
-//                    // Line 1, 2, 3
-//                    return 3;
-//                } else {
-//                    return 0;
-//                }
                 return linesList.length();
-//                return 3;
             }
             int columnCount(const QModelIndex &parent=QModelIndex()) const {
-////                qDebug() << "column";
                 if (linesList.length() > 0) {
-//                    qDebug() << linesList[0].length();
                     return linesList[0].length();
                 } else {
                     return 0;
                 }
 
-                if (busmanTableModel /*&& linesList.length() > 0 && linesList[0].length() > 0*/) {
+                if (busmanTableModel) {
                     return busmanTableModel->columnCount();
                 } else {
                     return 0;
@@ -102,8 +92,6 @@ namespace LineDaysTableNS {
                 if (busmanTableModel == 0)
                     return;
 
-                // Заполнение списка линий
-//                for (auto i = 0; i < rowCount(); i++) {
                 // TODO:
                 for (auto i = 0; i < 3; i++) {
                     qDebug() << i << linesList.length();
@@ -118,20 +106,7 @@ namespace LineDaysTableNS {
                     }
 
                     linesList.append(line);
-//                    qDebug() << "line" << line.length();
                 }
-
-//                qDebug() << "\n\n";
-//                qDebug() << "_" << linesList[0].length() << linesList.length();
-//                qDebug() << "_" << columnCount() << rowCount();
-//                qDebug() << "\n\n";
-
-//                for (auto row = 0; row < busmanTableModel->rowCount(); row++) {
-//                    for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
-////                        auto pair = busmanTableModel->linesPairDayKindMap[(BusmanTableModel::Lines) row];
-////                        linesList[row].append(pair);
-//                    }
-//                }
 
                 // TODO: пока тут бага возникает -- двойное количество строк и почему так понять не смог
                 // Говорим моделе о новых строках и столбцах
@@ -155,13 +130,10 @@ namespace LineDaysTableNS {
         private:
             // Список, содержащий список пар
             QList<QList<QPair<Busman::DayKind, Busman::DayKind>>> linesList;
-
-//            QList<QPair<Busman::DayKind, Busman::DayKind>> lines_1_list;
-//            QList<QPair<Busman::DayKind, Busman::DayKind>> lines_2_list;
-//            QList<QPair<Busman::DayKind, Busman::DayKind>> lines_3_list;
     };
 
 
+    // TODO: перенести определение в cpp
     class CellDelegate : public QStyledItemDelegate
     {
         protected:
@@ -178,7 +150,6 @@ namespace LineDaysTableNS {
                     // Отступ между иконками в ячейке
                     auto indent = 2;
                     auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
-//                    qDebug() << "deleg" << rect.size() << size;
                     dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                     nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
@@ -199,8 +170,6 @@ namespace LineDaysTableNS {
                 }
 
                 QStyledItemDelegate::paint(painter, itemOption, index);
-
-//                QStyledItemDelegate::paint(painter, option, index);
             }
     };
 }
@@ -212,8 +181,7 @@ class LineDaysTable : public QTableView
     public:
         LineDaysTable();
 
-//    private:
-//        QStandardItemModel model;
+        // TODO:
         LineDaysTableNS::LineDaysTableModel model;
 };
 

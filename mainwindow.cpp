@@ -10,9 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-//    ui->tableView->setModel(&model);
-//    ui->tableView->setItemDelegate(new CellDelegate());
-
     tableView.setModel(&model);
     tableView.setItemDelegate(new CellDelegate());
 
@@ -35,12 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setCentralWidget(centralWidget);
 
-//    connect(ui->actionShowCellText, SIGNAL(triggered(bool)), SLOT(setVisibleCellText(bool)));
-//
-//    connect(ui->actionOpen, SIGNAL(triggered()), SLOT(open()));
-//    connect(ui->actionSaveAs, SIGNAL(triggered()), SLOT(saveAs()));
-
-//    connect(ui->actionShowCellText, &QAction::triggered, this, &MainWindow::setVisibleCellText);
     connect(ui->actionShowCellText, &QAction::triggered, [=](bool visible) {
         model.isVisibleCellText = visible;
 
@@ -50,13 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
     connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveAs);
-
-//    ui->dayLinesTableWidget->hide();
-//    for (auto key: model.lineDaysIconsMap.keys()) {
-//        QImage icon = model.lineDaysIconsMap[key];
-//        QListWidgetItem* item = new QListWidgetItem(QIcon(QPixmap::fromImage(icon)), "");
-//        ui->listWidget->addItem(item);
-//    }
 }
 
 MainWindow::~MainWindow() {
@@ -65,8 +49,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::load(const QString& fileName) {
     model.load(fileName);
-//    ui->tableView->resizeColumnsToContents();
-//    tableView.resizeColumnsToContents();
+
     static const int size = 60;
     for (int i = 0; i < tableView.model()->columnCount(); i++) {
         tableView.horizontalHeader()->resizeSection(i, size);
@@ -91,12 +74,6 @@ void MainWindow::load(const QString& fileName) {
         lineDaysTable.verticalHeader()->resizeSection(i, size / 2);
     }
 
-//    lineDaysTable.verticalHeader()->setMinimumSectionSize(size * 3);
-//    lineDaysTable.verticalHeader()->setMaximumSectionSize(size * 3);
-
-//    lineDaysTable.verticalHeader()->setFixedWidth(tableView.verticalHeader()->width());
-//    lineDaysTable.verticalHeader()->setFixedHeight(lineDaysTable.verticalHeader()->width() / 2);
-
     lineDaysTable.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     lineDaysTable.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
@@ -106,17 +83,6 @@ void MainWindow::load(const QString& fileName) {
         heightLineDays += lineDaysTable.verticalHeader()->sectionSize(i);
     }
     lineDaysTable.setFixedHeight(heightLineDays);
-
-//    qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-//    lineDaysTable.model.sayViewUpdate();
-
-//    lineDaysTable.resizeColumnsToContents();
-
-//    static const int size = 200;
-//    for (int i = 0; i < ui->tableView->colorCount(); i++) {
-//        ui->tableView->horizontalHeader()->resizeSection(i, size);
-//    }
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
 void MainWindow::open() {
@@ -134,10 +100,3 @@ void MainWindow::saveAs() {
 
     model.saveAs(fileName);
 }
-
-//void MainWindow::setVisibleCellText(bool visible) {
-//    model.isVisibleCellText = visible;
-
-//    // Говорим представлению обновиться
-//    model.sayViewUpdate();
-//}
