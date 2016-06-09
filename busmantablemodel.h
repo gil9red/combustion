@@ -62,6 +62,10 @@ class BusmanTableModel : public QAbstractTableModel
         // Показывать текст ячеек с расписанием: XX, 00, DD и т.п.
         bool isVisibleCellText;
 
+        // Словарь содержит иконки для обозначения цветом линии (1, 2 и 3) и рабочие смены (день и ночь),
+        // по перечислению Busman::DayKind
+        QMap<Busman::DayKind, QImage> lineDaysIconsMap;
+
     private:
         QVariant data(const QModelIndex &index, int role) const;
 

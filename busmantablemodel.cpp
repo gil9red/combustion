@@ -6,6 +6,19 @@
 #include <QFile>
 
 
+#include <QPainter>
+
+QImage drawBackground(const QImage& im, const QColor& background) {
+    QImage image(im.size(), QImage::Format_ARGB32_Premultiplied);
+    image.fill(background);
+
+    QPainter p(&image);
+    p.drawImage(0, 0, im);
+
+    return image;
+}
+
+
 BusmanTableModel::BusmanTableModel() {
     isVisibleCellText = true;
 
@@ -25,6 +38,21 @@ BusmanTableModel::BusmanTableModel() {
 //    dayKindBackgroundColorMap["XX"] = QBrush(Qt::black);
 
 ////    dayKindTextColorMap["XX"] = QBrush(Qt::white);
+
+    QImage sun(":/sun");
+    QImage moon(":/moon");
+
+    QColor line1Color = Qt::yellow;
+    QColor line2Color = Qt::green;
+    QColor line3Color = Qt::blue;
+    line3Color.setAlpha(100);
+
+    lineDaysIconsMap[Busman::DayKind::LINE_1_DAY]   = drawBackground(sun, line1Color);
+    lineDaysIconsMap[Busman::DayKind::LINE_1_NIGHT] = drawBackground(moon, line1Color);
+    lineDaysIconsMap[Busman::DayKind::LINE_2_DAY]   = drawBackground(sun, line2Color);
+    lineDaysIconsMap[Busman::DayKind::LINE_2_NIGHT] = drawBackground(moon, line2Color);
+    lineDaysIconsMap[Busman::DayKind::LINE_3_DAY]   = drawBackground(sun, line3Color);
+    lineDaysIconsMap[Busman::DayKind::LINE_3_NIGHT] = drawBackground(moon, line3Color);
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
