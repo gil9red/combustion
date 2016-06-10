@@ -8,4 +8,6 @@ LineDaysTable::LineDaysTable() : QTableView()
 
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+    setVerticalHeader(new LineDaysTableNS::VerticalHeaderView());
 }
