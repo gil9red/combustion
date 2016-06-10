@@ -25,12 +25,20 @@ class MainWindow : public QMainWindow
         void open();
         void saveAs();
 
+        void read_settings();
+        void write_settings();
+
+    protected:
+        void closeEvent(QCloseEvent *event);
+
     private:
         Ui::MainWindow *ui;
 
         LineDaysTable lineDaysTable;
         QTableView tableView;
         BusmanTableModel model;
+
+
 };
 
 #endif // MAINWINDOW_H
