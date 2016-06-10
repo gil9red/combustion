@@ -79,8 +79,7 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
     out << "---------------------------------------------------+" << "\n";
 
     out << "_________|";
-    // TODO: магическое число нужно убрать
-    for (int i = 0; i < columnCount() - 2; i++) {
+    for (int i = 0; i < columnCount(); i++) {
         out << QString::number(i + 1).rightJustified(2, '0') << "|";
     }
     out << "\n";
@@ -133,7 +132,7 @@ int BusmanTableModel::columnCount(const QModelIndex &parent) const {
     if (busmanList.length() > 0) {
         Busman* busman = busmanList.at(0);
         // Номер автобуса + Выбор линии маршрута + количесто дней в расписании
-        return 2 + busman->wishesOnSchedule.length();
+        return busman->wishesOnSchedule.length();
     }
 
     return 0;
@@ -155,8 +154,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         } else {
             if (isVisibleCellText) {
                 // TODO: дубликат
-                // Минус 2: Номер автобуса + Выбор линии маршрута
-                return busman->wishesOnSchedule.at(column - 2);
+                return busman->wishesOnSchedule.at(column);
             }
         }
 
@@ -168,8 +166,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
 
             default: {
                 // TODO: дубликат
-                // Минус 2: Номер автобуса + Выбор линии маршрута
-                return busman->wishesOnSchedule.at(column - 2);
+                return busman->wishesOnSchedule.at(column);
             }
         }
 
@@ -181,8 +178,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
                 break;
 
             default: {
-                // Минус 2: Номер автобуса + Выбор линии маршрута
-                QString day = busman->wishesOnSchedule.at(column - 2);
+                QString day = busman->wishesOnSchedule.at(column);
                 if (day == "XX") {
                     return QBrush(Qt::white);
                 } else {

@@ -43,11 +43,6 @@ namespace LineDaysTableNS {
                 const int row = index.row();
                 const int column = index.column();
 
-                // TODO: то самое магическое число
-                if (column < 2) {
-                    return QVariant();
-                }
-
                 if (role == DayKind_Day_Role || role == DayKind_Night_Role) {
                     auto pair = linesList.at(row).at(column);
 
@@ -63,9 +58,9 @@ namespace LineDaysTableNS {
 
             QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const {
                 // TODO: магичкеское число
-                if (section >= 2 && role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+                if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
                     // TODO: магичкеское число
-                    return QString("День %1").arg(section + 1 - 2);
+                    return QString("День %1").arg(section + 1);
                 }
 
                 return QVariant();
@@ -150,26 +145,23 @@ namespace LineDaysTableNS {
     {
         protected:
             void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
-                // TODO: магическое число
-                if (index.column() >= 2) {
-                    painter->save();
+                painter->save();
 
-                    QRect rect = option.rect;
+                QRect rect = option.rect;
 
-                    QImage dayImage = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<QImage>();
-                    QImage nightImage = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<QImage>();
+                QImage dayImage = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<QImage>();
+                QImage nightImage = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<QImage>();
 
-                    // Отступ между иконками в ячейке
-                    auto indent = 2;
-                    auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
-                    dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-                    nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                // Отступ между иконками в ячейке
+                auto indent = 2;
+                auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
+                dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-                    painter->drawImage(rect.x(), rect.y(), dayImage);
-                    painter->drawImage(rect.x() + size + indent, rect.y(), nightImage);
+                painter->drawImage(rect.x(), rect.y(), dayImage);
+                painter->drawImage(rect.x() + size + indent, rect.y(), nightImage);
 
-                    painter->restore();
-                }
+                painter->restore();
 
                 // Цвет выделения полупрозрачный, чтобы были видно что в ячейке
                 QStyleOptionViewItem itemOption(option);
