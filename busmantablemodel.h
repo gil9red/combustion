@@ -43,6 +43,14 @@ class BusmanTableModel : public QAbstractTableModel
 
         void sayViewUpdate();
 
+        // TODO: перенести в cpp
+        Busman* get(int row) {
+            if (row < 0 || row >= busmanList.length())
+                return nullptr;
+
+            return busmanList.at(row);
+        }
+
     private:
         QList<Busman*> busmanList;
         QMap<QString, QBrush> dayKindBackgroundColorMap;
@@ -62,6 +70,8 @@ class BusmanTableModel : public QAbstractTableModel
 
         // Словарь содержит описание цвета для линий.
         QMap<Lines, QColor> linesColorMap;
+
+        QMap<QString, Lines> stringLineMap;
 
         QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
 };

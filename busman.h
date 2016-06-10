@@ -16,6 +16,9 @@ class Busman
 
     public:
         QString busNum;
+
+        // TODO: наверное, лучше использовать список BusmanTableModel::Lines
+        // TODO: отсортировать номера линий
         QString selectLines;
         QStringList wishesOnSchedule;
 

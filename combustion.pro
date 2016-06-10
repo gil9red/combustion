@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     busman.cpp \
     busmantablemodel.cpp \
     celldelegate.cpp \
-    linedaystable.cpp
+    linedaystable.cpp \
+    verticalschedulerheaderview.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
     busman.h \
     busmantablemodel.h \
     celldelegate.h \
-    linedaystable.h
+    linedaystable.h \
+    verticalschedulerheaderview.h
 
 FORMS    += mainwindow.ui
 

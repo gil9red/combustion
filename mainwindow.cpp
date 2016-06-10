@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QScrollBar>
+#include "verticalschedulerheaderview.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -15,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Заголовок будет в lineDaysTable
     tableView.horizontalHeader()->hide();
+    tableView.setVerticalHeader(new VerticalSchedulerHeaderView());
 
     tableView.setSelectionBehavior(QAbstractItemView::SelectItems);
     tableView.setSelectionMode(QAbstractItemView::SingleSelection);
@@ -73,8 +75,9 @@ void MainWindow::load(const QString& fileName) {
         lineDaysTable.horizontalHeader()->resizeSection(i, size);
     }
 
-    tableView.verticalHeader()->setFixedWidth(size);
-    lineDaysTable.verticalHeader()->setFixedWidth(size);
+    static const int width_vertical_header = 90;
+    tableView.verticalHeader()->setFixedWidth(width_vertical_header);
+    lineDaysTable.verticalHeader()->setFixedWidth(width_vertical_header);
 
     for (int i = 0; i < lineDaysTable.model.rowCount(); i++) {
         lineDaysTable.verticalHeader()->resizeSection(i, size / 2);

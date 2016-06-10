@@ -38,6 +38,10 @@ BusmanTableModel::BusmanTableModel() {
     linesPairDayKindMap[Lines::Line_2] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_2_DAY, Busman::DayKind::LINE_2_NIGHT);
     linesPairDayKindMap[Lines::Line_3] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_3_DAY, Busman::DayKind::LINE_3_NIGHT);
 
+    stringLineMap["1"] = Lines::Line_1;
+    stringLineMap["2"] = Lines::Line_2;
+    stringLineMap["3"] = Lines::Line_3;
+
     lineDaysIconsMap[Busman::DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
     lineDaysIconsMap[Busman::DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
     lineDaysIconsMap[Busman::DayKind::LINE_2_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_2]);
