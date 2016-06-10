@@ -14,7 +14,6 @@ class VerticalSchedulerHeaderView: public QHeaderView
 
     public:
         VerticalSchedulerHeaderView(QWidget* parent = Q_NULLPTR);
-        int scrollX = 0;
 
     protected:
         // TODO: вынести в cpp
