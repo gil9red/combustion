@@ -32,10 +32,13 @@ MainWindow::MainWindow(QWidget *parent) :
             lineDaysTable.horizontalScrollBar(), &QAbstractSlider::setValue);
 
     auto mainLayout = new QVBoxLayout();
+    mainLayout->setMargin(0);
     mainLayout->addWidget(&lineDaysTable);
     mainLayout->addWidget(&tableView);
 
     auto centralWidget = new QWidget();
+    centralWidget->setObjectName("CentralWindow");
+    centralWidget->setStyleSheet("QWidget#CentralWindow { background-color: gray; }");
     centralWidget->setLayout(mainLayout);
 
     setCentralWidget(centralWidget);
