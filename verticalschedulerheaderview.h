@@ -23,23 +23,27 @@ class VerticalSchedulerHeaderView: public QHeaderView
             if (busmanTableModel != nullptr) {
                 Busman* busman = busmanTableModel->get(logicalIndex);
                 if (busman != nullptr) {
-                    // Draw background
-                    painter->save();
                     QStyleOptionHeader option;
                     initStyleOption(&option);
                     option.rect = rect;
-                    // TODO: немного имзенить цвет заднего фона -- иначе сложно отличить
-                    // от ячеек таблицы
-                    style()->drawControl(QStyle::CE_HeaderSection, &option, painter);
-//                    painter->setBrush(Qt::black);
-//                    painter->drawRect(rect);
 
-                    const int indent = 10;
+                    // Отрисовка ячейки и затемнение фона, чтобы было отличие от ячеек таблицы
+                    style()->drawControl(QStyle::CE_HeaderSection, &option, painter);
+                    painter->save();
+                    painter->setPen(Qt::NoPen);
+                    painter->setBrush(QColor(0, 0, 0, 20));
+                    painter->drawRect(option.rect);
+                    painter->restore();
+
+
+                    const int text_indent = 10;
                     const int vert_indent = 6;
-                    int x = rect.x() + indent;
+                    int x = rect.x() + text_indent;
                     int y = rect.y() + vert_indent;
                     int width = 15; // Ширина, которая дается для отрисовки символа в заголовке
                     int height = rect.height() - vert_indent * 2;
+
+                    painter->save();
 
                     auto font = painter->font();
                     font.setBold(true);
