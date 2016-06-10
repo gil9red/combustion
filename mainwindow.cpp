@@ -119,8 +119,8 @@ void MainWindow::saveAs() {
 void MainWindow::read_settings(){
     // TODO: при сложных настройках, лучше перейти на json или yaml
     QSettings config ("config",  QSettings::IniFormat);
-    QRect restoreState = config.value("MainWindow_State").toRect();
-    QRect restoreGeometry = config.value("MainWindow_Geometry").toRect();
+    restoreState(config.value("MainWindow_State"));
+    restoreGeometry(config.value("MainWindow_Geometry"));
 }
 
 void MainWindow::write_settings(){
@@ -132,7 +132,6 @@ void MainWindow::write_settings(){
 
 void MainWindow::closeEvent(QCloseEvent *event){
        write_settings();
-       event->accept();
-       close();
+       qApp->quit();
 }
 
