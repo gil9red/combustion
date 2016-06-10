@@ -145,46 +145,22 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     Busman* busman = busmanList.at(row);
 
     if (role == Qt::DisplayRole) {
-        if (column == COLUMN::NUMBER) {
-            return busman->busNum;
-
-        } else if (column == COLUMN::LINES) {
-            return busman->selectLines;
-
-        } else {
-            if (isVisibleCellText) {
-                // TODO: дубликат
-                return busman->wishesOnSchedule.at(column);
-            }
+        if (isVisibleCellText) {
+            // TODO: дубликат
+            return busman->wishesOnSchedule.at(column);
         }
 
     } else if (role == WishDayRole) {
-        switch (column) {
-            case COLUMN::NUMBER:
-            case COLUMN::LINES:
-                break;
-
-            default: {
-                // TODO: дубликат
-                return busman->wishesOnSchedule.at(column);
-            }
-        }
+        // TODO: дубликат
+        return busman->wishesOnSchedule.at(column);
 
         // TODO: хорошо бы в делегате реализовать отрисовку текста
     } else if (role == Qt::ForegroundRole) {
-        switch (column) {
-            case COLUMN::NUMBER:
-            case COLUMN::LINES:
-                break;
-
-            default: {
-                QString day = busman->wishesOnSchedule.at(column);
-                if (day == "XX") {
-                    return QBrush(Qt::white);
-                } else {
-                    return QBrush(Qt::black);
-                }
-            }
+        QString day = busman->wishesOnSchedule.at(column);
+        if (day == "XX") {
+            return QBrush(Qt::white);
+        } else {
+            return QBrush(Qt::black);
         }
 
     // Текст в ячейках располагается по центру

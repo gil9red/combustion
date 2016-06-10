@@ -12,11 +12,6 @@
 class BusmanTableModel : public QAbstractTableModel
 {
     public:
-        enum COLUMN {
-            NUMBER,
-            LINES,
-        };
-
         enum CustomRole {
             BusmanRole = Qt::UserRole,
             WishDayRole = Qt::UserRole + 1,
