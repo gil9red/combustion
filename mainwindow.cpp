@@ -119,8 +119,8 @@ void MainWindow::saveAs() {
 void MainWindow::read_settings(){
     // TODO: при сложных настройках, лучше перейти на json или yaml
     QSettings config ("config",  QSettings::IniFormat);
-    restoreState(config.value("MainWindow_State"));
-    restoreGeometry(config.value("MainWindow_Geometry"));
+    restoreState(config.value("MainWindow_State").toByteArray());
+    restoreGeometry(config.value("MainWindow_Geometry").toByteArray());
 }
 
 void MainWindow::write_settings(){

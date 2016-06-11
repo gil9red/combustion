@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     // TODO: помнить размеры, положение и состояние виджетов
     try {
         MainWindow w;
-        w.resize(970, 550);
         w.show();
 
         // FIXME: linedaystable исправить баг при повторной загрузке
