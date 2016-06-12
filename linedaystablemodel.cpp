@@ -84,13 +84,13 @@ void LineDaysTableModel::reset__() {
 
     // TODO:
     for (auto i = 0; i < 3; i++) {
-        qDebug() << i << linesList.length();
+//        qDebug() << i << linesList.length();
 
         QList<QPair<Busman::DayKind, Busman::DayKind>> line;
 
         // TODO:
         for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
-            qDebug() << i << linesList.length() << j;
+//            qDebug() << i << linesList.length() << j;
             auto pair = busmanTableModel->linesPairDayKindMap[(BusmanTableModel::Lines) i];
             line.append(pair);
         }

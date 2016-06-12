@@ -3,13 +3,12 @@
 #include <QPainter>
 #include "linedaystable.h"
 #include <QDebug>
+#include <QDate>
 
 
 LineDays_CellDelegate::LineDays_CellDelegate(LineDaysTable* parent)
     : QStyledItemDelegate() {
     this->parentTable = parent;
-
-    qDebug() << parentTable;
 }
 
 void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
@@ -35,18 +34,18 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QStyleOptionViewItem itemOption(option);
     initStyleOption(&itemOption, index);
 
-    if ((itemOption.state & QStyle::State_Selected) && (itemOption.state & QStyle::State_Active)) {
-//                    auto pos = parentTable->viewport()->mapFromGlobal(QCursor::pos());
-//                    bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
-//                    qDebug() << pos << (leftSide ? "left" : "right");
-//////                    side =
+    if ((itemOption.state & QStyle::State_Selected) /*&& (itemOption.state & QStyle::State_Active)*/) {
+        auto pos = parentTable->clickedPos;
+        if (pos != QPoint(-1, -1)) {
+            bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
+            qDebug() << QDateTime::currentDateTime() << pos << (leftSide ? "left" : "right");
 
-////                    if (leftSide) {
-////                        itemOption.rect.setWidth(itemOption.rect.width() / 2);
-////                    } else {
-////                        itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
-////                    }
-//                    qDebug() << parentTable;
+            if (leftSide) {
+                itemOption.rect.setWidth(itemOption.rect.width() / 2);
+            } else {
+                itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
+            }
+        }
 
         auto color = itemOption.palette.color(QPalette::Highlight);
         color.setAlpha(180);
