@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     busmantablemodel.cpp \
     celldelegate.cpp \
     linedaystable.cpp \
-    verticalschedulerheaderview.cpp
+    verticalschedulerheaderview.cpp \
+    linedaystablemodel.cpp \
+    linedays_verticalheaderview.cpp \
+    linedays_celldelegate.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
@@ -27,7 +30,10 @@ HEADERS  += mainwindow.h \
     busmantablemodel.h \
     celldelegate.h \
     linedaystable.h \
-    verticalschedulerheaderview.h
+    verticalschedulerheaderview.h \
+    linedaystablemodel.h \
+    linedays_verticalheaderview.h \
+    linedays_celldelegate.h
 
 FORMS    += mainwindow.ui
 
