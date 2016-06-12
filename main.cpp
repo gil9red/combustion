@@ -5,17 +5,13 @@
 
 
 // TODO: указатели 0 заменить на nullptr
-// TODO: исправить падение при закрытии окна
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // TODO: помнить размеры, положение и состояние виджетов
     try {
         MainWindow w;
         w.show();
-
-        // FIXME: linedaystable исправить баг при повторной загрузке
         w.load("../combustion/INFO/given_pussle.txt");
 
         return a.exec();

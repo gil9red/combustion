@@ -28,9 +28,6 @@ class MainWindow : public QMainWindow
         void read_settings();
         void write_settings();
 
-    protected:
-        void closeEvent(QCloseEvent *event);
-
     private:
         Ui::MainWindow *ui;
 
@@ -38,7 +35,8 @@ class MainWindow : public QMainWindow
         QTableView tableView;
         BusmanTableModel model;
 
-
+    protected:
+        void closeEvent(QCloseEvent*);
 };
 
 #endif // MAINWINDOW_H

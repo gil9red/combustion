@@ -117,20 +117,19 @@ void MainWindow::saveAs() {
 }
 
 void MainWindow::read_settings(){
-    // TODO: при сложных настройках, лучше перейти на json или yaml
-    QSettings config ("config",  QSettings::IniFormat);
+    QSettings config("config",  QSettings::IniFormat);
     restoreState(config.value("MainWindow_State").toByteArray());
     restoreGeometry(config.value("MainWindow_Geometry").toByteArray());
 }
 
 void MainWindow::write_settings(){
 
-    QSettings config ("config",  QSettings::IniFormat);
-    config.setValue("MainWindow_State", this->saveState());
-    config.setValue("MainWindow_Geometry", this->saveGeometry());
+    QSettings config("config",  QSettings::IniFormat);
+    config.setValue("MainWindow_State", saveState());
+    config.setValue("MainWindow_Geometry", saveGeometry());
 }
 
-void MainWindow::closeEvent(QCloseEvent *event){
+void MainWindow::closeEvent(QCloseEvent*){
        write_settings();
        qApp->quit();
 }
