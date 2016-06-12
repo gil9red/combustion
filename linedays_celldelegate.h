@@ -3,12 +3,13 @@
 
 
 #include <QStyledItemDelegate>
+#include "linedaystable.h"
 
 
 class LineDays_CellDelegate : public QStyledItemDelegate
 {
     public:
-        LineDays_CellDelegate(QWidget* parent=nullptr);
+        LineDays_CellDelegate(LineDaysTable* parent=nullptr);
 //        LineDays_CellDelegate(QWidget* parent=nullptr): QStyledItemDelegate() {
 //            this->parentTable = parent;
 //        }
@@ -21,7 +22,7 @@ class LineDays_CellDelegate : public QStyledItemDelegate
 //            };
 //            SelectedSide side = SelectedSide::None;
 
-        QWidget* parentTable;
+        LineDaysTable* parentTable;
 
     protected:
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;

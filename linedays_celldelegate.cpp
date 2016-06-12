@@ -1,11 +1,15 @@
 #include "linedays_celldelegate.h"
 #include "linedaystablemodel.h"
 #include <QPainter>
+#include "linedaystable.h"
+#include <QDebug>
 
 
-LineDays_CellDelegate::LineDays_CellDelegate(QWidget* parent)
+LineDays_CellDelegate::LineDays_CellDelegate(LineDaysTable* parent)
     : QStyledItemDelegate() {
     this->parentTable = parent;
+
+    qDebug() << parentTable;
 }
 
 void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
