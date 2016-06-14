@@ -16,8 +16,8 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     QRect rect = option.rect;
 
-    QImage dayImage = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<QImage>();
-    QImage nightImage = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<QImage>();
+    QImage dayImage = index.model()->data(index, LineDaysTableModel::DayKind_Image_Day_Role).value<QImage>();
+    QImage nightImage = index.model()->data(index, LineDaysTableModel::DayKind_Image_Night_Role).value<QImage>();
 
     // Отступ между иконками в ячейке
     auto indent = 2;
@@ -29,6 +29,12 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     painter->drawImage(rect.x(), rect.y(), dayImage);
     painter->drawImage(rect.x() + size + indent, rect.y(), nightImage);
+
+
+    Busman::DayKind sunDay = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<Busman::DayKind>();
+    Busman::DayKind moonDay = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<Busman::DayKind>();
+    painter->drawText(QRectF(rect.x(), rect.y(), size, size), Qt::AlignLeft | Qt::AlignTop, QString::number(sunDay));
+    painter->drawText(QRectF(rect.x() + size + indent, rect.y(), size, size), Qt::AlignLeft | Qt::AlignTop, QString::number(moonDay));
 
     painter->restore();
 

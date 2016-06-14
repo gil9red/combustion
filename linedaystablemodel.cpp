@@ -28,14 +28,27 @@ QVariant LineDaysTableModel::data(const QModelIndex &index, int role) const {
     const int row = index.row();
     const int column = index.column();
 
-    if (role == DayKind_Day_Role || role == DayKind_Night_Role) {
+    if (role == DayKind_Image_Day_Role || role == DayKind_Image_Night_Role) {
         auto pair = linesList.at(row).at(column);
 
-        if (role == DayKind_Day_Role) {
+        if (role == DayKind_Image_Day_Role) {
             return busmanTableModel->lineDaysIconsMap[pair.first];
         } else {
             return busmanTableModel->lineDaysIconsMap[pair.second];
         }
+
+    } else if (role == DayKind_Day_Role || role == DayKind_Night_Role) {
+        auto pair = linesList.at(row).at(column);
+//        qDebug() << pair;
+
+        QVariant v;
+        if (role == DayKind_Day_Role) {
+            v.setValue(pair.first);
+        } else {
+            v.setValue(pair.second);
+        }
+
+        return v;
     }
 
     return QVariant();
@@ -88,11 +101,14 @@ void LineDaysTableModel::reset__() {
 
         QList<QPair<Busman::DayKind, Busman::DayKind>> line;
 
+        QDebug deb = qDebug();
+
         // TODO:
         for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
 //            qDebug() << i << linesList.length() << j;
             auto pair = busmanTableModel->linesPairDayKindMap[(BusmanTableModel::Lines) i];
             line.append(pair);
+            deb << pair;
         }
 
         linesList.append(line);

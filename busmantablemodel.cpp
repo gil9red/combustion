@@ -48,6 +48,10 @@ BusmanTableModel::BusmanTableModel() {
     lineDaysIconsMap[Busman::DayKind::LINE_2_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_2]);
     lineDaysIconsMap[Busman::DayKind::LINE_3_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_3]);
     lineDaysIconsMap[Busman::DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
+
+    for (auto key: lineDaysIconsMap.keys()) {
+        qDebug() << key << lineDaysIconsMap.value(key);
+    }
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
@@ -143,7 +147,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     const int column = index.column();
 
     Busman* busman = busmanList.at(row);
-    auto day = busman->workingDays.contains(column) ? busman->workingDays[column] : Busman::DayKind::NONE;
+    auto day = busman->workingDays.value(column, Busman::DayKind::NONE);
 
     if (role == Qt::DisplayRole) {
         if (isVisibleCellText) {
@@ -174,6 +178,9 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         return v;
 
     } else if (role == DayKindRole) {
+        if (day != Busman::DayKind::NONE)
+        qDebug() << "data DayKindRole " << day;
+
         QVariant v;
         v.setValue(day);
         return v;
@@ -181,6 +188,9 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     // TODO: нормальное название для той таблицы, серьезно!
     // Роль для возврата иконки линии/дня
     } else if (role == DayImageKindRole) {
+        if (day != Busman::DayKind::NONE)
+        qDebug() << "data DayImageKindRole " << day;
+
         if (day != Busman::DayKind::NONE) {
             return lineDaysIconsMap[day];
         }

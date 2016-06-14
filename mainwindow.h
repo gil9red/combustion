@@ -49,6 +49,7 @@ class MainWindow : public QMainWindow
             qDebug() << "sun" << day;
             model.setDayKind(bottomIndex, day);
 
+            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
             model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
         }

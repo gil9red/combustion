@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QBrush>
 #include <QTableView>
+#include <QDebug>
 
 
 class BusmanTableModel : public QAbstractTableModel
@@ -75,6 +76,8 @@ class BusmanTableModel : public QAbstractTableModel
                 // TODO: дубликат
                 throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
             }
+
+            qDebug() << "setDayKind" << index << day;
 
             busman->workingDays[index.column()] = day;
         }

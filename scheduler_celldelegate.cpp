@@ -46,7 +46,6 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     painter->fillRect(rect, brush);
 
-    // TODO: рисуется почему то только moon, sun игнорируется
     // TODO: выделение полупрозрачным сделать
     Busman::DayKind day = index.model()->data(index, BusmanTableModel::DayKindRole).value<Busman::DayKind>();
     if (day != Busman::DayKind::NONE) {
@@ -73,9 +72,32 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         painter->drawImage(rect.x(), rect.y(), dayImage);
         painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
     }
+    painter->drawText(option.rect, Qt::AlignLeft | Qt::AlignTop, QString::number(day));
 
     painter->restore();
 
+    // Цвет выделения полупрозрачный, чтобы были видно что в ячейке
+    QStyleOptionViewItem itemOption(option);
+    initStyleOption(&itemOption, index);
+
+    if ((itemOption.state & QStyle::State_Selected) /*&& (itemOption.state & QStyle::State_Active)*/) {
+//        auto pos = parentTable->clickedPos;
+//        if (pos != QPoint(-1, -1)) {
+//            bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
+//            qDebug() << QDateTime::currentDateTime() << pos << (leftSide ? "left" : "right");
+
+//            if (leftSide) {
+//                itemOption.rect.setWidth(itemOption.rect.width() / 2);
+//            } else {
+//                itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
+//            }
+//        }
+
+        auto color = itemOption.palette.color(QPalette::Highlight);
+        color.setAlpha(180);
+        itemOption.palette.setColor(QPalette::Highlight, color);
+    }
+
     // Здесь дорисовываются стандартные вещи вроде текста, которые берутся из модели
-    QStyledItemDelegate::paint(painter, option, index);
+    QStyledItemDelegate::paint(painter, itemOption, index);
 }

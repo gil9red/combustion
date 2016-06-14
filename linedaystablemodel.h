@@ -37,7 +37,7 @@ class LineDaysTableModel : public QAbstractTableModel
         }
 
         // TODO: cpp
-        const QPair<Busman::DayKind, Busman::DayKind>& get(const QModelIndex& index) throw(std::exception) {
+        QPair<Busman::DayKind, Busman::DayKind> get(const QModelIndex& index) throw(std::exception) {
             auto row = getRow(index);
 
             if (index.column() >= row.length()) {
@@ -45,16 +45,20 @@ class LineDaysTableModel : public QAbstractTableModel
                                        .arg(index.column()).arg(row.length()).toStdString());
             }
 
+            qDebug() << "get" << row[index.column()] << row[index.column()].first << row[index.column()].second << row[index.column()].first;
             return row[index.column()];
         }
 
         // TODO: cpp
         Busman::DayKind getLeft(const QModelIndex& index) throw(std::exception) {
+//            const QPair<Busman::DayKind, Busman::DayKind>&
+            qDebug() << "getLeft" << get(index).first;
             return get(index).first;
         }
 
         // TODO: cpp
         Busman::DayKind getRight(const QModelIndex& index) throw(std::exception) {
+            qDebug() << "getRight" << get(index).second;
             return get(index).second;
         }
 
@@ -117,8 +121,10 @@ class LineDaysTableModel : public QAbstractTableModel
 
     public:
         enum UserRole {
-            DayKind_Day_Role = Qt::UserRole,
-            DayKind_Night_Role = Qt::UserRole + 1,
+            DayKind_Image_Day_Role = Qt::UserRole,
+            DayKind_Image_Night_Role = Qt::UserRole + 1,
+            DayKind_Day_Role = Qt::UserRole + 2,
+            DayKind_Night_Role = Qt::UserRole + 3,
         };
 
         BusmanTableModel* busmanTableModel;

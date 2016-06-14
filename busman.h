@@ -28,7 +28,7 @@ class Busman
         // Варианты значения для рабочего дня:
         // TODO: название лучше более смысловое
         enum DayKind {
-            NONE,
+            NONE = 0,
             LINE_1_DAY,
             LINE_1_NIGHT,
             LINE_2_DAY,
