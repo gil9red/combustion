@@ -22,6 +22,8 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     // Отступ между иконками в ячейке
     auto indent = 2;
     auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
+
+    // TODO: исправить ошибку "QImage::scaled: Image is a null image"
     dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 

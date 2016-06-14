@@ -46,8 +46,8 @@ class LineDaysTable : public QTableView
 
 //    private slots:
 //        void clickedIndex(const QModelIndex& index) {
-//            clickedPos = viewport()->mapFromGlobal(QCursor::pos());
-//            qDebug() << index << clickedPos;
+////            clickedPos = viewport()->mapFromGlobal(QCursor::pos());
+////            qDebug() << index << clickedPos;
 //        }
 };
 

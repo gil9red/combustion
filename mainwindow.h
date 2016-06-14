@@ -31,16 +31,56 @@ class MainWindow : public QMainWindow
     // TODO: переименовать, подключать не из формы, перенести в срр
     private slots:
         void on_actionSelectSun_triggered() {
-            qDebug() << "sun";
+            auto topIndex = lineDaysTable.currentIndex();
+            auto bottomIndex = tableView.currentIndex();
+
+            // Проверка что ячейки валидные и столбцы выделенных ячеек совпадают
+            if (!topIndex.isValid() || !bottomIndex.isValid() || topIndex.column() != bottomIndex.column()) {
+                return;
+            }
+
+            Busman* busman = model.get(bottomIndex);
+            if (busman == nullptr) {
+                qWarning() << "busman is nullptr, index:" << bottomIndex;
+                return;
+            }
+
+            auto day = lineDaysTable.model.getLeft(topIndex);
+            qDebug() << "sun" << day;
+            model.setDayKind(bottomIndex, day);
+
+            model.sayViewUpdate();
+            lineDaysTable.model.sayViewUpdate();
         }
         void on_actionSelectMoon_triggered() {
-            qDebug() << "moon";
+            auto topIndex = lineDaysTable.currentIndex();
+            auto bottomIndex = tableView.currentIndex();
+
+            // Проверка что ячейки валидные и столбцы выделенных ячеек совпадают
+            if (!topIndex.isValid() || !bottomIndex.isValid() || topIndex.column() != bottomIndex.column()) {
+                return;
+            }
+
+            Busman* busman = model.get(bottomIndex);
+            if (busman == nullptr) {
+                qWarning() << "busman is nullptr, index:" << bottomIndex;
+                return;
+            }
+
+            auto day = lineDaysTable.model.getRight(topIndex);
+            qDebug() << "moon" << day;
+            model.setDayKind(bottomIndex, day);
+
+            model.sayViewUpdate();
+            lineDaysTable.model.sayViewUpdate();
         }
 
     private:
         Ui::MainWindow *ui;
 
         LineDaysTable lineDaysTable;
+
+        // TODO: в отдельный виджет как LineDaysTable
         QTableView tableView;
         BusmanTableModel model;
 

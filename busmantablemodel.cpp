@@ -143,6 +143,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     const int column = index.column();
 
     Busman* busman = busmanList.at(row);
+    auto day = busman->workingDays.contains(column) ? busman->workingDays[column] : Busman::DayKind::NONE;
 
     if (role == Qt::DisplayRole) {
         if (isVisibleCellText) {
@@ -171,6 +172,18 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         QVariant v;
         v.setValue(busman);
         return v;
+
+    } else if (role == DayKindRole) {
+        QVariant v;
+        v.setValue(day);
+        return v;
+
+    // TODO: нормальное название для той таблицы, серьезно!
+    // Роль для возврата иконки линии/дня
+    } else if (role == DayImageKindRole) {
+        if (day != Busman::DayKind::NONE) {
+            return lineDaysIconsMap[day];
+        }
     }
 
     return QVariant();

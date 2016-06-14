@@ -44,6 +44,7 @@ class Busman
 #include <QVariant>
 
 Q_DECLARE_METATYPE(Busman*)
+Q_DECLARE_METATYPE(Busman::DayKind)
 
 
 #endif // BUSMAN_H

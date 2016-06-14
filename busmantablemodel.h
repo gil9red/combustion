@@ -15,6 +15,8 @@ class BusmanTableModel : public QAbstractTableModel
         enum CustomRole {
             BusmanRole = Qt::UserRole,
             WishDayRole = Qt::UserRole + 1,
+            DayKindRole = Qt::UserRole + 2,
+            DayImageKindRole = Qt::UserRole + 3,
         };
 
         enum Lines {
@@ -39,11 +41,42 @@ class BusmanTableModel : public QAbstractTableModel
         void sayViewUpdate();
 
         // TODO: перенести в cpp
+        Busman* get(const QModelIndex& index) {
+            return get(index.row());
+        }
+
+        // TODO: перенести в cpp
         Busman* get(int row) {
-            if (row < 0 || row >= busmanList.length())
+            if (row < 0 || row >= busmanList.length()) {
                 return nullptr;
+            }
 
             return busmanList.at(row);
+        }
+
+        Busman::DayKind getDayKind(const QModelIndex& index) throw(std::exception) {
+            Busman* busman = get(index);
+            if (busman == nullptr) {
+                // TODO: дубликат
+                throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+            }
+
+            auto column = index.column();
+            if (!busman->workingDays.contains(column)) {
+                return Busman::DayKind::NONE;
+            }
+
+            return busman->workingDays[column];
+        }
+
+        void setDayKind(const QModelIndex& index, Busman::DayKind day) throw(std::exception) {
+            Busman* busman = get(index);
+            if (busman == nullptr) {
+                // TODO: дубликат
+                throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+            }
+
+            busman->workingDays[index.column()] = day;
         }
 
     private:
