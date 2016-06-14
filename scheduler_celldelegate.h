@@ -5,7 +5,7 @@
 #include <QStyledItemDelegate>
 
 
-class CellDelegate : public QStyledItemDelegate
+class SchedulerCellDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

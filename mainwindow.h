@@ -28,6 +28,15 @@ class MainWindow : public QMainWindow
         void read_settings();
         void write_settings();
 
+    // TODO: переименовать, подключать не из формы, перенести в срр
+    private slots:
+        void on_actionSelectSun_triggered() {
+            qDebug() << "sun";
+        }
+        void on_actionSelectMoon_triggered() {
+            qDebug() << "moon";
+        }
+
     private:
         Ui::MainWindow *ui;
 
@@ -37,6 +46,7 @@ class MainWindow : public QMainWindow
 
     protected:
         void closeEvent(QCloseEvent*);
+
 };
 
 #endif // MAINWINDOW_H

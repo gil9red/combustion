@@ -1,4 +1,4 @@
-#include "celldelegate.h"
+#include "scheduler_celldelegate.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -7,7 +7,7 @@
 #include "busmantablemodel.h"
 
 
-void CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 viewOption = option;
 

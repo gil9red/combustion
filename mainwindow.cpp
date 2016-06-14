@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "celldelegate.h"
+#include "scheduler_celldelegate.h"
 #include <QFileDialog>
 #include <QDebug>
 #include <QScrollBar>
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     read_settings();
 
     tableView.setModel(&model);
-    tableView.setItemDelegate(new CellDelegate());
+    tableView.setItemDelegate(new SchedulerCellDelegate());
 
     // Заголовок будет в lineDaysTable
     tableView.horizontalHeader()->hide();
@@ -133,4 +133,3 @@ void MainWindow::closeEvent(QCloseEvent*){
        write_settings();
        qApp->quit();
 }
-

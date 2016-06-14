@@ -17,23 +17,23 @@ SOURCES += main.cpp\
     parserpuzzlefile.cpp \
     busman.cpp \
     busmantablemodel.cpp \
-    celldelegate.cpp \
     linedaystable.cpp \
     verticalschedulerheaderview.cpp \
     linedaystablemodel.cpp \
     linedays_verticalheaderview.cpp \
-    linedays_celldelegate.cpp
+    linedays_celldelegate.cpp \
+    scheduler_celldelegate.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
     busman.h \
     busmantablemodel.h \
-    celldelegate.h \
     linedaystable.h \
     verticalschedulerheaderview.h \
     linedaystablemodel.h \
     linedays_verticalheaderview.h \
-    linedays_celldelegate.h
+    linedays_celldelegate.h \
+    scheduler_celldelegate.h
 
 FORMS    += mainwindow.ui
 
