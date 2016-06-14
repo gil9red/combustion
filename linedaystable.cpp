@@ -13,5 +13,5 @@ LineDaysTable::LineDaysTable()
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    connect(this, LineDaysTable::clicked, this, LineDaysTable::clickedIndex);
+//    connect(this, LineDaysTable::clicked, this, LineDaysTable::clickedIndex);
 }

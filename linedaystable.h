@@ -19,10 +19,10 @@ class LineDaysTable : public QTableView
         // TODO:
         LineDaysTableModel model;
 
-        // TODO
-        QPoint clickedPos = QPoint(-1, -1);
+//        // TODO
+//        QPoint clickedPos = QPoint(-1, -1);
 
-    protected:
+//    protected:
 //        void mousePressEvent(QMouseEvent* event) {
 //            qDebug() << event->pos() << viewport()->mapFromGlobal(QCursor::pos());
 //            clickedPos = event->pos();
@@ -44,11 +44,11 @@ class LineDaysTable : public QTableView
 //            QTableView::focusOutEvent(event);
 //        }
 
-    private slots:
-        void clickedIndex(const QModelIndex& index) {
-            clickedPos = viewport()->mapFromGlobal(QCursor::pos());
-            qDebug() << index << clickedPos;
-        }
+//    private slots:
+//        void clickedIndex(const QModelIndex& index) {
+//            clickedPos = viewport()->mapFromGlobal(QCursor::pos());
+//            qDebug() << index << clickedPos;
+//        }
 };
 
 
