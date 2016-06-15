@@ -5,6 +5,7 @@
 #include "busmantablemodel.h"
 #include "linedaystable.h"
 #include <QResizeEvent>
+#include <QItemSelection>
 
 
 namespace Ui {

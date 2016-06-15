@@ -24,6 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView.setSelectionBehavior(QAbstractItemView::SelectItems);
     tableView.setSelectionMode(QAbstractItemView::SingleSelection);
 
+//    connect(&lineDaysTable, &QTableView::clicked, this, [=](const QModelIndex& index) {
+//        // Очищение выделения
+//        tableView.selectionModel()->clearSelection();
+
+//        // Выделение столбца
+//        tableView.selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Columns);
+//    });
+
     // TODO: привести в нормальный вид, пока все запутанно и похоже на костыль
     lineDaysTable.model.busmanTableModel = &model;
 
