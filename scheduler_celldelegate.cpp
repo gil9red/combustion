@@ -69,9 +69,26 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 //        nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        painter->drawImage(rect.x(), rect.y(), dayImage);
-        painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
+        switch (day) {
+            case Busman::DayKind::LINE_1_DAY:
+            case Busman::DayKind::LINE_2_DAY:
+            case Busman::DayKind::LINE_3_DAY:
+                painter->drawImage(rect.x(), rect.y(), dayImage);
+                break;
+
+            case Busman::DayKind::LINE_1_NIGHT:
+            case Busman::DayKind::LINE_2_NIGHT:
+            case Busman::DayKind::LINE_3_NIGHT:
+                painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
+                break;
+
+            default: {
+
+            }
+        }
     }
+
+    // NOTE: отрисовка DayKind для отладки. Убрать потом.
     painter->drawText(option.rect, Qt::AlignLeft | Qt::AlignTop, QString::number(day));
 
     painter->restore();
