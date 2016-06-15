@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-    public slots:
+    public:
         void load(const QString& fileName);
 
         void open();
@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow
         void write_settings();
 
     // TODO: переименовать, подключать не из формы, перенести в срр
-    private slots:
+    private:
         void on_actionSelectSun_triggered() {
             auto topIndex = lineDaysTable.currentIndex();
             auto bottomIndex = tableView.currentIndex();
