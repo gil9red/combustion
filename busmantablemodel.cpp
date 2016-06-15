@@ -38,6 +38,13 @@ BusmanTableModel::BusmanTableModel() {
     linesPairDayKindMap[Lines::Line_2] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_2_DAY, Busman::DayKind::LINE_2_NIGHT);
     linesPairDayKindMap[Lines::Line_3] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_3_DAY, Busman::DayKind::LINE_3_NIGHT);
 
+    dayKindsLinesMap[Busman::DayKind::LINE_1_DAY] = Lines::Line_1;
+    dayKindsLinesMap[Busman::DayKind::LINE_1_NIGHT] = Lines::Line_1;
+    dayKindsLinesMap[Busman::DayKind::LINE_2_DAY] = Lines::Line_2;
+    dayKindsLinesMap[Busman::DayKind::LINE_2_NIGHT] = Lines::Line_2;
+    dayKindsLinesMap[Busman::DayKind::LINE_3_DAY] = Lines::Line_3;
+    dayKindsLinesMap[Busman::DayKind::LINE_3_NIGHT] = Lines::Line_3;
+
     stringLineMap["1"] = Lines::Line_1;
     stringLineMap["2"] = Lines::Line_2;
     stringLineMap["3"] = Lines::Line_3;
@@ -128,11 +135,11 @@ void BusmanTableModel::sayViewUpdate() {
     emit dataChanged(createIndex(0, 0), createIndex(rowCount() - 1, columnCount() - 1));
 }
 
-int BusmanTableModel::rowCount(const QModelIndex &parent) const {
+int BusmanTableModel::rowCount(const QModelIndex &) const {
     return busmanList.length();
 }
 
-int BusmanTableModel::columnCount(const QModelIndex &parent) const {
+int BusmanTableModel::columnCount(const QModelIndex &) const {
     if (busmanList.length() > 0) {
         Busman* busman = busmanList.at(0);
         // Номер автобуса + Выбор линии маршрута + количесто дней в расписании

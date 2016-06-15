@@ -69,6 +69,9 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 //        nightImage = nightImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
+        // TODO:
+        // scheduler_celldelegate.cpp void SchedulerCellDelegate::paint
+        // mainwindow.h void on_actionReturnValue_triggered()
         switch (day) {
             case Busman::DayKind::LINE_1_DAY:
             case Busman::DayKind::LINE_2_DAY:

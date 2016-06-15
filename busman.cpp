@@ -22,7 +22,7 @@ QStringList getSublist(QStringList list, int begin) {
 }
 
 
-Busman* Busman::fromString(const QString& str, const QStringList& days) {
+Busman* Busman::fromString(const QString& str) {
     QStringList dataRow = str.split('|');
     dataRow.removeLast();
     dataRow.removeAt(3);

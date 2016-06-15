@@ -21,10 +21,10 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, 
         lines.append(in.readLine());
     }
 
-    // Получение списка дат (3 строка)
-    QStringList days = lines.at(2).split('|');
-    days.removeFirst();
-    days.removeLast();
+//    // Получение списка дат (3 строка)
+//    QStringList days = lines.at(2).split('|');
+//    days.removeFirst();
+//    days.removeLast();
 
     // Получение списка водителей и их предпочтений
     int indexEndTable = -1;
@@ -37,7 +37,7 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, 
             break;
         }
 
-        Busman* busman = Busman::fromString(line, days);
+        Busman* busman = Busman::fromString(line);
         busmanList.append(busman);
     }
 

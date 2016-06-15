@@ -12,7 +12,7 @@ class Busman
 {
     public:
         // Функция парсит указанную строку и пытается создать из нее объект Busman
-        static Busman* fromString(const QString& str, const QStringList & days);
+        static Busman* fromString(const QString& str);
 
     public:
         QString busNum;

@@ -46,8 +46,32 @@ class MainWindow : public QMainWindow
                 return;
             }
 
+            if (lineDaysTable.model.getLeft(topIndex) == Busman::DayKind::NONE
+                    && lineDaysTable.model.getRight(topIndex) == Busman::DayKind::NONE) {
+                qWarning() << "Cell is empty";
+                return;
+            }
+
+            // Берем значение
             auto day = lineDaysTable.model.getLeft(topIndex);
-            qDebug() << "sun" << day;
+            if (day == Busman::DayKind::NONE) {
+                qWarning() << "Left value cell is empty";
+                return;
+            }
+
+            // Убираем значение, которое забрали
+            lineDaysTable.model.setLeft(topIndex, Busman::DayKind::NONE);
+
+            auto bottomCellDay = model.getDayKind(bottomIndex);
+            if (bottomCellDay != Busman::DayKind::NONE) {
+                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                // TODO:
+                // По дню получаем его строку в таблице выше
+                int row = (int) model.dayKindsLinesMap[bottomCellDay];
+                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+            }
+
+            // Вставляем значение в ячейку таблицы
             model.setDayKind(bottomIndex, day);
 
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
@@ -69,16 +93,59 @@ class MainWindow : public QMainWindow
                 return;
             }
 
+            if (lineDaysTable.model.getLeft(topIndex) == Busman::DayKind::NONE
+                    && lineDaysTable.model.getRight(topIndex) == Busman::DayKind::NONE) {
+                qWarning() << "Cell is empty";
+                return;
+            }
+
+            // Берем значение
             auto day = lineDaysTable.model.getRight(topIndex);
-            qDebug() << "moon" << day;
+            if (day == Busman::DayKind::NONE) {
+                qWarning() << "Right value cell is empty";
+                return;
+            }
+
+            // Убираем значение, которое забрали
+            lineDaysTable.model.setRight(topIndex, Busman::DayKind::NONE);
+
+            auto bottomCellDay = model.getDayKind(bottomIndex);
+            if (bottomCellDay != Busman::DayKind::NONE) {
+                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                // TODO:
+                // По дню получаем его строку в таблице выше
+                int row = (int) model.dayKindsLinesMap[bottomCellDay];
+                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+            }
+
+            // Вставляем значение в ячейку таблицы
             model.setDayKind(bottomIndex, day);
 
+            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
             model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
         }
 
-        void on_actionClearDay_triggered() {
+        void on_actionReturnValue_triggered() {
+            auto bottomIndex = tableView.currentIndex();
 
+            auto day = model.getDayKind(bottomIndex);
+            if (day == Busman::DayKind::NONE) {
+                return;
+            }
+
+            // TODO: clear
+            model.setDayKind(bottomIndex, Busman::DayKind::NONE);
+
+            // TODO:
+            int row = (int) model.dayKindsLinesMap[day];
+            int column = bottomIndex.column();
+
+            lineDaysTable.model.setValue(row, column, day);
+
+            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+            model.sayViewUpdate();
+            lineDaysTable.model.sayViewUpdate();
         }
 
     private:

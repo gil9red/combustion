@@ -87,9 +87,6 @@ class BusmanTableModel : public QAbstractTableModel
         QMap<QString, QBrush> dayKindBackgroundColorMap;
 
     public:
-        // TODO:
-//        QMap<QString, QString> valueDescriptionMap;
-
         // TODO: сделать private обернуть в функции set/get + при изменении значения
         // уведомлять об этом представление
         // Показывать текст ячеек с расписанием: XX, 00, DD и т.п.
@@ -105,6 +102,7 @@ class BusmanTableModel : public QAbstractTableModel
         QMap<QString, Lines> stringLineMap;
 
         QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
+        QMap<Busman::DayKind, Lines> dayKindsLinesMap;
 };
 
 #endif // BUSMANTABLEMODEL_H
