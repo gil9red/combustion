@@ -42,10 +42,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tableView.horizontalScrollBar(), &QAbstractSlider::valueChanged,
             lineDaysTable.horizontalScrollBar(), &QAbstractSlider::setValue);
 
-    auto mainLayout = new QVBoxLayout();
+    auto tableLayout = new QVBoxLayout();
+    tableLayout->setMargin(0);
+    tableLayout->addWidget(&lineDaysTable);
+    tableLayout->addWidget(&tableView);
+
+    auto mainLayout = new QHBoxLayout();
     mainLayout->setMargin(0);
-    mainLayout->addWidget(&lineDaysTable);
-    mainLayout->addWidget(&tableView);
+    // TODO: добавить виджет для подсчета очков
+    //mainLayout->addWidget();
+    mainLayout->addLayout(tableLayout);
 
     auto centralWidget = new QWidget();
     centralWidget->setObjectName("CentralWindow");
