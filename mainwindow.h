@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow
         void write_settings();
 
     // TODO: переименовать, подключать не из формы, перенести в срр
-    private:
+    private slots:
         void on_actionSelectSun_triggered() {
             auto topIndex = lineDaysTable.currentIndex();
             auto bottomIndex = tableView.currentIndex();
@@ -75,6 +75,10 @@ class MainWindow : public QMainWindow
 
             model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
+        }
+
+        void on_actionClearDay_triggered() {
+
         }
 
     private:

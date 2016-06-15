@@ -61,6 +61,7 @@
    </attribute>
    <addaction name="actionSelectSun"/>
    <addaction name="actionSelectMoon"/>
+   <addaction name="actionClearDay"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -108,6 +109,11 @@
   <action name="actionSelectMoon">
    <property name="text">
     <string>selectMoon</string>
+   </property>
+  </action>
+  <action name="actionClearDay">
+   <property name="text">
+    <string>ClearDay</string>
    </property>
   </action>
  </widget>
