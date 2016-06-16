@@ -6,6 +6,7 @@
 #include "linedaystable.h"
 #include <QResizeEvent>
 #include <QItemSelection>
+#include "scoreinfoboard.h"
 
 
 namespace Ui {
@@ -156,6 +157,8 @@ class MainWindow : public QMainWindow
         // TODO: в отдельный виджет как LineDaysTable
         QTableView tableView;
         BusmanTableModel model;
+
+        ScoreInfoBoard scoreInfoBoard;
 
     protected:
         void closeEvent(QCloseEvent*);

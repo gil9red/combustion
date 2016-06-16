@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     linedaystablemodel.cpp \
     linedays_verticalheaderview.cpp \
     linedays_celldelegate.cpp \
-    scheduler_celldelegate.cpp
+    scheduler_celldelegate.cpp \
+    scoreinfoboard.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
@@ -33,9 +34,11 @@ HEADERS  += mainwindow.h \
     linedaystablemodel.h \
     linedays_verticalheaderview.h \
     linedays_celldelegate.h \
-    scheduler_celldelegate.h
+    scheduler_celldelegate.h \
+    scoreinfoboard.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    scoreinfoboard.ui
 
 DISTFILES += \
     INFO/given_pussle.txt

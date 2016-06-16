@@ -72,15 +72,17 @@ MainWindow::MainWindow(QWidget *parent) :
     tableLayout->addWidget(&lineDaysTable);
     tableLayout->addWidget(&tableView);
 
+    auto tablesView = new QWidget();
+    tablesView->setObjectName("TablesView");
+    tablesView->setStyleSheet("QWidget#TablesView { background-color: gray; }");
+    tablesView->setLayout(tableLayout);
+
     auto mainLayout = new QHBoxLayout();
     mainLayout->setMargin(0);
-    // TODO: добавить виджет для подсчета очков
-    //mainLayout->addWidget();
-    mainLayout->addLayout(tableLayout);
+    mainLayout->addWidget(&scoreInfoBoard);
+    mainLayout->addWidget(tablesView);
 
     auto centralWidget = new QWidget();
-    centralWidget->setObjectName("CentralWindow");
-    centralWidget->setStyleSheet("QWidget#CentralWindow { background-color: gray; }");
     centralWidget->setLayout(mainLayout);
 
     setCentralWidget(centralWidget);
