@@ -57,7 +57,7 @@ ScoreInfoBoard::~ScoreInfoBoard()
 
 void ScoreInfoBoard::refresh() {
     // Заполнение a x b = c
-    for (auto key: enumValueLabelValuesMap.keys()) {
+    for (auto key: enumValueNumbersMap.keys()) {
         // Заполнение a
         auto label = enumValueLabelValuesMap[key];
         label->setText(getFormatFloatValue(key));

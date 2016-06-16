@@ -35,6 +35,8 @@ class ScoreInfoBoard : public QWidget
     private:
         Ui::ScoreInfoBoard *ui;
 
+        // TODO: словари можно объединить в один -- создать структуру и в ней описать значения
+        // которые в словарях описаны
         // Словарь, описывающий тип метрики и количество случаев
         QMap<EnumValue, int> enumValueNumbersMap;
 
