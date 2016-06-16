@@ -12,7 +12,6 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ScoreInfoBoard)
 {
-    // TODO: добавить total result
     ui->setupUi(this);
 
     enumValueNumbersMap[EnumValue::ShiftPreferences]          = 0;
@@ -22,6 +21,12 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     enumValueNumbersMap[EnumValue::EarlyAfterLateShifts]      = 0;
     enumValueNumbersMap[EnumValue::ConsecutiveLateShifts]     = 0;
     enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 0;
+
+//    // TODO: remove
+//    int i = 0;
+//    for (auto key: enumValueNumbersMap.keys()) {
+//        enumValueNumbersMap[key] = ++i;
+//    }
 
     enumValueLabelValuesMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Value;
     enumValueLabelValuesMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Value;
@@ -56,6 +61,8 @@ ScoreInfoBoard::~ScoreInfoBoard()
 }
 
 void ScoreInfoBoard::refresh() {
+    float score = 0.0;
+
     // Заполнение a x b = c
     for (auto key: enumValueNumbersMap.keys()) {
         // Заполнение a
@@ -67,8 +74,13 @@ void ScoreInfoBoard::refresh() {
         label = enumValueLabelNumbersMap[key];
         label->setText(getFormatFloatValue(number));
 
+        float value = key * number;
+        score += value;
+
         // Заполнение c
         label = enumValueLabelResultsMap[key];
-        label->setText(getFormatFloatValue(key * number));
+        label->setText(getFormatFloatValue(value));
     }
+
+    ui->label_Score->setText(getFormatFloatValue(score));
 }
