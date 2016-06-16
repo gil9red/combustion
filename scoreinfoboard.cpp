@@ -1,5 +1,6 @@
 #include "scoreinfoboard.h"
 #include "ui_scoreinfoboard.h"
+#include <QDebug>
 
 
 QString getFormatFloatValue(float value) {
@@ -14,6 +15,38 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     // TODO: добавить total result
     ui->setupUi(this);
 
+    enumValueNumbersMap[EnumValue::ShiftPreferences]          = 0;
+    enumValueNumbersMap[EnumValue::DayoffPreferences]         = 0;
+    enumValueNumbersMap[EnumValue::UnassignedShifts]          = 0;
+    enumValueNumbersMap[EnumValue::LongRests]                 = 0;
+    enumValueNumbersMap[EnumValue::EarlyAfterLateShifts]      = 0;
+    enumValueNumbersMap[EnumValue::ConsecutiveLateShifts]     = 0;
+    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 0;
+
+    enumValueLabelValuesMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Value;
+    enumValueLabelValuesMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Value;
+    enumValueLabelValuesMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Value;
+    enumValueLabelValuesMap[EnumValue::LongRests]                 = ui->label_LongRests_Value;
+    enumValueLabelValuesMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Value;
+    enumValueLabelValuesMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Value;
+    enumValueLabelValuesMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Value;
+
+    enumValueLabelNumbersMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Number;
+    enumValueLabelNumbersMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Number;
+    enumValueLabelNumbersMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Number;
+    enumValueLabelNumbersMap[EnumValue::LongRests]                 = ui->label_LongRests_Number;
+    enumValueLabelNumbersMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Number;
+    enumValueLabelNumbersMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Number;
+    enumValueLabelNumbersMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Number;
+
+    enumValueLabelResultsMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Result;
+    enumValueLabelResultsMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Result;
+    enumValueLabelResultsMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Result;
+    enumValueLabelResultsMap[EnumValue::LongRests]                 = ui->label_LongRests_Result;
+    enumValueLabelResultsMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Result;
+    enumValueLabelResultsMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Result;
+    enumValueLabelResultsMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Result;
+
     refresh();
 }
 
@@ -23,12 +56,19 @@ ScoreInfoBoard::~ScoreInfoBoard()
 }
 
 void ScoreInfoBoard::refresh() {
-    // TODO: названия виджетов соответственно их перечислению
-    ui->label_2->setText(getFormatFloatValue(EnumValue::ShiftPreferences));
-    ui->label_13->setText(getFormatFloatValue(EnumValue::DayoffPreferences));
-    ui->label_18->setText(getFormatFloatValue(EnumValue::UnassignedShifts));
-    ui->label_23->setText(getFormatFloatValue(EnumValue::LongRests));
-    ui->label_26->setText(getFormatFloatValue(EnumValue::EarlyAfterLateShifts));
-    ui->label_33->setText(getFormatFloatValue(EnumValue::ConsecutiveLateShifts));
-    ui->label_38->setText(getFormatFloatValue(EnumValue::DeviationTargetLateShifts));
+    // Заполнение a x b = c
+    for (auto key: enumValueLabelValuesMap.keys()) {
+        // Заполнение a
+        auto label = enumValueLabelValuesMap[key];
+        label->setText(getFormatFloatValue(key));
+
+        // Заполнение b
+        auto number = enumValueNumbersMap[key];
+        label = enumValueLabelNumbersMap[key];
+        label->setText(getFormatFloatValue(number));
+
+        // Заполнение c
+        label = enumValueLabelResultsMap[key];
+        label->setText(getFormatFloatValue(key * number));
+    }
 }

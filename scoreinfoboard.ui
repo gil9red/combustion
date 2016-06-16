@@ -17,7 +17,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="4">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="label_ShiftPreferences_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -88,7 +88,7 @@
       </spacer>
      </item>
      <item row="1" column="2">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="label_ShiftPreferences_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -108,7 +108,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_ShiftPreferences_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -184,7 +184,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="label_13">
+      <widget class="QLabel" name="label_DayoffPreferences_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -262,7 +262,7 @@
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QLabel" name="label_15">
+      <widget class="QLabel" name="label_DayoffPreferences_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -272,7 +272,7 @@
       </widget>
      </item>
      <item row="10" column="0">
-      <widget class="QLabel" name="label_23">
+      <widget class="QLabel" name="label_LongRests_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -298,7 +298,7 @@
       </spacer>
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="label_18">
+      <widget class="QLabel" name="label_UnassignedShifts_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -328,7 +328,7 @@
       </widget>
      </item>
      <item row="4" column="4">
-      <widget class="QLabel" name="label_17">
+      <widget class="QLabel" name="label_DayoffPreferences_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -348,7 +348,7 @@
       </widget>
      </item>
      <item row="7" column="2">
-      <widget class="QLabel" name="label_20">
+      <widget class="QLabel" name="label_UnassignedShifts_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -368,7 +368,7 @@
       </widget>
      </item>
      <item row="7" column="4">
-      <widget class="QLabel" name="label_22">
+      <widget class="QLabel" name="label_UnassignedShifts_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -378,7 +378,7 @@
       </widget>
      </item>
      <item row="19" column="4">
-      <widget class="QLabel" name="label_41">
+      <widget class="QLabel" name="label_DeviationTargetLateShifts_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -388,7 +388,7 @@
       </widget>
      </item>
      <item row="10" column="4">
-      <widget class="QLabel" name="label_28">
+      <widget class="QLabel" name="label_LongRests_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -398,7 +398,7 @@
       </widget>
      </item>
      <item row="13" column="0">
-      <widget class="QLabel" name="label_26">
+      <widget class="QLabel" name="label_EarlyAfterLateShifts_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -438,7 +438,7 @@
       </widget>
      </item>
      <item row="10" column="2">
-      <widget class="QLabel" name="label_27">
+      <widget class="QLabel" name="label_LongRests_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -458,7 +458,7 @@
       </widget>
      </item>
      <item row="13" column="2">
-      <widget class="QLabel" name="label_30">
+      <widget class="QLabel" name="label_EarlyAfterLateShifts_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -468,7 +468,7 @@
       </widget>
      </item>
      <item row="13" column="4">
-      <widget class="QLabel" name="label_32">
+      <widget class="QLabel" name="label_EarlyAfterLateShifts_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -478,7 +478,7 @@
       </widget>
      </item>
      <item row="16" column="0">
-      <widget class="QLabel" name="label_33">
+      <widget class="QLabel" name="label_ConsecutiveLateShifts_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -498,7 +498,7 @@
       </widget>
      </item>
      <item row="16" column="2">
-      <widget class="QLabel" name="label_35">
+      <widget class="QLabel" name="label_ConsecutiveLateShifts_Number">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -508,7 +508,7 @@
       </widget>
      </item>
      <item row="16" column="4">
-      <widget class="QLabel" name="label_37">
+      <widget class="QLabel" name="label_ConsecutiveLateShifts_Result">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -518,7 +518,7 @@
       </widget>
      </item>
      <item row="19" column="0">
-      <widget class="QLabel" name="label_38">
+      <widget class="QLabel" name="label_DeviationTargetLateShifts_Value">
        <property name="text">
         <string>0.0</string>
        </property>
@@ -528,7 +528,7 @@
       </widget>
      </item>
      <item row="19" column="2">
-      <widget class="QLabel" name="label_39">
+      <widget class="QLabel" name="label_DeviationTargetLateShifts_Number">
        <property name="text">
         <string>0.0</string>
        </property>
