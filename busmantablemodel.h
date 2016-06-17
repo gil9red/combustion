@@ -9,6 +9,8 @@
 #include <QTableView>
 #include <QDebug>
 
+#include "enums.h"
+
 
 class BusmanTableModel : public QAbstractTableModel
 {
@@ -18,12 +20,6 @@ class BusmanTableModel : public QAbstractTableModel
             WishDayRole = Qt::UserRole + 1,
             DayKindRole = Qt::UserRole + 2,
             DayImageKindRole = Qt::UserRole + 3,
-        };
-
-        enum Lines {
-            Line_1 = 0,
-            Line_2,
-            Line_3,
         };
 
     public:
@@ -55,7 +51,7 @@ class BusmanTableModel : public QAbstractTableModel
             return busmanList.at(row);
         }
 
-        Busman::DayKind getDayKind(const QModelIndex& index) throw(std::exception) {
+        DayKind getDayKind(const QModelIndex& index) throw(std::exception) {
             Busman* busman = get(index);
             if (busman == nullptr) {
                 // TODO: дубликат
@@ -64,13 +60,13 @@ class BusmanTableModel : public QAbstractTableModel
 
             auto column = index.column();
             if (!busman->workingDays.contains(column)) {
-                return Busman::DayKind::NONE;
+                return DayKind::NONE;
             }
 
             return busman->workingDays[column];
         }
 
-        void setDayKind(const QModelIndex& index, Busman::DayKind day) throw(std::exception) {
+        void setDayKind(const QModelIndex& index, DayKind day) throw(std::exception) {
             Busman* busman = get(index);
             if (busman == nullptr) {
                 // TODO: дубликат
@@ -93,16 +89,16 @@ class BusmanTableModel : public QAbstractTableModel
         bool isVisibleCellText;
 
         // Словарь содержит иконки для обозначения цветом линии (1, 2 и 3) и рабочие смены (день и ночь),
-        // по перечислению Busman::DayKind
-        QMap<Busman::DayKind, QImage> lineDaysIconsMap;
+        // по перечислению DayKind
+        QMap<DayKind, QImage> lineDaysIconsMap;
 
         // Словарь содержит описание цвета для линий.
         QMap<Lines, QColor> linesColorMap;
 
         QMap<QString, Lines> stringLineMap;
 
-        QMap<Lines, QPair<Busman::DayKind, Busman::DayKind>> linesPairDayKindMap;
-        QMap<Busman::DayKind, Lines> dayKindsLinesMap;
+        QMap<Lines, QPair<DayKind, DayKind>> linesPairDayKindMap;
+        QMap<DayKind, Lines> dayKindsLinesMap;
 };
 
 #endif // BUSMANTABLEMODEL_H

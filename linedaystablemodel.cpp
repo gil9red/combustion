@@ -99,14 +99,14 @@ void LineDaysTableModel::reset__() {
     for (auto i = 0; i < 3; i++) {
 //        qDebug() << i << linesList.length();
 
-        QList<QPair<Busman::DayKind, Busman::DayKind>> line;
+        QList<QPair<DayKind, DayKind>> line;
 
         QDebug deb = qDebug();
 
         // TODO:
         for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
 //            qDebug() << i << linesList.length() << j;
-            auto pair = busmanTableModel->linesPairDayKindMap[(BusmanTableModel::Lines) i];
+            auto pair = busmanTableModel->linesPairDayKindMap[(Lines) i];
             line.append(pair);
             deb << pair;
         }

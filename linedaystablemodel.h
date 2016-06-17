@@ -27,7 +27,7 @@ class LineDaysTableModel : public QAbstractTableModel
         void reset__();
 
         // TODO: cpp
-        QList<QPair<Busman::DayKind, Busman::DayKind>> getRow(const QModelIndex& index) throw(std::exception) {
+        QList<QPair<DayKind, DayKind>> getRow(const QModelIndex& index) throw(std::exception) {
             if (index.row() >= linesList.length()) {
                 throw std::logic_error(QString("Выход за пределы списка. (index.row() >= linesList.length() ; %1 >= %2).")
                                        .arg(index.row()).arg(linesList.length()).toStdString());
@@ -37,7 +37,7 @@ class LineDaysTableModel : public QAbstractTableModel
         }
 
         // TODO: cpp
-        QPair<Busman::DayKind, Busman::DayKind> get(const QModelIndex& index) throw(std::exception) {
+        QPair<DayKind, DayKind> get(const QModelIndex& index) throw(std::exception) {
             auto row = getRow(index);
 
             if (index.column() >= row.length()) {
@@ -50,25 +50,25 @@ class LineDaysTableModel : public QAbstractTableModel
         }
 
         // TODO: cpp
-        Busman::DayKind getLeft(const QModelIndex& index) throw(std::exception) {
-//            const QPair<Busman::DayKind, Busman::DayKind>&
+        DayKind getLeft(const QModelIndex& index) throw(std::exception) {
+//            const QPair<DayKind, DayKind>&
             qDebug() << "getLeft" << get(index).first;
             return get(index).first;
         }
 
         // TODO: cpp
-        Busman::DayKind getRight(const QModelIndex& index) throw(std::exception) {
+        DayKind getRight(const QModelIndex& index) throw(std::exception) {
             qDebug() << "getRight" << get(index).second;
             return get(index).second;
         }
 
         // TODO: cpp
-        void set(const QModelIndex& index, QPair<Busman::DayKind, Busman::DayKind> pair) throw(std::exception) {
+        void set(const QModelIndex& index, QPair<DayKind, DayKind> pair) throw(std::exception) {
             set(index.row(), index.column(), pair);
         }
 
         // TODO: cpp
-        void set(int row, int column, QPair<Busman::DayKind, Busman::DayKind> pair) throw(std::exception) {
+        void set(int row, int column, QPair<DayKind, DayKind> pair) throw(std::exception) {
             // TODO: дубликат
             if (row >= linesList.length()) {
                 throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
@@ -84,17 +84,17 @@ class LineDaysTableModel : public QAbstractTableModel
             linesList[row][column] = pair;
         }
 
-        void setValue(int row, int column, Busman::DayKind day) {
+        void setValue(int row, int column, DayKind day) {
             switch (day) {
-                case Busman::DayKind::LINE_1_DAY:
-                case Busman::DayKind::LINE_2_DAY:
-                case Busman::DayKind::LINE_3_DAY:
+                case DayKind::LINE_1_DAY:
+                case DayKind::LINE_2_DAY:
+                case DayKind::LINE_3_DAY:
                     setLeft(row, column, day);
                     break;
 
-                case Busman::DayKind::LINE_1_NIGHT:
-                case Busman::DayKind::LINE_2_NIGHT:
-                case Busman::DayKind::LINE_3_NIGHT:
+                case DayKind::LINE_1_NIGHT:
+                case DayKind::LINE_2_NIGHT:
+                case DayKind::LINE_3_NIGHT:
                     setRight(row, column, day);
                     break;
 
@@ -105,12 +105,12 @@ class LineDaysTableModel : public QAbstractTableModel
         }
 
         // TODO: cpp
-        void setLeft(const QModelIndex& index, Busman::DayKind day) throw(std::exception) {
+        void setLeft(const QModelIndex& index, DayKind day) throw(std::exception) {
             setLeft(index.row(), index.column(), day);
         }
 
         // TODO: cpp
-        void setLeft(int row, int column, Busman::DayKind day) throw(std::exception) {
+        void setLeft(int row, int column, DayKind day) throw(std::exception) {
             // TODO: дубликат
             if (row >= linesList.length()) {
                 throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
@@ -131,12 +131,12 @@ class LineDaysTableModel : public QAbstractTableModel
         }
 
         // TODO: cpp
-        void setRight(const QModelIndex& index, Busman::DayKind day) throw(std::exception) {
+        void setRight(const QModelIndex& index, DayKind day) throw(std::exception) {
             setRight(index.row(), index.column(), day);
         }
 
         // TODO: cpp
-        void setRight(int row, int column, Busman::DayKind day) throw(std::exception) {
+        void setRight(int row, int column, DayKind day) throw(std::exception) {
             // TODO: дубликат
             if (row >= linesList.length()) {
                 throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
@@ -168,7 +168,7 @@ class LineDaysTableModel : public QAbstractTableModel
 
     private:
         // Список, содержащий список пар
-        QList<QList<QPair<Busman::DayKind, Busman::DayKind>>> linesList;
+        QList<QList<QPair<DayKind, DayKind>>> linesList;
 };
 
 

@@ -47,24 +47,24 @@ class MainWindow : public QMainWindow
                 return;
             }
 
-            if (lineDaysTable.model.getLeft(topIndex) == Busman::DayKind::NONE
-                    && lineDaysTable.model.getRight(topIndex) == Busman::DayKind::NONE) {
+            if (lineDaysTable.model.getLeft(topIndex) == DayKind::NONE
+                    && lineDaysTable.model.getRight(topIndex) == DayKind::NONE) {
                 qWarning() << "Cell is empty";
                 return;
             }
 
             // Берем значение
             auto day = lineDaysTable.model.getLeft(topIndex);
-            if (day == Busman::DayKind::NONE) {
+            if (day == DayKind::NONE) {
                 qWarning() << "Left value cell is empty";
                 return;
             }
 
             // Убираем значение, которое забрали
-            lineDaysTable.model.setLeft(topIndex, Busman::DayKind::NONE);
+            lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
 
             auto bottomCellDay = model.getDayKind(bottomIndex);
-            if (bottomCellDay != Busman::DayKind::NONE) {
+            if (bottomCellDay != DayKind::NONE) {
                 // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
                 // TODO:
                 // По дню получаем его строку в таблице выше
@@ -94,24 +94,24 @@ class MainWindow : public QMainWindow
                 return;
             }
 
-            if (lineDaysTable.model.getLeft(topIndex) == Busman::DayKind::NONE
-                    && lineDaysTable.model.getRight(topIndex) == Busman::DayKind::NONE) {
+            if (lineDaysTable.model.getLeft(topIndex) == DayKind::NONE
+                    && lineDaysTable.model.getRight(topIndex) == DayKind::NONE) {
                 qWarning() << "Cell is empty";
                 return;
             }
 
             // Берем значение
             auto day = lineDaysTable.model.getRight(topIndex);
-            if (day == Busman::DayKind::NONE) {
+            if (day == DayKind::NONE) {
                 qWarning() << "Right value cell is empty";
                 return;
             }
 
             // Убираем значение, которое забрали
-            lineDaysTable.model.setRight(topIndex, Busman::DayKind::NONE);
+            lineDaysTable.model.setRight(topIndex, DayKind::NONE);
 
             auto bottomCellDay = model.getDayKind(bottomIndex);
-            if (bottomCellDay != Busman::DayKind::NONE) {
+            if (bottomCellDay != DayKind::NONE) {
                 // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
                 // TODO:
                 // По дню получаем его строку в таблице выше
@@ -131,12 +131,12 @@ class MainWindow : public QMainWindow
             auto bottomIndex = tableView.currentIndex();
 
             auto day = model.getDayKind(bottomIndex);
-            if (day == Busman::DayKind::NONE) {
+            if (day == DayKind::NONE) {
                 return;
             }
 
             // TODO: clear
-            model.setDayKind(bottomIndex, Busman::DayKind::NONE);
+            model.setDayKind(bottomIndex, DayKind::NONE);
 
             // TODO:
             int row = (int) model.dayKindsLinesMap[day];

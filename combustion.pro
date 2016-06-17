@@ -35,7 +35,8 @@ HEADERS  += mainwindow.h \
     linedays_verticalheaderview.h \
     linedays_celldelegate.h \
     scheduler_celldelegate.h \
-    scoreinfoboard.h
+    scoreinfoboard.h \
+    enums.h
 
 FORMS    += mainwindow.ui \
     scoreinfoboard.ui

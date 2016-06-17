@@ -34,27 +34,27 @@ BusmanTableModel::BusmanTableModel() {
     linesColorMap[Lines::Line_2] = line2Color;
     linesColorMap[Lines::Line_3] = line3Color;
 
-    linesPairDayKindMap[Lines::Line_1] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_1_DAY, Busman::DayKind::LINE_1_NIGHT);
-    linesPairDayKindMap[Lines::Line_2] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_2_DAY, Busman::DayKind::LINE_2_NIGHT);
-    linesPairDayKindMap[Lines::Line_3] = QPair<Busman::DayKind, Busman::DayKind> (Busman::DayKind::LINE_3_DAY, Busman::DayKind::LINE_3_NIGHT);
+    linesPairDayKindMap[Lines::Line_1] = QPair<DayKind, DayKind> (DayKind::LINE_1_DAY, DayKind::LINE_1_NIGHT);
+    linesPairDayKindMap[Lines::Line_2] = QPair<DayKind, DayKind> (DayKind::LINE_2_DAY, DayKind::LINE_2_NIGHT);
+    linesPairDayKindMap[Lines::Line_3] = QPair<DayKind, DayKind> (DayKind::LINE_3_DAY, DayKind::LINE_3_NIGHT);
 
-    dayKindsLinesMap[Busman::DayKind::LINE_1_DAY] = Lines::Line_1;
-    dayKindsLinesMap[Busman::DayKind::LINE_1_NIGHT] = Lines::Line_1;
-    dayKindsLinesMap[Busman::DayKind::LINE_2_DAY] = Lines::Line_2;
-    dayKindsLinesMap[Busman::DayKind::LINE_2_NIGHT] = Lines::Line_2;
-    dayKindsLinesMap[Busman::DayKind::LINE_3_DAY] = Lines::Line_3;
-    dayKindsLinesMap[Busman::DayKind::LINE_3_NIGHT] = Lines::Line_3;
+    dayKindsLinesMap[DayKind::LINE_1_DAY] = Lines::Line_1;
+    dayKindsLinesMap[DayKind::LINE_1_NIGHT] = Lines::Line_1;
+    dayKindsLinesMap[DayKind::LINE_2_DAY] = Lines::Line_2;
+    dayKindsLinesMap[DayKind::LINE_2_NIGHT] = Lines::Line_2;
+    dayKindsLinesMap[DayKind::LINE_3_DAY] = Lines::Line_3;
+    dayKindsLinesMap[DayKind::LINE_3_NIGHT] = Lines::Line_3;
 
     stringLineMap["1"] = Lines::Line_1;
     stringLineMap["2"] = Lines::Line_2;
     stringLineMap["3"] = Lines::Line_3;
 
-    lineDaysIconsMap[Busman::DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
-    lineDaysIconsMap[Busman::DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
-    lineDaysIconsMap[Busman::DayKind::LINE_2_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_2]);
-    lineDaysIconsMap[Busman::DayKind::LINE_2_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_2]);
-    lineDaysIconsMap[Busman::DayKind::LINE_3_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_3]);
-    lineDaysIconsMap[Busman::DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
+    lineDaysIconsMap[DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
+    lineDaysIconsMap[DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
+    lineDaysIconsMap[DayKind::LINE_2_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_2]);
+    lineDaysIconsMap[DayKind::LINE_2_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_2]);
+    lineDaysIconsMap[DayKind::LINE_3_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_3]);
+    lineDaysIconsMap[DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
 
     for (auto key: lineDaysIconsMap.keys()) {
         qDebug() << key << lineDaysIconsMap.value(key);
@@ -154,7 +154,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     const int column = index.column();
 
     Busman* busman = busmanList.at(row);
-    auto day = busman->workingDays.value(column, Busman::DayKind::NONE);
+    auto day = busman->workingDays.value(column, DayKind::NONE);
 
     if (role == Qt::DisplayRole) {
         if (isVisibleCellText) {
@@ -185,7 +185,7 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         return v;
 
     } else if (role == DayKindRole) {
-        if (day != Busman::DayKind::NONE)
+        if (day != DayKind::NONE)
         qDebug() << "data DayKindRole " << day;
 
         QVariant v;
@@ -195,10 +195,10 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     // TODO: нормальное название для той таблицы, серьезно!
     // Роль для возврата иконки линии/дня
     } else if (role == DayImageKindRole) {
-        if (day != Busman::DayKind::NONE)
+        if (day != DayKind::NONE)
         qDebug() << "data DayImageKindRole " << day;
 
-        if (day != Busman::DayKind::NONE) {
+        if (day != DayKind::NONE) {
             return lineDaysIconsMap[day];
         }
     }

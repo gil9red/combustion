@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <QMap>
 
+#include "enums.h"
+
 
 // Класс, описывающий водителя автобуса
 class Busman
@@ -22,20 +24,6 @@ class Busman
         QString selectLines;
         QStringList wishesOnSchedule;
 
-        // TODO: мне кажется, это перечисление или должно быть глобальным -- в отдельном файле,
-        // или принадлежать модели -- больше подходит.
-        // Список рабочих дней
-        // Варианты значения для рабочего дня:
-        // TODO: название лучше более смысловое
-        enum DayKind {
-            NONE = 0,
-            LINE_1_DAY,
-            LINE_1_NIGHT,
-            LINE_2_DAY,
-            LINE_2_NIGHT,
-            LINE_3_DAY,
-            LINE_3_NIGHT,
-        };
         QMap<int, DayKind> workingDays;
 };
 
@@ -44,7 +32,7 @@ class Busman
 #include <QVariant>
 
 Q_DECLARE_METATYPE(Busman*)
-Q_DECLARE_METATYPE(Busman::DayKind)
+
 
 
 #endif // BUSMAN_H

@@ -47,8 +47,8 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     painter->fillRect(rect, brush);
 
     // TODO: выделение полупрозрачным сделать
-    Busman::DayKind day = index.model()->data(index, BusmanTableModel::DayKindRole).value<Busman::DayKind>();
-    if (day != Busman::DayKind::NONE) {
+    DayKind day = index.model()->data(index, BusmanTableModel::DayKindRole).value<DayKind>();
+    if (day != DayKind::NONE) {
         // TODO: Для sun рисовать иконку слева, для moon -- справа
         QImage dayImage = index.model()->data(index, BusmanTableModel::DayImageKindRole).value<QImage>();
         qDebug() << dayImage.isNull() << index << day;
@@ -73,15 +73,15 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         // scheduler_celldelegate.cpp void SchedulerCellDelegate::paint
         // mainwindow.h void on_actionReturnValue_triggered()
         switch (day) {
-            case Busman::DayKind::LINE_1_DAY:
-            case Busman::DayKind::LINE_2_DAY:
-            case Busman::DayKind::LINE_3_DAY:
+            case DayKind::LINE_1_DAY:
+            case DayKind::LINE_2_DAY:
+            case DayKind::LINE_3_DAY:
                 painter->drawImage(rect.x(), rect.y(), dayImage);
                 break;
 
-            case Busman::DayKind::LINE_1_NIGHT:
-            case Busman::DayKind::LINE_2_NIGHT:
-            case Busman::DayKind::LINE_3_NIGHT:
+            case DayKind::LINE_1_NIGHT:
+            case DayKind::LINE_2_NIGHT:
+            case DayKind::LINE_3_NIGHT:
                 painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
                 break;
 
