@@ -73,8 +73,6 @@ class BusmanTableModel : public QAbstractTableModel
                 throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
             }
 
-            qDebug() << "setDayKind" << index << day;
-
             busman->workingDays[index.column()] = day;
         }
 
@@ -94,9 +92,6 @@ class BusmanTableModel : public QAbstractTableModel
 
         // Словарь содержит описание цвета для линий.
         QMap<Lines, QColor> linesColorMap;
-
-        // TODO: remove
-//        QMap<QString, Lines> stringLineMap;
 
         QMap<Lines, QPair<DayKind, DayKind>> linesPairDayKindMap;
         QMap<DayKind, Lines> dayKindsLinesMap;

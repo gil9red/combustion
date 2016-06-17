@@ -7,7 +7,7 @@
 
 
 // TODO:
-QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, QString>& valueDescriptionMap*/) throw(std::exception) {
+QList<Busman*> ParserPuzzleFile::parse(const QString& fileName) throw(std::exception) {
     QList<Busman*> busmanList;
 
     QFile file(fileName);
@@ -20,11 +20,6 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, 
     while (!in.atEnd()) {
         lines.append(in.readLine());
     }
-
-//    // Получение списка дат (3 строка)
-//    QStringList days = lines.at(2).split('|');
-//    days.removeFirst();
-//    days.removeLast();
 
     // Получение списка водителей и их предпочтений
     int indexEndTable = -1;
@@ -44,25 +39,6 @@ QList<Busman*> ParserPuzzleFile::parse(const QString& fileName/*, QMap<QString, 
     if (indexEndTable == -1) {
         throw std::logic_error(QString("Индекс конца таблицы неизвестен. Что-то пошло не так.").toStdString());
     }
-
-//    // Получаем строку с SCORE и вытаскиваем его значение
-//    QString score = lines.at(indexEndTable + 1).split(":")[1];
-//    qDebug() << score;
-
-//    valueDescriptionMap.clear();
-//    // Перебор обозначений в таблице
-//    for (int i = indexEndTable + 3; i < lines.size(); i++) {
-//        QString line = lines.at(i);
-//        QStringList temps = line.split(" - ");
-
-//        valueDescriptionMap[temps[0]] = temps[1];
-//    }
-
-//    QMapIterator<QString, QString> it(valueDescriptionMap);
-//    while (it.hasNext()) {
-//        it.next();
-//        qDebug() << QString("%1: %2").arg(it.key()).arg(it.value());
-//    }
 
     return busmanList;
 }

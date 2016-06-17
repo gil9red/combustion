@@ -37,8 +37,7 @@ NN - NIGHT SHIFT PREFERENCE
 class ParserPuzzleFile
 {
     public:
-        // TODO:
-        static QList<Busman*> parse(const QString& fileName/*, QMap<QString, QString>& valueDescriptionMap*/) throw(std::exception);
+        static QList<Busman*> parse(const QString& fileName) throw(std::exception);
 };
 
 #endif // PARSERPUZZLEFILE_H

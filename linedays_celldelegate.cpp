@@ -8,7 +8,7 @@
 
 LineDays_CellDelegate::LineDays_CellDelegate(LineDaysTable* parent)
     : QStyledItemDelegate() {
-    this->parentTable = parent;
+    parentTable = parent;
 }
 
 void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
@@ -29,7 +29,6 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     painter->drawImage(rect.x(), rect.y(), dayImage);
     painter->drawImage(rect.x() + size + indent, rect.y(), nightImage);
-
 
     DayKind sunDay = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<DayKind>();
     DayKind moonDay = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<DayKind>();

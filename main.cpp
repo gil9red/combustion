@@ -4,7 +4,6 @@
 #include <QDebug>
 
 
-// TODO: указатели 0 заменить на nullptr
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

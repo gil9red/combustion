@@ -112,11 +112,9 @@ void MainWindow::load(const QString& fileName) {
     tableView.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     tableView.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
-    // Устанавливаем размер стоблцов как в tableView
-    // TODO: привести к одной ширине столбцов с учетом разного количества столбцов
-    // TODO:
     lineDaysTable.model.reset__();
 
+    // Устанавливаем размер столбцов как в tableView
     for (int i = 0; i < lineDaysTable.model.columnCount(); i++) {
         auto size = tableView.horizontalHeader()->sectionSize(i);
         lineDaysTable.horizontalHeader()->resizeSection(i, size);

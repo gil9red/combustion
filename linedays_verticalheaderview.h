@@ -17,5 +17,4 @@ class LineDays_VerticalHeaderView: public QHeaderView
 };
 
 
-
 #endif // LINEDAYS_VERTICALHEADERVIEW_H

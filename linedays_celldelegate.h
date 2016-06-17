@@ -10,18 +10,8 @@ class LineDays_CellDelegate : public QStyledItemDelegate
 {
     public:
         LineDays_CellDelegate(LineDaysTable* parent=nullptr);
-//        LineDays_CellDelegate(QWidget* parent=nullptr): QStyledItemDelegate() {
-//            this->parentTable = parent;
-//        }
 
     public:
-//            enum SelectedSide {
-//                None,
-//                Left,
-//                Right,
-//            };
-//            SelectedSide side = SelectedSide::None;
-
         LineDaysTable* parentTable;
 
     protected:

@@ -19,9 +19,9 @@ class VerticalSchedulerHeaderView: public QHeaderView
         // TODO: вынести в cpp
         void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
             BusmanTableModel* busmanTableModel = dynamic_cast<BusmanTableModel*> (model());
-            if (busmanTableModel != nullptr) {
+            if (busmanTableModel) {
                 Busman* busman = busmanTableModel->get(logicalIndex);
-                if (busman != nullptr) {
+                if (busman) {
                     QStyleOptionHeader option;
                     initStyleOption(&option);
                     option.rect = rect;
@@ -55,11 +55,9 @@ class VerticalSchedulerHeaderView: public QHeaderView
                     x += 5;
 
                     for (auto line: busman->lines) {
-//                    for (auto strLine: busman->lines) {
                         // Переход для отрисовки следующей цифры и немного отступа для просвета между ними
                         x += width + 2;
 
-//                        auto line = busmanTableModel->stringLineMap[strLine];
                         auto color = busmanTableModel->linesColorMap[line];
 
                         painter->setBrush(color);

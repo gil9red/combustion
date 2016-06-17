@@ -45,20 +45,16 @@ class LineDaysTableModel : public QAbstractTableModel
                                        .arg(index.column()).arg(row.length()).toStdString());
             }
 
-            qDebug() << "get" << row[index.column()] << row[index.column()].first << row[index.column()].second << row[index.column()].first;
             return row[index.column()];
         }
 
         // TODO: cpp
         DayKind getLeft(const QModelIndex& index) throw(std::exception) {
-//            const QPair<DayKind, DayKind>&
-            qDebug() << "getLeft" << get(index).first;
             return get(index).first;
         }
 
         // TODO: cpp
         DayKind getRight(const QModelIndex& index) throw(std::exception) {
-            qDebug() << "getRight" << get(index).second;
             return get(index).second;
         }
 
@@ -124,10 +120,6 @@ class LineDaysTableModel : public QAbstractTableModel
             }
 
             linesList[row][column].first = day;
-//            qDebug() << get(index);
-//            qDebug() << get(index).first;
-//            get(index).first = day;
-//            qDebug() << get(index).first;
         }
 
         // TODO: cpp
@@ -150,10 +142,6 @@ class LineDaysTableModel : public QAbstractTableModel
             }
 
             linesList[row][column].second = day;
-//            qDebug() << get(index);
-//            qDebug() << get(index).first;
-//            get(index).first = day;
-//            qDebug() << get(index).first;
         }
 
     public:

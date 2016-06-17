@@ -3,7 +3,7 @@
 
 
 LineDaysTableModel::LineDaysTableModel() {
-    busmanTableModel = 0;
+    busmanTableModel = nullptr;
 }
 
 int LineDaysTableModel::rowCount(const QModelIndex&) const {
@@ -39,7 +39,6 @@ QVariant LineDaysTableModel::data(const QModelIndex &index, int role) const {
 
     } else if (role == DayKind_Day_Role || role == DayKind_Night_Role) {
         auto pair = linesList.at(row).at(column);
-//        qDebug() << pair;
 
         QVariant v;
         if (role == DayKind_Day_Role) {
@@ -63,8 +62,6 @@ QVariant LineDaysTableModel::headerData(int section, Qt::Orientation orientation
 }
 
 void LineDaysTableModel::clear() {
-    qDebug() << "Call clear()" ;
-
     // Проверяем наличие по первому подсписку
     if (linesList.length() > 0 && linesList[0].length() > 0) {
         // TODO: посмотреть аналоги в Q*View
@@ -99,13 +96,10 @@ void LineDaysTableModel::reset__() {
     for (auto i = 0; i < 3; i++) {
         QList<QPair<DayKind, DayKind>> line;
 
-//        QDebug deb = qDebug();
-
-        // TODO:
         for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
+            // TODO:
             auto pair = busmanTableModel->linesPairDayKindMap[(Lines) i];
             line.append(pair);
-//            deb << pair;
         }
 
         linesList.append(line);

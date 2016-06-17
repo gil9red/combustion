@@ -11,9 +11,9 @@ LineDays_VerticalHeaderView::LineDays_VerticalHeaderView()
 
 void LineDays_VerticalHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 //                BusmanTableModel* busmanTableModel = dynamic_cast<BusmanTableModel*> (model());
-//                if (busmanTableModel != nullptr) {
+//                if (busmanTableModel) {
 //                    Busman* busman = busmanTableModel->get(logicalIndex);
-//                    if (busman != nullptr) {
+//                    if (busman) {
 //                        QStyleOptionHeader option;
 //                        initStyleOption(&option);
 //                        option.rect = rect;
@@ -93,14 +93,11 @@ void LineDays_VerticalHeaderView::paintSection(QPainter* painter, const QRect& r
     int width = rect.width() - text_indent * 2;
     int height = rect.height() - vert_indent * 2;
 
-    // TODO: неочень хорошо выглядит это получение цвета линии
-    auto line = (Lines) (logicalIndex + 1);
+    auto line = (Lines) logicalIndex;
     auto color = busmanTableModel->linesColorMap[line];
     painter->setBrush(color);
 
     // Отрисовка рамки и текста в ней
     painter->drawRect(x, y, width, height);
     painter->drawText(x, y, width, height, Qt::AlignCenter, QString("Линия %1").arg(logicalIndex + 1));
-
-//QHeaderView::paintSection(painter, rect, logicalIndex);
 }

@@ -45,28 +45,19 @@ BusmanTableModel::BusmanTableModel() {
     dayKindsLinesMap[DayKind::LINE_3_DAY] = Lines::Line_3;
     dayKindsLinesMap[DayKind::LINE_3_NIGHT] = Lines::Line_3;
 
-    // TODO: remove
-//    stringLineMap["1"] = Lines::Line_1;
-//    stringLineMap["2"] = Lines::Line_2;
-//    stringLineMap["3"] = Lines::Line_3;
-
     lineDaysIconsMap[DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
     lineDaysIconsMap[DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
     lineDaysIconsMap[DayKind::LINE_2_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_2]);
     lineDaysIconsMap[DayKind::LINE_2_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_2]);
     lineDaysIconsMap[DayKind::LINE_3_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_3]);
     lineDaysIconsMap[DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
-
-    for (auto key: lineDaysIconsMap.keys()) {
-        qDebug() << key << lineDaysIconsMap.value(key);
-    }
 }
 
 void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
     clear();
 
     // TODO
-    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName/*, valueDescriptionMap*/);
+    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName);
     foreach (Busman *busman, newBusmanList) {
         busmanList.append(busman);
     }
@@ -131,8 +122,6 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
 }
 
 void BusmanTableModel::clear() {
-    qDebug() << "Call clear()";
-
     if (rowCount() > 0 || columnCount() > 0) {
         // TODO: посмотреть аналоги в Q*View
         // Говорим моделе сбросить данные
