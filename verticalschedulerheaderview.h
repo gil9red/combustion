@@ -53,14 +53,35 @@ class VerticalSchedulerHeaderView: public QHeaderView
 
                     // Немного отступа после номера автобуса
                     x += 5;
-                    for (auto strLine: busman->selectLines) {
+
+                    for (auto line: busman->lines) {
+//                    for (auto strLine: busman->lines) {
                         // Переход для отрисовки следующей цифры и немного отступа для просвета между ними
                         x += width + 2;
 
-                        auto line = busmanTableModel->stringLineMap[strLine];
+//                        auto line = busmanTableModel->stringLineMap[strLine];
                         auto color = busmanTableModel->linesColorMap[line];
 
                         painter->setBrush(color);
+
+                        // TODO: доработка
+                        QString strLine;
+                        switch (line) {
+                            case Lines::Line_1:
+                                strLine = "1";
+                                break;
+
+                            case Lines::Line_2:
+                                strLine = "2";
+                                break;
+
+                            case Lines::Line_3:
+                                strLine = "3";
+                                break;
+
+                            default:
+                                break;
+                        }
 
                         // Отрисовка рамки и текста в ней
                         painter->drawRect(x, y, width, height);

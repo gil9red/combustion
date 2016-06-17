@@ -95,7 +95,8 @@ class BusmanTableModel : public QAbstractTableModel
         // Словарь содержит описание цвета для линий.
         QMap<Lines, QColor> linesColorMap;
 
-        QMap<QString, Lines> stringLineMap;
+        // TODO: remove
+//        QMap<QString, Lines> stringLineMap;
 
         QMap<Lines, QPair<DayKind, DayKind>> linesPairDayKindMap;
         QMap<DayKind, Lines> dayKindsLinesMap;

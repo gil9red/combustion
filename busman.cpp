@@ -33,14 +33,25 @@ Busman* Busman::fromString(const QString& str) {
     // Номер автобуса: A, B, C и т.п.
     QString busNum = dataRow[1];
 
-    // Выбор линии маршрута водителя
-    QString selectLines = dataRow[2].remove('0');
-
-    qDebug() << dataRow[0] << busNum << selectLines << wishesOnSchedule << wishesOnSchedule.size();
-
     Busman* busman = new Busman();
     busman->busNum = busNum;
     busman->wishesOnSchedule = wishesOnSchedule;
-    busman->selectLines = selectLines;
+
+    // Выбор линии маршрута водителя
+    for (auto c: dataRow[2]) {
+        if (c == '1') {
+            busman->lines.append(Lines::Line_1);
+
+        } else if (c == '2') {
+            busman->lines.append(Lines::Line_2);
+
+        } else if (c == '3') {
+            busman->lines.append(Lines::Line_3);
+        }
+    }
+
+    // Отсортировка списка линий
+    std::sort(busman->lines.begin(), busman->lines.end());
+
     return busman;
 }

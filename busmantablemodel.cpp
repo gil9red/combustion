@@ -45,9 +45,10 @@ BusmanTableModel::BusmanTableModel() {
     dayKindsLinesMap[DayKind::LINE_3_DAY] = Lines::Line_3;
     dayKindsLinesMap[DayKind::LINE_3_NIGHT] = Lines::Line_3;
 
-    stringLineMap["1"] = Lines::Line_1;
-    stringLineMap["2"] = Lines::Line_2;
-    stringLineMap["3"] = Lines::Line_3;
+    // TODO: remove
+//    stringLineMap["1"] = Lines::Line_1;
+//    stringLineMap["2"] = Lines::Line_2;
+//    stringLineMap["3"] = Lines::Line_3;
 
     lineDaysIconsMap[DayKind::LINE_1_DAY]   = drawBackground(sun, linesColorMap[Lines::Line_1]);
     lineDaysIconsMap[DayKind::LINE_1_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_1]);
@@ -97,10 +98,28 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
 
     for (int i = 0; i < busmanList.size(); i++) {
          Busman* busman = busmanList.at(i);
+
+         // TODO: завести словарь
+         QString strLines;
+         for (auto line: busman->lines) {
+             switch (line) {
+                case Lines::Line_1:
+                     strLines += "1";
+                     break;
+
+                case Lines::Line_2:
+                     strLines += "2";
+                     break;
+
+                case Lines::Line_3:
+                     strLines += "3";
+                     break;
+             }
+         }
+
          out << QString::number(i + 1).rightJustified(2, '0') << "|"
              << busman->busNum << "|"
-             // TODO: формат может поменять с строки на другой тип
-             << busman->selectLines.rightJustified(3, '0') << "||";
+             << strLines.rightJustified(3, '0') << "||";
 
          foreach (QString wishDay, busman->wishesOnSchedule) {
              out << wishDay << "|";
@@ -142,7 +161,6 @@ int BusmanTableModel::rowCount(const QModelIndex &) const {
 int BusmanTableModel::columnCount(const QModelIndex &) const {
     if (busmanList.length() > 0) {
         Busman* busman = busmanList.at(0);
-        // Номер автобуса + Выбор линии маршрута + количесто дней в расписании
         return busman->wishesOnSchedule.length();
     }
 
@@ -185,9 +203,6 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
         return v;
 
     } else if (role == DayKindRole) {
-        if (day != DayKind::NONE)
-        qDebug() << "data DayKindRole " << day;
-
         QVariant v;
         v.setValue(day);
         return v;
@@ -195,9 +210,6 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     // TODO: нормальное название для той таблицы, серьезно!
     // Роль для возврата иконки линии/дня
     } else if (role == DayImageKindRole) {
-        if (day != DayKind::NONE)
-        qDebug() << "data DayImageKindRole " << day;
-
         if (day != DayKind::NONE) {
             return lineDaysIconsMap[day];
         }

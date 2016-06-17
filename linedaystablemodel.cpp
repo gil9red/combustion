@@ -6,11 +6,11 @@ LineDaysTableModel::LineDaysTableModel() {
     busmanTableModel = 0;
 }
 
-int LineDaysTableModel::rowCount(const QModelIndex &parent) const {
+int LineDaysTableModel::rowCount(const QModelIndex&) const {
     return linesList.length();
 }
 
-int LineDaysTableModel::columnCount(const QModelIndex &parent) const {
+int LineDaysTableModel::columnCount(const QModelIndex&) const {
     if (linesList.length() > 0) {
         return linesList[0].length();
     } else {
@@ -97,24 +97,20 @@ void LineDaysTableModel::reset__() {
 
     // TODO:
     for (auto i = 0; i < 3; i++) {
-//        qDebug() << i << linesList.length();
-
         QList<QPair<DayKind, DayKind>> line;
 
-        QDebug deb = qDebug();
+//        QDebug deb = qDebug();
 
         // TODO:
         for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
-//            qDebug() << i << linesList.length() << j;
             auto pair = busmanTableModel->linesPairDayKindMap[(Lines) i];
             line.append(pair);
-            deb << pair;
+//            deb << pair;
         }
 
         linesList.append(line);
     }
 
-    // TODO: пока тут бага возникает -- двойное количество строк и почему так понять не смог
     // Говорим моделе о новых строках и столбцах
     beginInsertRows(QModelIndex(), 0, rowCount() - 1);
     endInsertRows();
