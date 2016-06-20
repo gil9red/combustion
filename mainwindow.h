@@ -57,12 +57,13 @@ class MainWindow : public QMainWindow
                     continue;
                 }
 
-//                auto text = busman->wishesOnSchedule[column];
-//
-//                // Выделяются только ячейки с RR
-//                if (text != "RR") {
-//                    continue;
-//                }
+                auto text = busman->wishesOnSchedule[column];
+
+                // TODO: проверить
+                // В эти дни у водителей гарантированные выходные
+                if (text == "XX") {
+                    continue;
+                }
 
                 auto indexView = model.index(row, column);
 
