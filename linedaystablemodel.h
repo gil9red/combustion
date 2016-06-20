@@ -33,7 +33,7 @@ class LineDaysTableModel : public QAbstractTableModel
                                        .arg(index.row()).arg(linesList.length()).toStdString());
             }
 
-            // TODO: не очень хорошо
+            // TODO: не очень хорошо такое приведение
             // Линии имеют тот же индекс, что строки, т.е. 0 == Lines::Line_1,
             // 1 == Line_2 и 2 == Line_3. Этим и пользуемся, чтобы узнать к какой линии
             // относится индекс

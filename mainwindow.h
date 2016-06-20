@@ -49,12 +49,20 @@ class MainWindow : public QMainWindow
                     qWarning() << "column >= busman->wishesOnSchedule.length()... column: " << column << ", length: " << busman->wishesOnSchedule.length();
                     continue;
                 }
-                auto text = busman->wishesOnSchedule[column];
 
-                // Выделяются только ячейки с RR
-                if (text != "RR") {
+                // Проверяем, что линия выделенной ячейки не совпадает с списком
+                // линий маршрута по которым может ездить водитель
+                auto line = lineDaysTable.model.getLine(index);
+                if (!busman->lines.contains(line)) {
                     continue;
                 }
+
+//                auto text = busman->wishesOnSchedule[column];
+//
+//                // Выделяются только ячейки с RR
+//                if (text != "RR") {
+//                    continue;
+//                }
 
                 auto indexView = model.index(row, column);
 
