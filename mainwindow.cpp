@@ -134,14 +134,13 @@ void MainWindow::saveAs() {
     model.saveAs(fileName);
 }
 
-void MainWindow::read_settings(){
+void MainWindow::read_settings() {
     QSettings config("config",  QSettings::IniFormat);
     restoreState(config.value("MainWindow_State").toByteArray());
     restoreGeometry(config.value("MainWindow_Geometry").toByteArray());
 }
 
-void MainWindow::write_settings(){
-
+void MainWindow::write_settings() {
     QSettings config("config",  QSettings::IniFormat);
     config.setValue("MainWindow_State", saveState());
     config.setValue("MainWindow_Geometry", saveGeometry());
@@ -163,7 +162,7 @@ void MainWindow::updateStates() {
     ui->actionSelectMoon->setEnabled(enabled);
 }
 
-void MainWindow::closeEvent(QCloseEvent*){
-       write_settings();
-       qApp->quit();
+void MainWindow::closeEvent(QCloseEvent*) {
+    write_settings();
+    qApp->quit();
 }
