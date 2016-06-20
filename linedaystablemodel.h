@@ -27,6 +27,20 @@ class LineDaysTableModel : public QAbstractTableModel
         void reset__();
 
         // TODO: cpp
+        Lines getLine(const QModelIndex& index) throw(std::exception) {
+            if (index.row() >= 3) {
+                throw std::logic_error(QString("Выход за пределы списка. (index.row() >= linesList.length() ; %1 >= %2).")
+                                       .arg(index.row()).arg(linesList.length()).toStdString());
+            }
+
+            // TODO: не очень хорошо
+            // Линии имеют тот же индекс, что строки, т.е. 0 == Lines::Line_1,
+            // 1 == Line_2 и 2 == Line_3. Этим и пользуемся, чтобы узнать к какой линии
+            // относится индекс
+            return (Lines) index.row();
+        }
+
+        // TODO: cpp
         QList<QPair<DayKind, DayKind>> getRow(const QModelIndex& index) throw(std::exception) {
             if (index.row() >= linesList.length()) {
                 throw std::logic_error(QString("Выход за пределы списка. (index.row() >= linesList.length() ; %1 >= %2).")
