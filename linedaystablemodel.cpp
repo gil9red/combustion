@@ -2,7 +2,9 @@
 #include <QDebug>
 
 
-LineDaysTableModel::LineDaysTableModel() {
+LineDaysTableModel::LineDaysTableModel()
+    : QAbstractTableModel() {
+
     busmanTableModel = nullptr;
 }
 
