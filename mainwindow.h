@@ -31,6 +31,8 @@ class MainWindow : public QMainWindow
         void write_settings();
 
     private:
+        void updateStates();
+
         // Функция проверяет возможна ли вставка в таблицу значения.
         // Используется для выделения доступных для вставки ячеек
         // и перед вставкой в ячейки.

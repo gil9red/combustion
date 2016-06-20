@@ -37,6 +37,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tableView.horizontalScrollBar(), &QAbstractSlider::valueChanged,
             lineDaysTable.horizontalScrollBar(), &QAbstractSlider::setValue);
 
+
+    // При кликах на ячейках проверяем состояния виджетов, например кнопок -- делаем активные
+    // или напротив деактивируем
+    connect(&lineDaysTable, &QTableView::clicked, this, &updateStates);
+    connect(&tableView, &QTableView::clicked, this, &updateStates);
+
+
     auto tableLayout = new QVBoxLayout();
     tableLayout->setMargin(0);
     tableLayout->addWidget(&lineDaysTable);
@@ -66,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
     connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveAs);
+
+    updateStates();
 }
 
 MainWindow::~MainWindow() {
@@ -136,6 +145,22 @@ void MainWindow::write_settings(){
     QSettings config("config",  QSettings::IniFormat);
     config.setValue("MainWindow_State", saveState());
     config.setValue("MainWindow_Geometry", saveGeometry());
+}
+
+void MainWindow::updateStates() {
+    // TODO: добавление проверки isValidSetDay
+
+    const auto& topIndex = lineDaysTable.currentIndex();
+    const auto& bottomIndex = tableView.currentIndex();
+
+    // Проверка валидности индексов
+    bool enabled = topIndex.isValid() && bottomIndex.isValid();
+
+    // Проверка того, что столбцы одинаковые
+    enabled = enabled && topIndex.column() == bottomIndex.column();
+
+    ui->actionSelectSun->setEnabled(enabled);
+    ui->actionSelectMoon->setEnabled(enabled);
 }
 
 void MainWindow::closeEvent(QCloseEvent*){
