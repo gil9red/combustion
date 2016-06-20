@@ -30,6 +30,39 @@ class MainWindow : public QMainWindow
         void read_settings();
         void write_settings();
 
+    private:
+        void selectSchedulerCell(const QModelIndex& index) {
+            // Очищение выделения
+            tableView.selectionModel()->clearSelection();
+
+            int column = index.column();
+
+            for (int row = 0; row < model.rowCount(); row++) {
+                Busman* busman = model.get(row);
+                if (busman == nullptr) {
+                    qWarning() << "connect(&lineDaysTable, &QTableView::clicked... busman is nullptr, row:" << row;
+                    continue;
+                }
+
+                // TODO: через модель сделать получение
+                if (column >= busman->wishesOnSchedule.length()) {
+                    qWarning() << "column >= busman->wishesOnSchedule.length()... column: " << column << ", length: " << busman->wishesOnSchedule.length();
+                    continue;
+                }
+                auto text = busman->wishesOnSchedule[column];
+
+                // Выделяются только ячейки с RR
+                if (text != "RR") {
+                    continue;
+                }
+
+                auto indexView = model.index(row, column);
+
+                // Выделение ячейки
+                tableView.selectionModel()->select(indexView, QItemSelectionModel::Select);
+            }
+        }
+
     // TODO: переименовать, подключать не из формы, перенести в срр
     private slots:
         void on_actionSelectSun_triggered() {

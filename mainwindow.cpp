@@ -24,38 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView.setSelectionBehavior(QAbstractItemView::SelectItems);
     tableView.setSelectionMode(QAbstractItemView::SingleSelection);
 
-//    // TODO: пример выборочного выделение ячеек
-//    connect(&lineDaysTable, &QTableView::clicked, this, [=](const QModelIndex& index) {
-//        // Очищение выделения
-//        tableView.selectionModel()->clearSelection();
-
-//        int column = index.column();
-
-//        for (int row = 0; row < model.rowCount(); row++) {
-//            Busman* busman = model.get(row);
-//            if (busman == nullptr) {
-//                qWarning() << "connect(&lineDaysTable, &QTableView::clicked... busman is nullptr, row:" << row;
-//                continue;
-//            }
-
-//            // TODO: через модель сделать получение
-//            if (column >= busman->wishesOnSchedule.length()) {
-//                qWarning() << "column >= busman->wishesOnSchedule.length()... column: " << column << ", length: " << busman->wishesOnSchedule.length();
-//                continue;
-//            }
-//            auto text = busman->wishesOnSchedule[column];
-
-//            // Выделяются только ячейки с RR
-//            if (text != "RR") {
-//                continue;
-//            }
-
-//            auto indexView = model.index(row, column);
-
-//            // Выделение ячейки
-//            tableView.selectionModel()->select(indexView, QItemSelectionModel::Select);
-//        }
-//    });
+    // TODO: привести connect к одному виду
+    connect(&lineDaysTable, &QTableView::clicked, this, &selectSchedulerCell);
 
     // TODO: привести в нормальный вид, пока все запутанно и похоже на костыль
     lineDaysTable.model.busmanTableModel = &model;
