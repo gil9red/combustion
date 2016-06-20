@@ -31,6 +31,45 @@ class MainWindow : public QMainWindow
         void write_settings();
 
     private:
+        // Функция проверяет возможна ли вставка в таблицу значения.
+        // Используется для выделения доступных для вставки ячеек
+        // и перед вставкой в ячейки.
+        // TODO: разобраться с терминологией проекта -- таблицы снизу и сверху звучат странно
+        // Принимает индексы ячейки таблицы сверху и таблицы снизу
+        bool isValidSetDay(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
+            const auto column = indexBottom.column();
+
+            Busman* busman = model.get(indexBottom);
+            if (busman == nullptr) {
+                qWarning() << "connect(&lineDaysTable, &QTableView::clicked... busman is nullptr, row:" << indexBottom.row();
+                return false;
+            }
+
+            // TODO: через модель сделать получение
+            if (column >= busman->wishesOnSchedule.length()) {
+                qWarning() << "column >= busman->wishesOnSchedule.length()... column: " << column << ", length: " << busman->wishesOnSchedule.length();
+                return false;
+            }
+
+            // Проверяем, что линия выделенной ячейки не совпадает с списком
+            // линий маршрута по которым может ездить водитель
+            auto line = lineDaysTable.model.getLine(indexTop);
+            if (!busman->lines.contains(line)) {
+                return false;
+            }
+
+            auto text = busman->wishesOnSchedule[column];
+
+            // TODO: проверить
+            // В эти дни у водителей гарантированные выходные
+            if (text == "XX") {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Функция выделяет в таблице расписания доступные для установки ячейки
         void selectSchedulerCell(const QModelIndex& index) {
             // Очищение выделения
             tableView.selectionModel()->clearSelection();
@@ -38,37 +77,12 @@ class MainWindow : public QMainWindow
             int column = index.column();
 
             for (int row = 0; row < model.rowCount(); row++) {
-                Busman* busman = model.get(row);
-                if (busman == nullptr) {
-                    qWarning() << "connect(&lineDaysTable, &QTableView::clicked... busman is nullptr, row:" << row;
-                    continue;
-                }
-
-                // TODO: через модель сделать получение
-                if (column >= busman->wishesOnSchedule.length()) {
-                    qWarning() << "column >= busman->wishesOnSchedule.length()... column: " << column << ", length: " << busman->wishesOnSchedule.length();
-                    continue;
-                }
-
-                // Проверяем, что линия выделенной ячейки не совпадает с списком
-                // линий маршрута по которым может ездить водитель
-                auto line = lineDaysTable.model.getLine(index);
-                if (!busman->lines.contains(line)) {
-                    continue;
-                }
-
-                auto text = busman->wishesOnSchedule[column];
-
-                // TODO: проверить
-                // В эти дни у водителей гарантированные выходные
-                if (text == "XX") {
-                    continue;
-                }
-
                 auto indexView = model.index(row, column);
 
                 // Выделение ячейки
-                tableView.selectionModel()->select(indexView, QItemSelectionModel::Select);
+                if (isValidSetDay(index, indexView)) {
+                    tableView.selectionModel()->select(indexView, QItemSelectionModel::Select);
+                }
             }
         }
 
