@@ -71,6 +71,12 @@ class MainWindow : public QMainWindow
             return true;
         }
 
+        // TODO: доделать
+        // Проверка индексов ячеек таблиц
+        bool isValidIndexes(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
+
+        }
+
         // Функция выделяет в таблице расписания доступные для установки ячейки
         void selectSchedulerCell(const QModelIndex& index) {
             // Очищение выделения
