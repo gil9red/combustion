@@ -3,10 +3,12 @@
 
 
 #include <QTableView>
-#include "linedaystablemodel.h"
 #include <QDebug>
 #include <QMouseEvent>
 #include <QFocusEvent>
+
+#include "linedaystablemodel.h"
+#include "linedays_celldelegate.h"
 
 
 class LineDaysTable : public QTableView
@@ -18,6 +20,9 @@ class LineDaysTable : public QTableView
 
         // TODO:
         LineDaysTableModel model;
+
+        // TODO:
+        LineDays_CellDelegate delegate;
 };
 
 

@@ -1,5 +1,4 @@
 #include "linedaystable.h"
-#include "linedays_celldelegate.h"
 #include "linedays_verticalheaderview.h"
 
 
@@ -8,9 +7,8 @@ LineDaysTable::LineDaysTable()
 {
     setModel(&model);
 
-    auto delegate = new LineDays_CellDelegate();
-    setItemDelegate(delegate);
-    viewport()->installEventFilter(delegate);
+    setItemDelegate(&delegate);
+    viewport()->installEventFilter(&delegate);
 
     setVerticalHeader(new LineDays_VerticalHeaderView());
 
