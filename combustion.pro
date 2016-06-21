@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     linedays_verticalheaderview.cpp \
     linedays_celldelegate.cpp \
     scheduler_celldelegate.cpp \
-    scoreinfoboard.cpp
+    scoreinfoboard.cpp \
+    schedulertable.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     linedays_celldelegate.h \
     scheduler_celldelegate.h \
     scoreinfoboard.h \
-    enums.h
+    enums.h \
+    schedulertable.h
 
 FORMS    += mainwindow.ui \
     scoreinfoboard.ui

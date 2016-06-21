@@ -2,16 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "busmantablemodel.h"
 #include "linedaystable.h"
 #include <QResizeEvent>
 #include <QItemSelection>
 #include "scoreinfoboard.h"
+#include "schedulertable.h"
 
 
 namespace Ui {
     class MainWindow;
 }
+
+// TODO: повторить методы модели в табличное представление
+// поиск "schedulerTable.model" покажет все методы,
+// которые нужно перенести
 
 class MainWindow : public QMainWindow
 {
@@ -41,7 +45,7 @@ class MainWindow : public QMainWindow
         bool isValidSetDay(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
             const auto column = indexBottom.column();
 
-            Busman* busman = model.get(indexBottom);
+            Busman* busman = schedulerTable.model.get(indexBottom);
             if (busman == nullptr) {
                 qWarning() << "connect(&lineDaysTable, &QTableView::clicked... busman is nullptr, row:" << indexBottom.row();
                 return false;
@@ -84,16 +88,16 @@ class MainWindow : public QMainWindow
         // Функция выделяет в таблице расписания доступные для установки ячейки
         void selectSchedulerCell(const QModelIndex& index) {
             // Очищение выделения
-            tableView.selectionModel()->clearSelection();
+            schedulerTable.selectionModel()->clearSelection();
 
             int column = index.column();
 
-            for (int row = 0; row < model.rowCount(); row++) {
-                auto indexView = model.index(row, column);
+            for (int row = 0; row < schedulerTable.model.rowCount(); row++) {
+                auto indexView = schedulerTable.model.index(row, column);
 
                 // Выделение ячейки
                 if (isValidSetDay(index, indexView)) {
-                    tableView.selectionModel()->select(indexView, QItemSelectionModel::Select);
+                    schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
                 }
             }
         }
@@ -102,13 +106,13 @@ class MainWindow : public QMainWindow
     private slots:
         void on_actionSelectSun_triggered() {
             auto topIndex = lineDaysTable.currentIndex();
-            auto bottomIndex = tableView.currentIndex();
+            auto bottomIndex = schedulerTable.currentIndex();
 
             if (!isValidIndexes(topIndex, bottomIndex)) {
                 return;
             }
 
-            Busman* busman = model.get(bottomIndex);
+            Busman* busman = schedulerTable.model.get(bottomIndex);
             if (busman == nullptr) {
                 qWarning() << "busman is nullptr, index:" << bottomIndex;
                 return;
@@ -130,31 +134,31 @@ class MainWindow : public QMainWindow
             // Убираем значение, которое забрали
             lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
 
-            auto bottomCellDay = model.getDayKind(bottomIndex);
+            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
             if (bottomCellDay != DayKind::NONE) {
                 // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
                 // TODO:
                 // По дню получаем его строку в таблице выше
-                int row = (int) model.dayKindsLinesMap[bottomCellDay];
+                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
                 lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
             }
 
             // Вставляем значение в ячейку таблицы
-            model.setDayKind(bottomIndex, day);
+            schedulerTable.model.setDayKind(bottomIndex, day);
 
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            model.sayViewUpdate();
+            schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
         }
         void on_actionSelectMoon_triggered() {
             auto topIndex = lineDaysTable.currentIndex();
-            auto bottomIndex = tableView.currentIndex();
+            auto bottomIndex = schedulerTable.currentIndex();
 
             if (!isValidIndexes(topIndex, bottomIndex)) {
                 return;
             }
 
-            Busman* busman = model.get(bottomIndex);
+            Busman* busman = schedulerTable.model.get(bottomIndex);
             if (busman == nullptr) {
                 qWarning() << "busman is nullptr, index:" << bottomIndex;
                 return;
@@ -176,42 +180,42 @@ class MainWindow : public QMainWindow
             // Убираем значение, которое забрали
             lineDaysTable.model.setRight(topIndex, DayKind::NONE);
 
-            auto bottomCellDay = model.getDayKind(bottomIndex);
+            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
             if (bottomCellDay != DayKind::NONE) {
                 // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
                 // TODO:
                 // По дню получаем его строку в таблице выше
-                int row = (int) model.dayKindsLinesMap[bottomCellDay];
+                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
                 lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
             }
 
             // Вставляем значение в ячейку таблицы
-            model.setDayKind(bottomIndex, day);
+            schedulerTable.model.setDayKind(bottomIndex, day);
 
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            model.sayViewUpdate();
+            schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
         }
 
         void on_actionReturnValue_triggered() {
-            auto bottomIndex = tableView.currentIndex();
+            auto bottomIndex = schedulerTable.currentIndex();
 
-            auto day = model.getDayKind(bottomIndex);
+            auto day = schedulerTable.model.getDayKind(bottomIndex);
             if (day == DayKind::NONE) {
                 return;
             }
 
             // TODO: clear
-            model.setDayKind(bottomIndex, DayKind::NONE);
+            schedulerTable.model.setDayKind(bottomIndex, DayKind::NONE);
 
             // TODO:
-            int row = (int) model.dayKindsLinesMap[day];
+            int row = (int) schedulerTable.model.dayKindsLinesMap[day];
             int column = bottomIndex.column();
 
             lineDaysTable.model.setValue(row, column, day);
 
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            model.sayViewUpdate();
+            schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
         }
 
@@ -219,11 +223,7 @@ class MainWindow : public QMainWindow
         Ui::MainWindow *ui;
 
         LineDaysTable lineDaysTable;
-
-        // TODO: в отдельный виджет как LineDaysTable
-        QTableView tableView;
-        BusmanTableModel model;
-
+        SchedulerTable schedulerTable;
         ScoreInfoBoard scoreInfoBoard;
 
     protected:

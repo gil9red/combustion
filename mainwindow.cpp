@@ -14,40 +14,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
     read_settings();
 
-    tableView.setModel(&model);
-    tableView.setItemDelegate(new SchedulerCellDelegate());
-
-    // Заголовок будет в lineDaysTable
-    tableView.horizontalHeader()->hide();
-    tableView.setVerticalHeader(new VerticalSchedulerHeaderView());
-
-    tableView.setSelectionBehavior(QAbstractItemView::SelectItems);
-    tableView.setSelectionMode(QAbstractItemView::SingleSelection);
-
     // TODO: привести connect к одному виду
     connect(&lineDaysTable, &QTableView::clicked, this, &selectSchedulerCell);
 
     // TODO: привести в нормальный вид, пока все запутанно и похоже на костыль
-    lineDaysTable.model.busmanTableModel = &model;
+    lineDaysTable.model.busmanTableModel = &schedulerTable.model;
 
     // Прячем горизонтальный ползунок
     lineDaysTable.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Соединяем горинонтальный ползунок таблицы с расписанием с горизонтальным ползунком таблицы линий
-    connect(tableView.horizontalScrollBar(), &QAbstractSlider::valueChanged,
+    connect(schedulerTable.horizontalScrollBar(), &QAbstractSlider::valueChanged,
             lineDaysTable.horizontalScrollBar(), &QAbstractSlider::setValue);
 
 
     // При кликах на ячейках проверяем состояния виджетов, например кнопок -- делаем активные
     // или напротив деактивируем
     connect(&lineDaysTable, &QTableView::clicked, this, &updateStates);
-    connect(&tableView, &QTableView::clicked, this, &updateStates);
+    connect(&schedulerTable, &QTableView::clicked, this, &updateStates);
 
 
     auto tableLayout = new QVBoxLayout();
     tableLayout->setMargin(0);
     tableLayout->addWidget(&lineDaysTable);
-    tableLayout->addWidget(&tableView);
+    tableLayout->addWidget(&schedulerTable);
 
     auto tablesView = new QWidget();
     tablesView->setObjectName("TablesView");
@@ -65,10 +55,10 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(centralWidget);
 
     connect(ui->actionShowCellText, &QAction::triggered, [=](bool visible) {
-        model.isVisibleCellText = visible;
+        schedulerTable.model.isVisibleCellText = visible;
 
         // Говорим представлению обновиться
-        model.sayViewUpdate();
+        schedulerTable.model.sayViewUpdate();
     });
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
@@ -82,25 +72,25 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::load(const QString& fileName) {
-    model.load(fileName);
+    schedulerTable.model.load(fileName);
 
     static const int size = 60;
-    for (int i = 0; i < tableView.model()->columnCount(); i++) {
-        tableView.horizontalHeader()->resizeSection(i, size);
+    for (int i = 0; i < schedulerTable.model.columnCount(); i++) {
+        schedulerTable.horizontalHeader()->resizeSection(i, size);
     }
-    tableView.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    tableView.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    schedulerTable.horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    schedulerTable.verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     lineDaysTable.model.reset__();
 
     // Устанавливаем размер столбцов как в tableView
     for (int i = 0; i < lineDaysTable.model.columnCount(); i++) {
-        auto size = tableView.horizontalHeader()->sectionSize(i);
+        auto size = schedulerTable.horizontalHeader()->sectionSize(i);
         lineDaysTable.horizontalHeader()->resizeSection(i, size);
     }
 
     static const int width_vertical_header = 90;
-    tableView.verticalHeader()->setFixedWidth(width_vertical_header);
+    schedulerTable.verticalHeader()->setFixedWidth(width_vertical_header);
     lineDaysTable.verticalHeader()->setFixedWidth(width_vertical_header);
 
     for (int i = 0; i < lineDaysTable.model.rowCount(); i++) {
@@ -131,7 +121,7 @@ void MainWindow::saveAs() {
     if (fileName.isEmpty())
         return;
 
-    model.saveAs(fileName);
+    schedulerTable.model.saveAs(fileName);
 }
 
 void MainWindow::read_settings() {
@@ -150,7 +140,7 @@ void MainWindow::updateStates() {
     // TODO: добавление проверки isValidSetDay
 
     auto topIndex = lineDaysTable.currentIndex();
-    auto bottomIndex = tableView.currentIndex();
+    auto bottomIndex = schedulerTable.currentIndex();
 
     // Проверка валидности индексов
     bool enabled = isValidIndexes(topIndex, bottomIndex);
