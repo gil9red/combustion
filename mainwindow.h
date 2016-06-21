@@ -71,10 +71,14 @@ class MainWindow : public QMainWindow
             return true;
         }
 
-        // TODO: доделать
         // Проверка индексов ячеек таблиц
-        bool isValidIndexes(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
+        bool isValidIndexes(const QModelIndex& topIndex, const QModelIndex& bottomIndex) {
+            // Проверка валидности индексов
+            bool isValid = topIndex.isValid() && bottomIndex.isValid();
 
+            // Проверка того, что столбцы одинаковые
+            isValid = isValid && topIndex.column() == bottomIndex.column();
+            return isValid;
         }
 
         // Функция выделяет в таблице расписания доступные для установки ячейки
@@ -100,8 +104,7 @@ class MainWindow : public QMainWindow
             auto topIndex = lineDaysTable.currentIndex();
             auto bottomIndex = tableView.currentIndex();
 
-            // Проверка что ячейки валидные и столбцы выделенных ячеек совпадают
-            if (!topIndex.isValid() || !bottomIndex.isValid() || topIndex.column() != bottomIndex.column()) {
+            if (!isValidIndexes(topIndex, bottomIndex)) {
                 return;
             }
 
@@ -147,8 +150,7 @@ class MainWindow : public QMainWindow
             auto topIndex = lineDaysTable.currentIndex();
             auto bottomIndex = tableView.currentIndex();
 
-            // Проверка что ячейки валидные и столбцы выделенных ячеек совпадают
-            if (!topIndex.isValid() || !bottomIndex.isValid() || topIndex.column() != bottomIndex.column()) {
+            if (!isValidIndexes(topIndex, bottomIndex)) {
                 return;
             }
 

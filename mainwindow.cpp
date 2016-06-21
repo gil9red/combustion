@@ -149,14 +149,11 @@ void MainWindow::write_settings() {
 void MainWindow::updateStates() {
     // TODO: добавление проверки isValidSetDay
 
-    const auto& topIndex = lineDaysTable.currentIndex();
-    const auto& bottomIndex = tableView.currentIndex();
+    auto topIndex = lineDaysTable.currentIndex();
+    auto bottomIndex = tableView.currentIndex();
 
     // Проверка валидности индексов
-    bool enabled = topIndex.isValid() && bottomIndex.isValid();
-
-    // Проверка того, что столбцы одинаковые
-    enabled = enabled && topIndex.column() == bottomIndex.column();
+    bool enabled = isValidIndexes(topIndex, bottomIndex);
 
     ui->actionSelectSun->setEnabled(enabled);
     ui->actionSelectMoon->setEnabled(enabled);
