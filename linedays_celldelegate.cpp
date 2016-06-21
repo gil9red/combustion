@@ -1,9 +1,7 @@
 #include "linedays_celldelegate.h"
 #include "linedaystablemodel.h"
 #include <QPainter>
-#include "linedaystable.h"
 #include <QDebug>
-#include <QDate>
 
 
 LineDays_CellDelegate::LineDays_CellDelegate(LineDaysTable* parent)
@@ -42,17 +40,15 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     initStyleOption(&itemOption, index);
 
     if ((itemOption.state & QStyle::State_Selected) /*&& (itemOption.state & QStyle::State_Active)*/) {
-//        auto pos = parentTable->clickedPos;
-//        if (pos != QPoint(-1, -1)) {
-//            bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
-//            qDebug() << QDateTime::currentDateTime() << pos << (leftSide ? "left" : "right");
-
-//            if (leftSide) {
-//                itemOption.rect.setWidth(itemOption.rect.width() / 2);
-//            } else {
-//                itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
-//            }
-//        }
+        auto pos = parentTable->clickedPos;
+        if (pos != QPoint(-1, -1)) {
+            bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
+            if (leftSide) {
+                itemOption.rect.setWidth(itemOption.rect.width() / 2);
+            } else {
+                itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
+            }
+        }
 
         auto color = itemOption.palette.color(QPalette::Highlight);
         color.setAlpha(180);

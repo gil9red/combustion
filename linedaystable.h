@@ -19,36 +19,21 @@ class LineDaysTable : public QTableView
         // TODO:
         LineDaysTableModel model;
 
-//        // TODO
-//        QPoint clickedPos = QPoint(-1, -1);
+        // TODO
+        QPoint clickedPos = QPoint(-1, -1);
 
-//    protected:
-//        void mousePressEvent(QMouseEvent* event) {
-//            qDebug() << event->pos() << viewport()->mapFromGlobal(QCursor::pos());
-//            clickedPos = event->pos();
+    protected:
+        // TODO: cpp
+        void mouseReleaseEvent(QMouseEvent* event) {
+            clickedPos = event->pos();
 
-//            QTableView::mousePressEvent(event);
-//        }
+            QModelIndex index = indexAt(clickedPos);
+            if (index.isValid()) {
+                update(index);
+            }
 
-//        void mouseReleaseEvent(QMouseEvent* event) {
-//            qDebug() << event->pos() << viewport()->mapFromGlobal(QCursor::pos());
-//            clickedPos = event->pos();
-
-//            QTableView::mouseReleaseEvent(event);
-//        }
-
-//        void focusOutEvent(QFocusEvent* event) {
-////            clickedPos = QPoint(-1, -1);
-//            qDebug() << "focusOutEvent";
-
-//            QTableView::focusOutEvent(event);
-//        }
-
-//    private slots:
-//        void clickedIndex(const QModelIndex& index) {
-////            clickedPos = viewport()->mapFromGlobal(QCursor::pos());
-////            qDebug() << index << clickedPos;
-//        }
+            QTableView::mouseReleaseEvent(event);
+        }
 };
 
 

@@ -11,13 +11,12 @@ class LineDays_CellDelegate : public QStyledItemDelegate
     public:
         LineDays_CellDelegate(LineDaysTable* parent=nullptr);
 
-    public:
-        LineDaysTable* parentTable;
+    private:
+        LineDaysTable* parentTable = nullptr;
 
     protected:
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
-
 
 
 #endif // LINEDAYS_CELLDELEGATE_H
