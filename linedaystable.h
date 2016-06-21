@@ -18,22 +18,6 @@ class LineDaysTable : public QTableView
 
         // TODO:
         LineDaysTableModel model;
-
-        // TODO
-        QPoint clickedPos = QPoint(-1, -1);
-
-    protected:
-        // TODO: cpp
-        void mouseReleaseEvent(QMouseEvent* event) {
-            clickedPos = event->pos();
-
-            QModelIndex index = indexAt(clickedPos);
-            if (index.isValid()) {
-                update(index);
-            }
-
-            QTableView::mouseReleaseEvent(event);
-        }
 };
 
 

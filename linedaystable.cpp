@@ -7,7 +7,11 @@ LineDaysTable::LineDaysTable()
     : QTableView()
 {
     setModel(&model);
-    setItemDelegate(new LineDays_CellDelegate(this));
+
+    auto delegate = new LineDays_CellDelegate();
+    setItemDelegate(delegate);
+    viewport()->installEventFilter(delegate);
+
     setVerticalHeader(new LineDays_VerticalHeaderView());
 
     setSelectionBehavior(QAbstractItemView::SelectItems);

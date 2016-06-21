@@ -3,16 +3,17 @@
 
 
 #include <QStyledItemDelegate>
-#include "linedaystable.h"
+#include <QEvent>
 
 
-class LineDays_CellDelegate : public QStyledItemDelegate
-{
+class LineDays_CellDelegate : public QStyledItemDelegate {
+
     public:
-        LineDays_CellDelegate(LineDaysTable* parent=nullptr);
+        bool eventFilter(QObject* obj, QEvent* event);
 
     private:
-        LineDaysTable* parentTable = nullptr;
+        QPersistentModelIndex mIndex;
+        bool mLeftSide;
 
     protected:
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;

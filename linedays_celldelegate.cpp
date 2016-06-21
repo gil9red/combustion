@@ -1,12 +1,52 @@
 #include "linedays_celldelegate.h"
 #include "linedaystablemodel.h"
+
+#include <QMouseEvent>
 #include <QPainter>
 #include <QDebug>
 
 
-LineDays_CellDelegate::LineDays_CellDelegate(LineDaysTable* parent)
-    : QStyledItemDelegate() {
-    parentTable = parent;
+bool LineDays_CellDelegate::eventFilter(QObject* obj, QEvent* event) {
+    switch (event->type()) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseMove: {
+            // Проверка того, что отправителем события является объект с типом QTableView
+            auto table = dynamic_cast<QTableView *> (obj);
+            if (!table) {
+                table = dynamic_cast<QTableView *> (obj->parent());
+                if (!table) {
+                    break;
+                }
+            }
+
+            // Проверка того, что положение мышки находится в ячейки таблицы
+            auto mouseEvent = static_cast<QMouseEvent *> (event);
+            auto pos = mouseEvent->pos();
+            auto index = table->indexAt(pos);
+            if (!index.isValid()) {
+                break;
+            }
+
+            // Проверяем, что клик произошел на левой половине ячейки
+            bool left = pos.x() < table->visualRect(index).center().x();
+
+            // Проверяем, что новые значения уникальные -- ненужные действия не нужны
+            if (index == mIndex && left == mLeftSide) {
+                break;
+            }
+
+            mIndex = index;
+            mLeftSide = left;
+            table->viewport()->update();
+
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return false;
 }
 
 void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
@@ -35,22 +75,19 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     painter->restore();
 
-    // Цвет выделения полупрозрачный, чтобы были видно что в ячейке
     QStyleOptionViewItem itemOption(option);
     initStyleOption(&itemOption, index);
 
-    if ((itemOption.state & QStyle::State_Selected) /*&& (itemOption.state & QStyle::State_Active)*/) {
-        auto pos = parentTable->clickedPos;
-        if (pos != QPoint(-1, -1)) {
-            bool leftSide = (rect.x() + (rect.width() / 2)) > pos.x();
-            if (leftSide) {
-                itemOption.rect.setWidth(itemOption.rect.width() / 2);
-            } else {
-                itemOption.rect.setX(itemOption.rect.x() + itemOption.rect.width() / 2);
-            }
+    // Обработка при выделении ячейки делегата
+    if (itemOption.state & QStyle::State_Selected && index == mIndex) {
+        QRect& rect = itemOption.rect;
+        if (mLeftSide) {
+            rect.setWidth(rect.width() / 2);
+        } else {
+            rect.setX(rect.x() + rect.width() / 2);
         }
 
-        auto color = itemOption.palette.color(QPalette::Highlight);
+        QColor color = itemOption.palette.color(QPalette::Highlight);
         color.setAlpha(180);
         itemOption.palette.setColor(QPalette::Highlight, color);
     }
