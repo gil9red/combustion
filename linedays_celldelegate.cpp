@@ -70,11 +70,6 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     painter->drawImage(rect.x(), rect.y(), dayImage);
     painter->drawImage(rect.x() + size + indent, rect.y(), nightImage);
 
-    DayKind sunDay = index.model()->data(index, LineDaysTableModel::DayKind_Day_Role).value<DayKind>();
-    DayKind moonDay = index.model()->data(index, LineDaysTableModel::DayKind_Night_Role).value<DayKind>();
-    painter->drawText(QRectF(rect.x(), rect.y(), size, size), Qt::AlignLeft | Qt::AlignTop, QString::number(sunDay));
-    painter->drawText(QRectF(rect.x() + size + indent, rect.y(), size, size), Qt::AlignLeft | Qt::AlignTop, QString::number(moonDay));
-
     painter->restore();
 
     QStyleOptionViewItem itemOption(option);

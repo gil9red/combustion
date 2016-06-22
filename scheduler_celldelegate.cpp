@@ -77,9 +77,6 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         }
     }
 
-    // NOTE: отрисовка DayKind для отладки. Убрать потом.
-    painter->drawText(option.rect, Qt::AlignLeft | Qt::AlignTop, QString::number(day));
-
     painter->restore();
 
     // Цвет выделения полупрозрачный, чтобы были видно что в ячейке
