@@ -149,6 +149,8 @@ class MainWindow : public QMainWindow
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
             schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
+
+            updateStates();
         }
         void on_actionSelectMoon_triggered() {
             auto topIndex = lineDaysTable.currentIndex();
@@ -195,6 +197,8 @@ class MainWindow : public QMainWindow
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
             schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
+
+            updateStates();
         }
 
         void on_actionReturnValue_triggered() {
@@ -217,6 +221,8 @@ class MainWindow : public QMainWindow
             // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
             schedulerTable.model.sayViewUpdate();
             lineDaysTable.model.sayViewUpdate();
+
+            updateStates();
         }
 
     private:

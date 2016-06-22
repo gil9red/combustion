@@ -137,16 +137,32 @@ void MainWindow::write_settings() {
 }
 
 void MainWindow::updateStates() {
+    ui->actionSelectSun->setEnabled(false);
+    ui->actionSelectMoon->setEnabled(false);
+
     // TODO: добавление проверки isValidSetDay
 
     auto topIndex = lineDaysTable.currentIndex();
     auto bottomIndex = schedulerTable.currentIndex();
 
-    // Проверка валидности индексов
-    bool enabled = isValidIndexes(topIndex, bottomIndex);
+    if (topIndex.isValid() && bottomIndex.isValid()) {
+        // Проверка валидности индексов
+        bool enabled = isValidIndexes(topIndex, bottomIndex);
 
-    ui->actionSelectSun->setEnabled(enabled);
-    ui->actionSelectMoon->setEnabled(enabled);
+        // Получаем пару значений выбранной ячейки таблицы сверху
+        auto days = lineDaysTable.model.get(topIndex);
+
+        // Проверяем что выбрана левая сторона и она не пуста
+        bool enabledLeft = enabled && lineDaysTable.delegate.selectedSide == Side::Left
+                && days.first != DayKind::NONE;
+
+        bool enabledRight = enabled && lineDaysTable.delegate.selectedSide == Side::Right
+                && days.second != DayKind::NONE;
+
+        // TODO: lineDaysTable.delegate заменить на обращение к методу lineDaysTable
+        ui->actionSelectSun->setEnabled(enabledLeft);
+        ui->actionSelectMoon->setEnabled(enabledRight);
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent*) {
