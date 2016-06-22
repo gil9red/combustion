@@ -28,4 +28,11 @@ enum Lines {
 };
 
 
+enum class Side {
+    None,
+    Left,
+    Right,
+};
+
+
 #endif // ENUMS_H

@@ -5,6 +5,8 @@
 #include <QStyledItemDelegate>
 #include <QEvent>
 
+#include "enums.h"
+
 
 class LineDays_CellDelegate : public QStyledItemDelegate {
 
@@ -13,7 +15,10 @@ class LineDays_CellDelegate : public QStyledItemDelegate {
 
     private:
         QPersistentModelIndex mIndex;
-        bool mLeftSide;
+
+    public:
+        // TODO:
+        Side selectedSide = Side::None;
 
     protected:
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;

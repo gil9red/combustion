@@ -29,14 +29,16 @@ bool LineDays_CellDelegate::eventFilter(QObject* obj, QEvent* event) {
 
             // Проверяем, что клик произошел на левой половине ячейки
             bool left = pos.x() < table->visualRect(index).center().x();
+            auto side = left ? Side::Left : Side::Right;
 
             // Проверяем, что новые значения уникальные -- ненужные действия не нужны
-            if (index == mIndex && left == mLeftSide) {
+            if (index == mIndex && side == selectedSide) {
                 break;
             }
 
             mIndex = index;
-            mLeftSide = left;
+            selectedSide = side;
+
             table->viewport()->update();
 
             break;
@@ -79,12 +81,19 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     initStyleOption(&itemOption, index);
 
     // Обработка при выделении ячейки делегата
-    if (itemOption.state & QStyle::State_Selected && index == mIndex) {
+    if (itemOption.state & QStyle::State_Selected && index == mIndex && selectedSide != Side::None) {
         QRect& rect = itemOption.rect;
-        if (mLeftSide) {
-            rect.setWidth(rect.width() / 2);
-        } else {
-            rect.setX(rect.x() + rect.width() / 2);
+        switch (selectedSide) {
+            case Side::Left:
+                rect.setWidth(rect.width() / 2);
+                break;
+
+            case Side::Right:
+                rect.setX(rect.x() + rect.width() / 2);
+                break;
+
+            default:
+                break;
         }
 
         QColor color = itemOption.palette.color(QPalette::Highlight);
