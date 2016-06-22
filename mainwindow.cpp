@@ -26,85 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(schedulerTable.horizontalScrollBar(), &QAbstractSlider::valueChanged,
             lineDaysTable.horizontalScrollBar(), &QAbstractSlider::setValue);
 
-
-    // TODO: REMOVE
-//    // При кликах на ячейках проверяем состояния виджетов, например кнопок -- делаем активные
-//    // или напротив деактивируем
-//    connect(&lineDaysTable, &QTableView::clicked, this, &updateStates);
-//    connect(&schedulerTable, &QTableView::clicked, this, &updateStates);
-
     lineDaysTable.viewport()->installEventFilter(this);
     schedulerTable.viewport()->installEventFilter(this);
-
-//    // TODO: лучше перенести в поля класса
-//    auto clickedCellTables = [=](const QModelIndex& index) {
-//        auto topIndex = lineDaysTable.currentIndex();
-//        auto bottomIndex = schedulerTable.currentIndex();
-
-//        // Проверка валидности индексов
-//        bool enabled = isValidIndexes(topIndex, bottomIndex);
-//        qDebug() << "clickedCellTables" << index << sender() << isLastSchedulerTableClickedCell << enabled;
-
-//        isLastSchedulerTableClickedCell = sender() == &schedulerTable;
-//        if (isLastSchedulerTableClickedCell && enabled) {
-//            // Получаем пару значений выбранной ячейки таблицы сверху
-//            auto days = lineDaysTable.model.get(topIndex);
-
-//            // Проверяем выбранные стороны и что в них есть значения
-//            bool enabledLeft = lineDaysTable.delegate.selectedSide == Side::Left && days.first != DayKind::NONE;
-//            bool enabledRight = lineDaysTable.delegate.selectedSide == Side::Right && days.second != DayKind::NONE;
-
-//            if (enabledLeft) {
-//                // Убираем значение, которое забрали
-//                lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
-
-//                auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-//                if (bottomCellDay != DayKind::NONE) {
-//                    // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-//                    // TODO:
-//                    // По дню получаем его строку в таблице выше
-//                    int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-//                    lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-//                }
-
-//                // Вставляем значение в ячейку таблицы
-//                schedulerTable.model.setDayKind(bottomIndex, days.first);
-
-//                // TODO: дубликат
-//                // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-//                schedulerTable.model.sayViewUpdate();
-//                lineDaysTable.model.sayViewUpdate();
-
-//            } else if (enabledRight) {
-//                // Убираем значение, которое забрали
-//                lineDaysTable.model.setRight(topIndex, DayKind::NONE);
-
-//                auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-//                if (bottomCellDay != DayKind::NONE) {
-//                    // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-//                    // TODO:
-//                    // По дню получаем его строку в таблице выше
-//                    int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-//                    lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-//                }
-
-//                // Вставляем значение в ячейку таблицы
-//                schedulerTable.model.setDayKind(bottomIndex, days.second);
-
-//                // TODO: дубликат
-//                // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-//                schedulerTable.model.sayViewUpdate();
-//                lineDaysTable.model.sayViewUpdate();
-//            }
-//        }
-
-//        updateStates();
-//    };
-
-//    // При кликах на ячейках проверяем состояния виджетов, например кнопок -- делаем активные
-//    // или напротив деактивируем
-//    connect(&lineDaysTable, &QTableView::clicked, this, clickedCellTables);
-//    connect(&schedulerTable, &QTableView::clicked, this, clickedCellTables);
 
     // TODO: перевод
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");
