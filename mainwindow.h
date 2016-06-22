@@ -232,6 +232,11 @@ class MainWindow : public QMainWindow
         SchedulerTable schedulerTable;
         ScoreInfoBoard scoreInfoBoard;
 
+        // Флаг говорит являлся ли последний клик по ячейкам
+        // в таблице расписания. false -- если нет или не было
+        // ниразу
+        bool isLastSchedulerTableClickedCell = false;
+
     protected:
         void closeEvent(QCloseEvent*);
 
