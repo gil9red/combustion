@@ -122,8 +122,9 @@ class MainWindow : public QMainWindow
                     auto topIndex = lineDaysTable.currentIndex();
                     auto bottomIndex = schedulerTable.currentIndex();
 
-                    // Проверка валидности индексов
-                    bool enabled = isValidIndexes(topIndex, bottomIndex);
+                    // Проверка возможности вставки значения -- тоже самое используется
+                    // для выделения ячеек таблицы расписания
+                    bool enabled = isValidSetDay(topIndex, bottomIndex);
 
                     isLastSchedulerTableClickedCell = obj == schedulerTable.viewport();
                     if (isLastSchedulerTableClickedCell && enabled) {
