@@ -102,127 +102,113 @@ class MainWindow : public QMainWindow
             }
         }
 
-    // TODO: переименовать, подключать не из формы, перенести в срр
-    private slots:
-        void on_actionSelectSun_triggered() {
-            auto topIndex = lineDaysTable.currentIndex();
-            auto bottomIndex = schedulerTable.currentIndex();
-
-            if (!isValidIndexes(topIndex, bottomIndex)) {
-                return;
+        // Служит продвинутым аналогом сигнала clicked, который раньше отлавливался от таблиц.
+        bool eventFilter(QObject* obj, QEvent* event) {
+            if (obj != lineDaysTable.viewport() && obj != schedulerTable.viewport()) {
+                return false;
             }
 
-            Busman* busman = schedulerTable.model.get(bottomIndex);
-            if (busman == nullptr) {
-                qWarning() << "busman is nullptr, index:" << bottomIndex;
-                return;
+            if (event->type() == QEvent::MouseButtonRelease) {
+                auto mouseEvent = static_cast <QMouseEvent*> (event);
+                auto pos = mouseEvent->pos();
+
+                // Проверяем, что клик произошел в какую-нибудь ячейку
+                if (!lineDaysTable.indexAt(pos).isValid() && !schedulerTable.indexAt(pos).isValid()) {
+                    return false;
+                }
+
+                // TODO: разобраться с дубликатами
+                if (mouseEvent->button() == Qt::LeftButton) {
+                    auto topIndex = lineDaysTable.currentIndex();
+                    auto bottomIndex = schedulerTable.currentIndex();
+
+                    // Проверка валидности индексов
+                    bool enabled = isValidIndexes(topIndex, bottomIndex);
+
+                    isLastSchedulerTableClickedCell = obj == schedulerTable.viewport();
+                    if (isLastSchedulerTableClickedCell && enabled) {
+                        // Получаем пару значений выбранной ячейки таблицы сверху
+                        auto days = lineDaysTable.model.get(topIndex);
+
+                        // Проверяем выбранные стороны и что в них есть значения
+                        bool enabledLeft = lineDaysTable.delegate.selectedSide == Side::Left && days.first != DayKind::NONE;
+                        bool enabledRight = lineDaysTable.delegate.selectedSide == Side::Right && days.second != DayKind::NONE;
+
+                        if (enabledLeft) {
+                            // Убираем значение, которое забрали
+                            lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
+
+                            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
+                            if (bottomCellDay != DayKind::NONE) {
+                                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                                // TODO:
+                                // По дню получаем его строку в таблице выше
+                                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
+                                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+                            }
+
+                            // Вставляем значение в ячейку таблицы
+                            schedulerTable.model.setDayKind(bottomIndex, days.first);
+
+                            // TODO: дубликат
+                            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                            schedulerTable.model.sayViewUpdate();
+                            lineDaysTable.model.sayViewUpdate();
+
+                        } else if (enabledRight) {
+                            // Убираем значение, которое забрали
+                            lineDaysTable.model.setRight(topIndex, DayKind::NONE);
+
+                            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
+                            if (bottomCellDay != DayKind::NONE) {
+                                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                                // TODO:
+                                // По дню получаем его строку в таблице выше
+                                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
+                                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+                            }
+
+                            // Вставляем значение в ячейку таблицы
+                            schedulerTable.model.setDayKind(bottomIndex, days.second);
+
+                            // TODO: дубликат
+                            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                            schedulerTable.model.sayViewUpdate();
+                            lineDaysTable.model.sayViewUpdate();
+                        }
+                    }
+
+                    updateStates();
+
+                    // Только правый клик по таблице расписания
+                } else if (obj == schedulerTable.viewport() && mouseEvent->button() == Qt::RightButton) {
+                    auto bottomIndex = schedulerTable.currentIndex();
+
+                    auto day = schedulerTable.model.getDayKind(bottomIndex);
+                    if (day == DayKind::NONE) {
+                        return false;
+                    }
+
+                    // TODO: clear
+                    schedulerTable.model.setDayKind(bottomIndex, DayKind::NONE);
+
+                    // TODO:
+                    int row = (int) schedulerTable.model.dayKindsLinesMap[day];
+                    int column = bottomIndex.column();
+
+                    lineDaysTable.model.setValue(row, column, day);
+
+                    // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                    schedulerTable.model.sayViewUpdate();
+                    lineDaysTable.model.sayViewUpdate();
+
+                    updateStates();
+                }
+
+                return false;
             }
 
-            if (lineDaysTable.model.getLeft(topIndex) == DayKind::NONE
-                    && lineDaysTable.model.getRight(topIndex) == DayKind::NONE) {
-                qWarning() << "Cell is empty";
-                return;
-            }
-
-            // Берем значение
-            auto day = lineDaysTable.model.getLeft(topIndex);
-            if (day == DayKind::NONE) {
-                qWarning() << "Left value cell is empty";
-                return;
-            }
-
-            // Убираем значение, которое забрали
-            lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
-
-            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-            if (bottomCellDay != DayKind::NONE) {
-                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-                // TODO:
-                // По дню получаем его строку в таблице выше
-                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-            }
-
-            // Вставляем значение в ячейку таблицы
-            schedulerTable.model.setDayKind(bottomIndex, day);
-
-            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            schedulerTable.model.sayViewUpdate();
-            lineDaysTable.model.sayViewUpdate();
-
-            updateStates();
-        }
-        void on_actionSelectMoon_triggered() {
-            auto topIndex = lineDaysTable.currentIndex();
-            auto bottomIndex = schedulerTable.currentIndex();
-
-            if (!isValidIndexes(topIndex, bottomIndex)) {
-                return;
-            }
-
-            Busman* busman = schedulerTable.model.get(bottomIndex);
-            if (busman == nullptr) {
-                qWarning() << "busman is nullptr, index:" << bottomIndex;
-                return;
-            }
-
-            if (lineDaysTable.model.getLeft(topIndex) == DayKind::NONE
-                    && lineDaysTable.model.getRight(topIndex) == DayKind::NONE) {
-                qWarning() << "Cell is empty";
-                return;
-            }
-
-            // Берем значение
-            auto day = lineDaysTable.model.getRight(topIndex);
-            if (day == DayKind::NONE) {
-                qWarning() << "Right value cell is empty";
-                return;
-            }
-
-            // Убираем значение, которое забрали
-            lineDaysTable.model.setRight(topIndex, DayKind::NONE);
-
-            auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-            if (bottomCellDay != DayKind::NONE) {
-                // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-                // TODO:
-                // По дню получаем его строку в таблице выше
-                int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-                lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-            }
-
-            // Вставляем значение в ячейку таблицы
-            schedulerTable.model.setDayKind(bottomIndex, day);
-
-            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            schedulerTable.model.sayViewUpdate();
-            lineDaysTable.model.sayViewUpdate();
-
-            updateStates();
-        }
-
-        void on_actionReturnValue_triggered() {
-            auto bottomIndex = schedulerTable.currentIndex();
-
-            auto day = schedulerTable.model.getDayKind(bottomIndex);
-            if (day == DayKind::NONE) {
-                return;
-            }
-
-            // TODO: clear
-            schedulerTable.model.setDayKind(bottomIndex, DayKind::NONE);
-
-            // TODO:
-            int row = (int) schedulerTable.model.dayKindsLinesMap[day];
-            int column = bottomIndex.column();
-
-            lineDaysTable.model.setValue(row, column, day);
-
-            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            schedulerTable.model.sayViewUpdate();
-            lineDaysTable.model.sayViewUpdate();
-
-            updateStates();
+            return QMainWindow::eventFilter(obj, event);
         }
 
     private:
@@ -237,9 +223,11 @@ class MainWindow : public QMainWindow
         // ниразу
         bool isLastSchedulerTableClickedCell = false;
 
+        // Виджет для показа подсказок работы с таблицами
+        QLabel helpManagerLabel;
+
     protected:
         void closeEvent(QCloseEvent*);
-
 };
 
 #endif // MAINWINDOW_H
