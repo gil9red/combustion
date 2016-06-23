@@ -64,21 +64,55 @@ void ScoreInfoBoard::refresh() {
     for (auto key: enumValueNumbersMap.keys()) {
         enumValueNumbersMap[key] = 0;
     }
+    // У каждого водителя 4 ночной смены, но не должно превышать 4
+    // TODO: магическое число заменить на соответствующее выражение
+    // <кол-во водителей> * 4
+    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 44;
 
-    if (model != nullptr) {
-        for (int row = 0; row < model->rowCount(); row++) {
-            for (int column = 0; column < model->columnCount(); column++) {
-                auto index = model->index(row, column);
-                auto textCell = model->data(index, BusmanTableModel::WishDayRole).toString();
+    if (busmanTableModel != nullptr) {
+        for (int row = 0; row < busmanTableModel->rowCount(); row++) {
+            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+                auto index = busmanTableModel->index(row, column);
+                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
 
                 // TODO:
-                // NOTE: Условие только для примера. Я не знаю к чему относится  RR
                 if (textCell == "RR") {
-                    enumValueNumbersMap[EnumValue::ShiftPreferences]++;
+                    enumValueNumbersMap[EnumValue::DayoffPreferences]++;
+                }
+            }
+
+            // Кол-во ночных смен у водителя
+            int numberLateDay = 0;
+            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+                // TODO: switch
+                auto index = busmanTableModel->index(row, column);
+                auto day = busmanTableModel->getDayKind(index);
+                if (day == DayKind::LINE_1_NIGHT
+                        || day == DayKind::LINE_2_NIGHT
+                        || day == DayKind::LINE_3_NIGHT) {
+                    numberLateDay++;
+                }
+            }
+
+            if (numberLateDay > 0) {
+                // TODO:
+                // TODO: магическое число
+                if (numberLateDay > 4) {
+                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] -= 4;
+                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] += numberLateDay - 4;
+                } else {
+                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] -= numberLateDay;
                 }
             }
         }
     }
+
+//    if (lineDaysTable != nullptr){
+//        for (int row = 0; row < lineDaysTable->model.rowCount(); row++){
+
+
+//        }
+//    }
 
     /* Подсчет очков */
     float score = 0.0;

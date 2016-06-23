@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     schedulerTable.viewport()->installEventFilter(this);
 
     // TODO: перевод
-    scoreInfoBoard.model = &schedulerTable.model;
+    scoreInfoBoard.busmanTableModel = &schedulerTable.model;
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");
     scoreInfoBoardDockWidget->setObjectName("ScoreInfoBoardDockWidget");
     scoreInfoBoardDockWidget->setWidget(&scoreInfoBoard);
