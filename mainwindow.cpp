@@ -124,6 +124,8 @@ void MainWindow::load(const QString& fileName) {
         heightLineDays += lineDaysTable.verticalHeader()->sectionSize(i);
     }
     lineDaysTable.setFixedHeight(heightLineDays);
+
+    updateStates();
 }
 
 void MainWindow::open() {
@@ -173,6 +175,9 @@ void MainWindow::updateStates() {
     }
     helpText += "\n\nДля возврата значения кликни правой кнопкой мышки.";
     helpManagerLabel.setText(helpText);
+
+    // Обновляем виджет с очками
+    scoreInfoBoard.refresh();
 
     // TODO: неиспользуется
 //    ui->actionSelectSun->setEnabled(false);

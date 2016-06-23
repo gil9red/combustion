@@ -10,8 +10,8 @@ QString getFormatFloatValue(float value) {
 
 ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ScoreInfoBoard)
-{
+    ui(new Ui::ScoreInfoBoard) {
+
     ui->setupUi(this);
 
     enumValueNumbersMap[EnumValue::ShiftPreferences]          = 0;
@@ -55,12 +55,32 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     refresh();
 }
 
-ScoreInfoBoard::~ScoreInfoBoard()
-{
+ScoreInfoBoard::~ScoreInfoBoard() {
     delete ui;
 }
 
 void ScoreInfoBoard::refresh() {
+    // Сброс очков
+    for (auto key: enumValueNumbersMap.keys()) {
+        enumValueNumbersMap[key] = 0;
+    }
+
+    if (model != nullptr) {
+        for (int row = 0; row < model->rowCount(); row++) {
+            for (int column = 0; column < model->columnCount(); column++) {
+                auto index = model->index(row, column);
+                auto textCell = model->data(index, BusmanTableModel::WishDayRole).toString();
+
+                // TODO:
+                // NOTE: Условие только для примера. Я не знаю к чему относится  RR
+                if (textCell == "RR") {
+                    enumValueNumbersMap[EnumValue::ShiftPreferences]++;
+                }
+            }
+        }
+    }
+
+    /* Подсчет очков */
     float score = 0.0;
 
     // Заполнение a x b = c
