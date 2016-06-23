@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     schedulerTable.viewport()->installEventFilter(this);
 
     // TODO: перевод
+    scoreInfoBoard.model = &schedulerTable.model;
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");
     scoreInfoBoardDockWidget->setObjectName("ScoreInfoBoardDockWidget");
     scoreInfoBoardDockWidget->setWidget(&scoreInfoBoard);
@@ -40,7 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     helpManagerLabel.setAlignment(Qt::AlignTop | Qt::AlignLeft);
     auto helpManagerLabelDockWidget = new QDockWidget("helpManagerLabel");
     helpManagerLabelDockWidget->setObjectName("HelpManagerLabelDockWidget");
-    helpManagerLabelDockWidget->setWidget(&helpManagerLabel);
+    helpManagerLabelDockWidget->setWidget(new QWidget());
+    helpManagerLabelDockWidget->widget()->setLayout(new QVBoxLayout());
+    helpManagerLabelDockWidget->widget()->layout()->addWidget(&helpManagerLabel);
     addDockWidget(Qt::LeftDockWidgetArea, helpManagerLabelDockWidget);
 
     auto mainLayout = new QVBoxLayout();

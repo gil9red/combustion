@@ -9,6 +9,7 @@ namespace Ui {
 
 #include <QMap>
 #include <QLabel>
+#include "busmantablemodel.h"
 
 
 class ScoreInfoBoard : public QWidget
@@ -31,6 +32,8 @@ class ScoreInfoBoard : public QWidget
             ConsecutiveLateShifts     = -10,
             DeviationTargetLateShifts = -8,
         };
+
+        BusmanTableModel* model = nullptr;
 
     private:
         Ui::ScoreInfoBoard *ui;

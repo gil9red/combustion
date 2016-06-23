@@ -12,6 +12,7 @@
 #include "enums.h"
 
 
+// TODO: переименовать в SchedulerTableModel
 class BusmanTableModel : public QAbstractTableModel
 {
     public:
