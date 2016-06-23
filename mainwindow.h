@@ -43,6 +43,11 @@ class MainWindow : public QMainWindow
         // TODO: разобраться с терминологией проекта -- таблицы снизу и сверху звучат странно
         // Принимает индексы ячейки таблицы сверху и таблицы снизу
         bool isValidSetDay(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
+            // Проверяем, что проверка по индекса проходит
+            if (!isValidIndexes(indexTop, indexBottom)) {
+                return false;
+            }
+
             const auto column = indexBottom.column();
 
             Busman* busman = schedulerTable.model.get(indexBottom);
