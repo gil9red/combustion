@@ -34,7 +34,7 @@ ScoreInfoBoard::~ScoreInfoBoard() {
     }
 }
 
-void ScoreInfoBoard::scheduleAnalysis() {
+void ScoreInfoBoard::analysis() {
     // Сброс очков
     for (auto key: enumValueDataMap.keys()) {
         enumValueDataMap[key]->number = 0;
@@ -175,10 +175,7 @@ void ScoreInfoBoard::scheduleAnalysis() {
     //    }
 }
 
-void ScoreInfoBoard::refresh() {
-    scheduleAnalysis();
-
-    // Заполнение a x b = c
+void ScoreInfoBoard::fillForms() {
     for (auto key: enumValueDataMap.keys()) {
         auto data = enumValueDataMap[key];
 
@@ -193,9 +190,14 @@ void ScoreInfoBoard::refresh() {
         // Заполнение c
         data->labelResult->setText(getFormatFloatValue(value));
     }
+}
 
-    auto score = calcScore();
-    ui->label_Score->setText(getFormatFloatValue(score));
+void ScoreInfoBoard::refresh() {
+    analysis();
+    fillForms();
+
+    auto score = getFormatFloatValue(calcScore());
+    ui->label_Score->setText(score);
 }
 
 float ScoreInfoBoard::calcScore() {

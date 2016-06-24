@@ -67,7 +67,10 @@ class ScoreInfoBoard : public QWidget {
 
     private:
         // Функция подсчитывает случаи метрики
-        void scheduleAnalysis();
+        void analysis();
+
+        // После анализа нужно заполнить виджеты
+        void fillForms();
 
     private:
         Ui::ScoreInfoBoard *ui;
