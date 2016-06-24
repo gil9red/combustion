@@ -20,7 +20,7 @@ class Busman
         QString busNum;
         QList<Lines> lines;
         QStringList wishesOnSchedule;
-        QMap<int, DayKind> workingDays;
+        QList<DayKind> workingDays;
 };
 
 

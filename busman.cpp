@@ -37,6 +37,10 @@ Busman* Busman::fromString(const QString& str) {
     busman->busNum = busNum;
     busman->wishesOnSchedule = wishesOnSchedule;
 
+    for (int i = 0; i < wishesOnSchedule.length(); i++) {
+        busman->workingDays.append(DayKind::NONE);
+    }
+
     // Выбор линии маршрута водителя
     for (auto c: dataRow[2]) {
         if (c == '1') {

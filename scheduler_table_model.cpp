@@ -161,7 +161,7 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
     const int column = index.column();
 
     Busman* busman = busmanList.at(row);
-    auto day = busman->workingDays.value(column, DayKind::NONE);
+    auto day = busman->workingDays.at(column);
 
     if (role == Qt::DisplayRole && isVisibleCellText) {
         return busman->wishesOnSchedule.at(column);
@@ -218,7 +218,7 @@ DayKind SchedulerTableModel::getDayKind(const QModelIndex& index) throw(std::exc
     }
 
     auto column = index.column();
-    return busman->workingDays.value(column, DayKind::NONE);
+    return busman->workingDays.at(column);
 }
 
 void SchedulerTableModel::setDayKind(const QModelIndex& index, DayKind day) throw(std::exception) {
