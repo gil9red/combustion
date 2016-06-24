@@ -99,9 +99,9 @@ void ScoreInfoBoard::scheduleAnalysis() {
             }
             // TODO:
             if (numberShiftPreferencesNight > 0) {
-                enumValueDataMap[ShiftPreferences] += numberShiftPreferencesNight;
+                enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesNight;
             } else {
-                enumValueDataMap[ShiftPreferences] -= numberShiftPreferencesNight;
+                enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesNight;
             }
 
             // Количество DayoffPreferences у водителя день
