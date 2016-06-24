@@ -178,9 +178,6 @@ void ScoreInfoBoard::scheduleAnalysis() {
 void ScoreInfoBoard::refresh() {
     scheduleAnalysis();
 
-    // Подсчет очков
-    float score = 0.0;
-
     // Заполнение a x b = c
     for (auto key: enumValueDataMap.keys()) {
         auto data = enumValueDataMap[key];
@@ -192,11 +189,23 @@ void ScoreInfoBoard::refresh() {
         data->labelNumber->setText(getFormatFloatValue(data->number));
 
         float value = key * data->number;
-        score += value;
 
         // Заполнение c
         data->labelResult->setText(getFormatFloatValue(value));
     }
 
+    auto score = calcScore();
     ui->label_Score->setText(getFormatFloatValue(score));
+}
+
+float ScoreInfoBoard::calcScore() {
+    float score = 0.0;
+
+    for (auto key: enumValueDataMap.keys()) {
+        auto number = enumValueDataMap[key]->number;
+        float value = key * number;
+        score += value;
+    }
+
+    return score;
 }

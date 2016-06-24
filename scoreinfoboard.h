@@ -22,6 +22,9 @@ class ScoreInfoBoard : public QWidget {
 
         void refresh();
 
+        // Функция подсчета количества очков
+        float calcScore();
+
     public:
         enum EnumValue {
             ShiftPreferences          = 3,
