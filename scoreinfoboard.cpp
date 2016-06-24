@@ -22,11 +22,11 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     enumValueNumbersMap[EnumValue::ConsecutiveLateShifts]     = 0;
     enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 0;
 
-//    // TODO: remove
-//    int i = 0;
-//    for (auto key: enumValueNumbersMap.keys()) {
-//        enumValueNumbersMap[key] = ++i;
-//    }
+    //    // TODO: remove
+    //    int i = 0;
+    //    for (auto key: enumValueNumbersMap.keys()) {
+    //        enumValueNumbersMap[key] = ++i;
+    //    }
 
     enumValueLabelValuesMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Value;
     enumValueLabelValuesMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Value;
@@ -81,7 +81,80 @@ void ScoreInfoBoard::refresh() {
                 }
             }
 
-            // Кол-во ночных смен у водителя
+            // Количество DayoffPreferences у водителя
+            int numberShiftPreferences = 0;
+            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+                // TODO: switch
+                auto index = busmanTableModel->index(row, column);
+                auto day = busmanTableModel->getDayKind(index);
+                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+
+                if (textCell == "RR") {
+                    if (day == DayKind::LINE_1_NIGHT
+                            || day == DayKind::LINE_2_NIGHT
+                            || day == DayKind::LINE_3_NIGHT
+                            || day == DayKind::LINE_1_DAY
+                            || day == DayKind::LINE_2_DAY
+                            || day == DayKind::LINE_3_DAY) {
+                        numberShiftPreferences++;
+                    }
+                }
+            }
+
+            // TODO:
+            if (numberShiftPreferences > 0) {
+                enumValueNumbersMap[EnumValue::DayoffPreferences] -= numberShiftPreferences;
+            } else {
+                enumValueNumbersMap[EnumValue::DayoffPreferences] += numberShiftPreferences;
+            }
+
+            // Количество ShiftPreferences у водителя ночью
+            int numberShiftPreferencesNight = 0;
+            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+                // TODO: switch
+                auto index = busmanTableModel->index(row, column);
+                auto day = busmanTableModel->getDayKind(index);
+                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+
+                if (textCell == "NN") {
+                    if (day == DayKind::LINE_1_NIGHT
+                            || day == DayKind::LINE_2_NIGHT
+                            || day == DayKind::LINE_3_NIGHT) {
+                        numberShiftPreferencesNight++;
+                    }
+                }
+            }
+            // TODO:
+            if (numberShiftPreferencesNight > 0) {
+                enumValueNumbersMap[EnumValue::ShiftPreferences] += numberShiftPreferencesNight;
+            } else {
+                enumValueNumbersMap[EnumValue::ShiftPreferences] -= numberShiftPreferencesNight;
+            }
+
+            // Количество DayoffPreferences у водителя день
+            int numberShiftPreferencesDay = 0;
+            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+                // TODO: switch
+                auto index = busmanTableModel->index(row, column);
+                auto day = busmanTableModel->getDayKind(index);
+                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+
+                if (textCell == "DD") {
+                    if (day == DayKind::LINE_1_DAY
+                            || day == DayKind::LINE_2_DAY
+                            || day == DayKind::LINE_3_DAY) {
+                        numberShiftPreferencesDay++;
+                    }
+                }
+            }
+            // TODO:
+            if (numberShiftPreferencesDay > 0) {
+                enumValueNumbersMap[EnumValue::ShiftPreferences] += numberShiftPreferencesDay;
+            } else {
+                enumValueNumbersMap[EnumValue::ShiftPreferences] -= numberShiftPreferencesDay;
+            }
+
+            // Количество ночных смен у водителя
             int numberLateDay = 0;
             for (int column = 0; column < busmanTableModel->columnCount(); column++) {
                 // TODO: switch
@@ -107,12 +180,18 @@ void ScoreInfoBoard::refresh() {
         }
     }
 
-//    if (lineDaysTable != nullptr){
-//        for (int row = 0; row < lineDaysTable->model.rowCount(); row++){
+    //    if (lineDaysTable != nullptr){
+    //        for (int row = 0; row < lineDaysTable->model.rowCount(); row++){
+    //            for (int column = 0; column < lineDaysTable->model.columnCount(); column++){
+    //                auto index =  lineDaysTable->model.index(row,column);
+    //                // TODO:
+    //                // Вывести общее количество Day и Night
+    //                //                auto itemRole = lineDaysTable->model.data(index,);
 
-
-//        }
-//    }
+    //                //                enumValueLabelNumbersMap[EnumValue::UnassignedShifts]
+    //            }
+    //        }
+    //    }
 
     /* Подсчет очков */
     float score = 0.0;
