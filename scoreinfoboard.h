@@ -13,8 +13,7 @@ namespace Ui {
 #include "linedaystable.h"
 
 
-class ScoreInfoBoard : public QWidget
-{
+class ScoreInfoBoard : public QWidget {
         Q_OBJECT
 
     public:
@@ -34,6 +33,29 @@ class ScoreInfoBoard : public QWidget
             DeviationTargetLateShifts = -8,
         };
 
+        struct Data {
+            // TODO: добавить операторы ++/-/+, которые работают с number
+
+            // Количество случаев
+            int number = 0;
+
+            // Отображение значения случая метрики
+            QLabel* labelValue = nullptr;
+
+            // Отображение количества случаев метрики
+            QLabel* labelNumber = nullptr;
+
+            // Отображение результата подсчета случаев метрики
+            QLabel* labelResult = nullptr;
+
+            Data(int number, QLabel* labelValue, QLabel* labelNumber, QLabel* labelResult) {
+                this->number = number;
+                this->labelValue = labelValue;
+                this->labelNumber = labelNumber;
+                this->labelResult = labelResult;
+            }
+        };
+
         // Максимальное количество разрешенных у водителей ночных смен.
         const static int maxGoodDayLateNumber = 4;
 
@@ -46,20 +68,7 @@ class ScoreInfoBoard : public QWidget
 
     private:
         Ui::ScoreInfoBoard *ui;
-
-        // TODO: словари можно объединить в один -- создать структуру и в ней описать значения
-        // которые в словарях описаны
-        // Словарь, описывающий тип метрики и количество случаев
-        QMap<EnumValue, int> enumValueNumbersMap;
-
-        // Словарь, описывающий тип метрики и виджет для отображения значения очка метрики
-        QMap<EnumValue, QLabel*> enumValueLabelValuesMap;
-
-        // Словарь, описывающий тип метрики и виджет для отображения количества случаев
-        QMap<EnumValue, QLabel*> enumValueLabelNumbersMap;
-
-        // Словарь, описывающий тип метрики и виджет для отображения суммы очков по метрике
-        QMap<EnumValue, QLabel*> enumValueLabelResultsMap;
+        QMap<EnumValue, Data*> enumValueDataMap;
 };
 
 #endif // SCOREINFOBOARD_H

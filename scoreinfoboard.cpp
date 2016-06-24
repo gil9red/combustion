@@ -14,55 +14,36 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
 
     ui->setupUi(this);
 
-    enumValueNumbersMap[ShiftPreferences]          = 0;
-    enumValueNumbersMap[DayoffPreferences]         = 0;
-    enumValueNumbersMap[UnassignedShifts]          = 0;
-    enumValueNumbersMap[LongRests]                 = 0;
-    enumValueNumbersMap[EarlyAfterLateShifts]      = 0;
-    enumValueNumbersMap[ConsecutiveLateShifts]     = 0;
-    enumValueNumbersMap[DeviationTargetLateShifts] = 0;
-
-    enumValueLabelValuesMap[ShiftPreferences]          = ui->label_ShiftPreferences_Value;
-    enumValueLabelValuesMap[DayoffPreferences]         = ui->label_DayoffPreferences_Value;
-    enumValueLabelValuesMap[UnassignedShifts]          = ui->label_UnassignedShifts_Value;
-    enumValueLabelValuesMap[LongRests]                 = ui->label_LongRests_Value;
-    enumValueLabelValuesMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Value;
-    enumValueLabelValuesMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Value;
-    enumValueLabelValuesMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Value;
-
-    enumValueLabelNumbersMap[ShiftPreferences]          = ui->label_ShiftPreferences_Number;
-    enumValueLabelNumbersMap[DayoffPreferences]         = ui->label_DayoffPreferences_Number;
-    enumValueLabelNumbersMap[UnassignedShifts]          = ui->label_UnassignedShifts_Number;
-    enumValueLabelNumbersMap[LongRests]                 = ui->label_LongRests_Number;
-    enumValueLabelNumbersMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Number;
-    enumValueLabelNumbersMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Number;
-    enumValueLabelNumbersMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Number;
-
-    enumValueLabelResultsMap[ShiftPreferences]          = ui->label_ShiftPreferences_Result;
-    enumValueLabelResultsMap[DayoffPreferences]         = ui->label_DayoffPreferences_Result;
-    enumValueLabelResultsMap[UnassignedShifts]          = ui->label_UnassignedShifts_Result;
-    enumValueLabelResultsMap[LongRests]                 = ui->label_LongRests_Result;
-    enumValueLabelResultsMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Result;
-    enumValueLabelResultsMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Result;
-    enumValueLabelResultsMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Result;
+    enumValueDataMap[ShiftPreferences]          = new ScoreInfoBoard::Data(0, ui->label_ShiftPreferences_Value, ui->label_ShiftPreferences_Number, ui->label_ShiftPreferences_Result);
+    enumValueDataMap[DayoffPreferences]         = new ScoreInfoBoard::Data(0, ui->label_DayoffPreferences_Value, ui->label_DayoffPreferences_Number, ui->label_DayoffPreferences_Result);
+    enumValueDataMap[UnassignedShifts]          = new ScoreInfoBoard::Data(0, ui->label_UnassignedShifts_Value, ui->label_UnassignedShifts_Number, ui->label_UnassignedShifts_Result);
+    enumValueDataMap[LongRests]                 = new ScoreInfoBoard::Data(0, ui->label_LongRests_Value, ui->label_LongRests_Number, ui->label_LongRests_Result);
+    enumValueDataMap[EarlyAfterLateShifts]      = new ScoreInfoBoard::Data(0, ui->label_EarlyAfterLateShifts_Value, ui->label_EarlyAfterLateShifts_Number, ui->label_EarlyAfterLateShifts_Result);
+    enumValueDataMap[ConsecutiveLateShifts]     = new ScoreInfoBoard::Data(0, ui->label_ConsecutiveLateShifts_Value, ui->label_ConsecutiveLateShifts_Number, ui->label_ConsecutiveLateShifts_Result);
+    enumValueDataMap[DeviationTargetLateShifts] = new ScoreInfoBoard::Data(0, ui->label_DeviationTargetLateShifts_Value, ui->label_DeviationTargetLateShifts_Number, ui->label_DeviationTargetLateShifts_Result);
 
     refresh();
 }
 
 ScoreInfoBoard::~ScoreInfoBoard() {
     delete ui;
+
+    // Удаление из словаря и удаление объекта
+    for (auto key: enumValueDataMap.keys()) {
+        delete enumValueDataMap.take(key);
+    }
 }
 
 void ScoreInfoBoard::scheduleAnalysis() {
     // Сброс очков
-    for (auto key: enumValueNumbersMap.keys()) {
-        enumValueNumbersMap[key] = 0;
+    for (auto key: enumValueDataMap.keys()) {
+        enumValueDataMap[key]->number = 0;
     }
 
     if (schedulerTableModel != nullptr) {
         // У каждого водителя maxGoodDayLateNumber ночной смены, но не должно превышать maxGoodDayLateNumber
         // <кол-во водителей> * maxGoodDayLateNumber
-        enumValueNumbersMap[DeviationTargetLateShifts] = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
+        enumValueDataMap[DeviationTargetLateShifts]->number = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
 
         for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
@@ -71,25 +52,19 @@ void ScoreInfoBoard::scheduleAnalysis() {
 
                 // TODO:
                 if (textCell == "RR") {
-                    enumValueNumbersMap[DayoffPreferences]++;
+                    enumValueDataMap[DayoffPreferences]->number++;
                 }
             }
 
             // Количество DayoffPreferences у водителя
             int numberShiftPreferences = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                // TODO: switch
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "RR") {
-                    if (day == DayKind::LINE_1_NIGHT
-                            || day == DayKind::LINE_2_NIGHT
-                            || day == DayKind::LINE_3_NIGHT
-                            || day == DayKind::LINE_1_DAY
-                            || day == DayKind::LINE_2_DAY
-                            || day == DayKind::LINE_3_DAY) {
+                    if (day != DayKind::NONE) {
                         numberShiftPreferences++;
                     }
                 }
@@ -97,77 +72,90 @@ void ScoreInfoBoard::scheduleAnalysis() {
 
             // TODO:
             if (numberShiftPreferences > 0) {
-                enumValueNumbersMap[DayoffPreferences] -= numberShiftPreferences;
+                enumValueDataMap[DayoffPreferences]->number -= numberShiftPreferences;
             } else {
-                enumValueNumbersMap[DayoffPreferences] += numberShiftPreferences;
+                enumValueDataMap[DayoffPreferences]->number += numberShiftPreferences;
             }
 
             // Количество ShiftPreferences у водителя ночью
             int numberShiftPreferencesNight = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                // TODO: switch
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "NN") {
-                    if (day == DayKind::LINE_1_NIGHT
-                            || day == DayKind::LINE_2_NIGHT
-                            || day == DayKind::LINE_3_NIGHT) {
-                        numberShiftPreferencesNight++;
+                    switch(day) {
+                        case DayKind::LINE_1_NIGHT:
+                        case DayKind::LINE_2_NIGHT:
+                        case DayKind::LINE_3_NIGHT:
+                            numberShiftPreferencesNight++;
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
             // TODO:
             if (numberShiftPreferencesNight > 0) {
-                enumValueNumbersMap[ShiftPreferences] += numberShiftPreferencesNight;
+                enumValueDataMap[ShiftPreferences] += numberShiftPreferencesNight;
             } else {
-                enumValueNumbersMap[ShiftPreferences] -= numberShiftPreferencesNight;
+                enumValueDataMap[ShiftPreferences] -= numberShiftPreferencesNight;
             }
 
             // Количество DayoffPreferences у водителя день
             int numberShiftPreferencesDay = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                // TODO: switch
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "DD") {
-                    if (day == DayKind::LINE_1_DAY
-                            || day == DayKind::LINE_2_DAY
-                            || day == DayKind::LINE_3_DAY) {
-                        numberShiftPreferencesDay++;
+                    switch(day) {
+                        case DayKind::LINE_1_DAY:
+                        case DayKind::LINE_2_DAY:
+                        case DayKind::LINE_3_DAY:
+                            numberShiftPreferencesDay++;
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
             // TODO:
             if (numberShiftPreferencesDay > 0) {
-                enumValueNumbersMap[ShiftPreferences] += numberShiftPreferencesDay;
+                enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesDay;
             } else {
-                enumValueNumbersMap[ShiftPreferences] -= numberShiftPreferencesDay;
+                enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesDay;
             }
 
             // Количество ночных смен у водителя
             int numberLateDay = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                // TODO: switch
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
-                if (day == DayKind::LINE_1_NIGHT
-                        || day == DayKind::LINE_2_NIGHT
-                        || day == DayKind::LINE_3_NIGHT) {
-                    numberLateDay++;
+
+                switch(day) {
+                    case DayKind::LINE_1_NIGHT:
+                    case DayKind::LINE_2_NIGHT:
+                    case DayKind::LINE_3_NIGHT:
+                        numberLateDay++;
+                        break;
+
+                    default:
+                        break;
                 }
             }
 
             if (numberLateDay > 0) {
                 // TODO:
                 if (numberLateDay > maxGoodDayLateNumber) {
-                    enumValueNumbersMap[DeviationTargetLateShifts] -= maxGoodDayLateNumber;
-                    enumValueNumbersMap[DeviationTargetLateShifts] += numberLateDay - maxGoodDayLateNumber;
+                    enumValueDataMap[DeviationTargetLateShifts]->number -= maxGoodDayLateNumber;
+                    enumValueDataMap[DeviationTargetLateShifts]->number += numberLateDay - maxGoodDayLateNumber;
                 } else {
-                    enumValueNumbersMap[DeviationTargetLateShifts] -= numberLateDay;
+                    enumValueDataMap[DeviationTargetLateShifts]->number -= numberLateDay;
                 }
             }
         }
@@ -194,22 +182,20 @@ void ScoreInfoBoard::refresh() {
     float score = 0.0;
 
     // Заполнение a x b = c
-    for (auto key: enumValueNumbersMap.keys()) {
+    for (auto key: enumValueDataMap.keys()) {
+        auto data = enumValueDataMap[key];
+
         // Заполнение a
-        auto label = enumValueLabelValuesMap[key];
-        label->setText(getFormatFloatValue(key));
+        data->labelValue->setText(getFormatFloatValue(key));
 
         // Заполнение b
-        auto number = enumValueNumbersMap[key];
-        label = enumValueLabelNumbersMap[key];
-        label->setText(getFormatFloatValue(number));
+        data->labelNumber->setText(getFormatFloatValue(data->number));
 
-        float value = key * number;
+        float value = key * data->number;
         score += value;
 
         // Заполнение c
-        label = enumValueLabelResultsMap[key];
-        label->setText(getFormatFloatValue(value));
+        data->labelResult->setText(getFormatFloatValue(value));
     }
 
     ui->label_Score->setText(getFormatFloatValue(score));
