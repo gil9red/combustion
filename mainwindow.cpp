@@ -98,7 +98,7 @@ void MainWindow::load(const QString& fileName) {
     auto schedulerHHeader = schedulerTable.horizontalHeader();
     auto schedulerVHeader = schedulerTable.verticalHeader();
 
-    for (int i = 0; i < schedulerTable.model.columnCount(); i++) {
+    for (int i = 0; i < schedulerTable.columnCount(); i++) {
         schedulerHHeader->resizeSection(i, width_columns);
     }
     schedulerHHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -110,7 +110,7 @@ void MainWindow::load(const QString& fileName) {
     auto lineDaysVHeader = lineDaysTable.verticalHeader();
 
     // Устанавливаем размер столбцов как в tableView
-    for (int i = 0; i < lineDaysTable.model.columnCount(); i++) {
+    for (int i = 0; i < lineDaysTable.columnCount(); i++) {
         auto size = schedulerHHeader->sectionSize(i);
         lineDaysHHeader->resizeSection(i, size);
     }
@@ -118,7 +118,7 @@ void MainWindow::load(const QString& fileName) {
     schedulerVHeader->setFixedWidth(width_vertical_header);
     lineDaysVHeader->setFixedWidth(width_vertical_header);
 
-    for (int i = 0; i < lineDaysTable.model.rowCount(); i++) {
+    for (int i = 0; i < lineDaysTable.rowCount(); i++) {
         lineDaysVHeader->resizeSection(i, width_columns / 2);
     }
 
@@ -170,7 +170,6 @@ void MainWindow::updateStates() {
 
     // TODO:
     QString helpText;
-    helpText = "◑ ◔ ╔═╗ ║▓▒░░░░░░░░░░░░░░░░░░ ╚═╝ IMMA CHARGIN MAH LAZER!";
     helpText = "◑ ◔\n";
     helpText += "╔═╗\n";
     helpText += "║▓▒░░░░░░░░░░░░░░░░░░\n";
@@ -270,7 +269,7 @@ void MainWindow::selectSchedulerCell(const QModelIndex& index) {
 
     int column = index.column();
 
-    for (int row = 0; row < schedulerTable.model.rowCount(); row++) {
+    for (int row = 0; row < schedulerTable.rowCount(); row++) {
         auto indexView = schedulerTable.model.index(row, column);
 
         // Выделение ячейки

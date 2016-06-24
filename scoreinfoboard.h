@@ -34,8 +34,15 @@ class ScoreInfoBoard : public QWidget
             DeviationTargetLateShifts = -8,
         };
 
+        // Максимальное количество разрешенных у водителей ночных смен.
+        const static int maxGoodDayLateNumber = 4;
+
         SchedulerTableModel* schedulerTableModel = nullptr;
         LineDaysTable* lineDaysTable = nullptr;
+
+    private:
+        // Функция подсчитывает случаи метрики
+        void scheduleAnalysis();
 
     private:
         Ui::ScoreInfoBoard *ui;

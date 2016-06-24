@@ -23,6 +23,9 @@ class LineDaysTable : public QTableView
 
         // TODO:
         LineDays_CellDelegate delegate;
+
+        int rowCount() const;
+        int columnCount() const;
 };
 
 

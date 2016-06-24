@@ -12,9 +12,11 @@ class SchedulerTable: public QTableView
     public:
         SchedulerTable();
 
+        int rowCount() const;
+        int columnCount() const;
+
     public:
         SchedulerTableModel model;
-
 };
 
 

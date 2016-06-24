@@ -14,37 +14,37 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
 
     ui->setupUi(this);
 
-    enumValueNumbersMap[EnumValue::ShiftPreferences]          = 0;
-    enumValueNumbersMap[EnumValue::DayoffPreferences]         = 0;
-    enumValueNumbersMap[EnumValue::UnassignedShifts]          = 0;
-    enumValueNumbersMap[EnumValue::LongRests]                 = 0;
-    enumValueNumbersMap[EnumValue::EarlyAfterLateShifts]      = 0;
-    enumValueNumbersMap[EnumValue::ConsecutiveLateShifts]     = 0;
-    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 0;
+    enumValueNumbersMap[ShiftPreferences]          = 0;
+    enumValueNumbersMap[DayoffPreferences]         = 0;
+    enumValueNumbersMap[UnassignedShifts]          = 0;
+    enumValueNumbersMap[LongRests]                 = 0;
+    enumValueNumbersMap[EarlyAfterLateShifts]      = 0;
+    enumValueNumbersMap[ConsecutiveLateShifts]     = 0;
+    enumValueNumbersMap[DeviationTargetLateShifts] = 0;
 
-    enumValueLabelValuesMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Value;
-    enumValueLabelValuesMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Value;
-    enumValueLabelValuesMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Value;
-    enumValueLabelValuesMap[EnumValue::LongRests]                 = ui->label_LongRests_Value;
-    enumValueLabelValuesMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Value;
-    enumValueLabelValuesMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Value;
-    enumValueLabelValuesMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Value;
+    enumValueLabelValuesMap[ShiftPreferences]          = ui->label_ShiftPreferences_Value;
+    enumValueLabelValuesMap[DayoffPreferences]         = ui->label_DayoffPreferences_Value;
+    enumValueLabelValuesMap[UnassignedShifts]          = ui->label_UnassignedShifts_Value;
+    enumValueLabelValuesMap[LongRests]                 = ui->label_LongRests_Value;
+    enumValueLabelValuesMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Value;
+    enumValueLabelValuesMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Value;
+    enumValueLabelValuesMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Value;
 
-    enumValueLabelNumbersMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Number;
-    enumValueLabelNumbersMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Number;
-    enumValueLabelNumbersMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Number;
-    enumValueLabelNumbersMap[EnumValue::LongRests]                 = ui->label_LongRests_Number;
-    enumValueLabelNumbersMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Number;
-    enumValueLabelNumbersMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Number;
-    enumValueLabelNumbersMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Number;
+    enumValueLabelNumbersMap[ShiftPreferences]          = ui->label_ShiftPreferences_Number;
+    enumValueLabelNumbersMap[DayoffPreferences]         = ui->label_DayoffPreferences_Number;
+    enumValueLabelNumbersMap[UnassignedShifts]          = ui->label_UnassignedShifts_Number;
+    enumValueLabelNumbersMap[LongRests]                 = ui->label_LongRests_Number;
+    enumValueLabelNumbersMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Number;
+    enumValueLabelNumbersMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Number;
+    enumValueLabelNumbersMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Number;
 
-    enumValueLabelResultsMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Result;
-    enumValueLabelResultsMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Result;
-    enumValueLabelResultsMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Result;
-    enumValueLabelResultsMap[EnumValue::LongRests]                 = ui->label_LongRests_Result;
-    enumValueLabelResultsMap[EnumValue::EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Result;
-    enumValueLabelResultsMap[EnumValue::ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Result;
-    enumValueLabelResultsMap[EnumValue::DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Result;
+    enumValueLabelResultsMap[ShiftPreferences]          = ui->label_ShiftPreferences_Result;
+    enumValueLabelResultsMap[DayoffPreferences]         = ui->label_DayoffPreferences_Result;
+    enumValueLabelResultsMap[UnassignedShifts]          = ui->label_UnassignedShifts_Result;
+    enumValueLabelResultsMap[LongRests]                 = ui->label_LongRests_Result;
+    enumValueLabelResultsMap[EarlyAfterLateShifts]      = ui->label_EarlyAfterLateShifts_Result;
+    enumValueLabelResultsMap[ConsecutiveLateShifts]     = ui->label_ConsecutiveLateShifts_Result;
+    enumValueLabelResultsMap[DeviationTargetLateShifts] = ui->label_DeviationTargetLateShifts_Result;
 
     refresh();
 }
@@ -53,17 +53,17 @@ ScoreInfoBoard::~ScoreInfoBoard() {
     delete ui;
 }
 
-void ScoreInfoBoard::refresh() {
+void ScoreInfoBoard::scheduleAnalysis() {
     // Сброс очков
     for (auto key: enumValueNumbersMap.keys()) {
         enumValueNumbersMap[key] = 0;
     }
-    // У каждого водителя 4 ночной смены, но не должно превышать 4
-    // TODO: магическое число заменить на соответствующее выражение
-    // <кол-во водителей> * 4
-    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 44;
 
     if (schedulerTableModel != nullptr) {
+        // У каждого водителя maxGoodDayLateNumber ночной смены, но не должно превышать maxGoodDayLateNumber
+        // <кол-во водителей> * maxGoodDayLateNumber
+        enumValueNumbersMap[DeviationTargetLateShifts] = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
+
         for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 auto index = schedulerTableModel->index(row, column);
@@ -71,7 +71,7 @@ void ScoreInfoBoard::refresh() {
 
                 // TODO:
                 if (textCell == "RR") {
-                    enumValueNumbersMap[EnumValue::DayoffPreferences]++;
+                    enumValueNumbersMap[DayoffPreferences]++;
                 }
             }
 
@@ -97,9 +97,9 @@ void ScoreInfoBoard::refresh() {
 
             // TODO:
             if (numberShiftPreferences > 0) {
-                enumValueNumbersMap[EnumValue::DayoffPreferences] -= numberShiftPreferences;
+                enumValueNumbersMap[DayoffPreferences] -= numberShiftPreferences;
             } else {
-                enumValueNumbersMap[EnumValue::DayoffPreferences] += numberShiftPreferences;
+                enumValueNumbersMap[DayoffPreferences] += numberShiftPreferences;
             }
 
             // Количество ShiftPreferences у водителя ночью
@@ -120,9 +120,9 @@ void ScoreInfoBoard::refresh() {
             }
             // TODO:
             if (numberShiftPreferencesNight > 0) {
-                enumValueNumbersMap[EnumValue::ShiftPreferences] += numberShiftPreferencesNight;
+                enumValueNumbersMap[ShiftPreferences] += numberShiftPreferencesNight;
             } else {
-                enumValueNumbersMap[EnumValue::ShiftPreferences] -= numberShiftPreferencesNight;
+                enumValueNumbersMap[ShiftPreferences] -= numberShiftPreferencesNight;
             }
 
             // Количество DayoffPreferences у водителя день
@@ -143,9 +143,9 @@ void ScoreInfoBoard::refresh() {
             }
             // TODO:
             if (numberShiftPreferencesDay > 0) {
-                enumValueNumbersMap[EnumValue::ShiftPreferences] += numberShiftPreferencesDay;
+                enumValueNumbersMap[ShiftPreferences] += numberShiftPreferencesDay;
             } else {
-                enumValueNumbersMap[EnumValue::ShiftPreferences] -= numberShiftPreferencesDay;
+                enumValueNumbersMap[ShiftPreferences] -= numberShiftPreferencesDay;
             }
 
             // Количество ночных смен у водителя
@@ -163,12 +163,11 @@ void ScoreInfoBoard::refresh() {
 
             if (numberLateDay > 0) {
                 // TODO:
-                // TODO: магическое число
-                if (numberLateDay > 4) {
-                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] -= 4;
-                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] += numberLateDay - 4;
+                if (numberLateDay > maxGoodDayLateNumber) {
+                    enumValueNumbersMap[DeviationTargetLateShifts] -= maxGoodDayLateNumber;
+                    enumValueNumbersMap[DeviationTargetLateShifts] += numberLateDay - maxGoodDayLateNumber;
                 } else {
-                    enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] -= numberLateDay;
+                    enumValueNumbersMap[DeviationTargetLateShifts] -= numberLateDay;
                 }
             }
         }
@@ -182,12 +181,16 @@ void ScoreInfoBoard::refresh() {
     //                // Вывести общее количество Day и Night
     //                //                auto itemRole = lineDaysTable->model.data(index,);
 
-    //                //                enumValueLabelNumbersMap[EnumValue::UnassignedShifts]
+    //                //                enumValueLabelNumbersMap[UnassignedShifts]
     //            }
     //        }
     //    }
+}
 
-    /* Подсчет очков */
+void ScoreInfoBoard::refresh() {
+    scheduleAnalysis();
+
+    // Подсчет очков
     float score = 0.0;
 
     // Заполнение a x b = c

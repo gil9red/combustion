@@ -16,3 +16,11 @@ SchedulerTable::SchedulerTable()
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
+
+int SchedulerTable::rowCount() const {
+    return model.rowCount();
+}
+
+int SchedulerTable::columnCount() const {
+    return model.columnCount();
+}

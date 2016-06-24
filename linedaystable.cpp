@@ -15,3 +15,11 @@ LineDaysTable::LineDaysTable()
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
+
+int LineDaysTable::rowCount() const {
+    return model.rowCount();
+}
+
+int LineDaysTable::columnCount() const {
+    return model.columnCount();
+}

@@ -9,6 +9,9 @@
 #include <QPainter>
 
 
+static const QString BusmanIsNullMessage("busman == nullptr, index: %1, %2.");
+
+
 QImage drawBackground(const QImage& im, const QColor& background) {
     QImage image(im.size(), QImage::Format_ARGB32_Premultiplied);
     image.fill(background);
@@ -56,9 +59,7 @@ SchedulerTableModel::SchedulerTableModel() {
 void SchedulerTableModel::load(const QString& fileName) throw (std::exception) {
     clear();
 
-    // TODO
-    QList<Busman*> newBusmanList = ParserPuzzleFile::parse(fileName);
-    foreach (Busman *busman, newBusmanList) {
+    foreach (Busman *busman, ParserPuzzleFile::parse(fileName)) {
         busmanList.append(busman);
     }
 
@@ -162,24 +163,16 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
     Busman* busman = busmanList.at(row);
     auto day = busman->workingDays.value(column, DayKind::NONE);
 
-    if (role == Qt::DisplayRole) {
-        if (isVisibleCellText) {
-            // TODO: дубликат
-            return busman->wishesOnSchedule.at(column);
-        }
+    if (role == Qt::DisplayRole && isVisibleCellText) {
+        return busman->wishesOnSchedule.at(column);
 
     } else if (role == WishDayRole) {
-        // TODO: дубликат
         return busman->wishesOnSchedule.at(column);
 
         // TODO: хорошо бы в делегате реализовать отрисовку текста
     } else if (role == Qt::ForegroundRole) {
         QString day = busman->wishesOnSchedule.at(column);
-        if (day == "XX") {
-            return QBrush(Qt::white);
-        } else {
-            return QBrush(Qt::black);
-        }
+        return QBrush(day == "XX" ? Qt::white : Qt::black);
 
     // Текст в ячейках располагается по центру
     } else if (role == Qt::TextAlignmentRole) {
@@ -221,23 +214,17 @@ Busman* SchedulerTableModel::get(int row) {
 DayKind SchedulerTableModel::getDayKind(const QModelIndex& index) throw(std::exception) {
     Busman* busman = get(index);
     if (busman == nullptr) {
-        // TODO: дубликат
-        throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+        throw std::logic_error(BusmanIsNullMessage.arg(index.row(), index.column()).toStdString());
     }
 
     auto column = index.column();
-    if (!busman->workingDays.contains(column)) {
-        return DayKind::NONE;
-    }
-
-    return busman->workingDays[column];
+    return busman->workingDays.value(column, DayKind::NONE);
 }
 
 void SchedulerTableModel::setDayKind(const QModelIndex& index, DayKind day) throw(std::exception) {
     Busman* busman = get(index);
     if (busman == nullptr) {
-        // TODO: дубликат
-        throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+        throw std::logic_error(BusmanIsNullMessage.arg(index.row(), index.column()).toStdString());
     }
 
     busman->workingDays[index.column()] = day;
