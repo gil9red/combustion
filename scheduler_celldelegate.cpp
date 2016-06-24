@@ -4,11 +4,10 @@
 #include <QDebug>
 
 #include "busman.h"
-#include "busmantablemodel.h"
+#include "scheduler_table_model.h"
 
 
-void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
+void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
     QStyleOptionViewItemV4 viewOption = option;
 
     painter->save();
@@ -17,9 +16,7 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QColor textColor = Qt::black;
     QRect rect = viewOption.rect;
 
-    // TODO:
-//    QString textCell = index.model()->data(index, Qt::DisplayRole).toString();
-    QString textCell = index.model()->data(index, BusmanTableModel::WishDayRole).toString();
+    QString textCell = index.model()->data(index, SchedulerTableModel::WishDayRole).toString();
 
     if (textCell == "RR") {
         brush = QBrush(Qt::lightGray);
@@ -46,18 +43,18 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     painter->fillRect(rect, brush);
 
-    // TODO: выделение полупрозрачным сделать
-    DayKind day = index.model()->data(index, BusmanTableModel::DayKindRole).value<DayKind>();
+    DayKind day = index.model()->data(index, SchedulerTableModel::DayKindRole).value<DayKind>();
     if (day != DayKind::NONE) {
-        QImage dayImage = index.model()->data(index, BusmanTableModel::DayImageKindRole).value<QImage>();
+        QImage dayImage = index.model()->data(index, SchedulerTableModel::DayImageKindRole).value<QImage>();
         QRect rect = option.rect;
 
         // Отступ между иконками в ячейке
         auto indent = 2;
         auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
 
-        // TODO: исправить ошибку "QImage::scaled: Image is a null image"
-        dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if (!dayImage.isNull()) {
+            dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
 
         switch (day) {
             case DayKind::LINE_1_DAY:

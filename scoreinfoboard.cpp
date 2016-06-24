@@ -22,12 +22,6 @@ ScoreInfoBoard::ScoreInfoBoard(QWidget *parent) :
     enumValueNumbersMap[EnumValue::ConsecutiveLateShifts]     = 0;
     enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 0;
 
-    //    // TODO: remove
-    //    int i = 0;
-    //    for (auto key: enumValueNumbersMap.keys()) {
-    //        enumValueNumbersMap[key] = ++i;
-    //    }
-
     enumValueLabelValuesMap[EnumValue::ShiftPreferences]          = ui->label_ShiftPreferences_Value;
     enumValueLabelValuesMap[EnumValue::DayoffPreferences]         = ui->label_DayoffPreferences_Value;
     enumValueLabelValuesMap[EnumValue::UnassignedShifts]          = ui->label_UnassignedShifts_Value;
@@ -69,11 +63,11 @@ void ScoreInfoBoard::refresh() {
     // <кол-во водителей> * 4
     enumValueNumbersMap[EnumValue::DeviationTargetLateShifts] = 44;
 
-    if (busmanTableModel != nullptr) {
-        for (int row = 0; row < busmanTableModel->rowCount(); row++) {
-            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
-                auto index = busmanTableModel->index(row, column);
-                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+    if (schedulerTableModel != nullptr) {
+        for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+                auto index = schedulerTableModel->index(row, column);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 // TODO:
                 if (textCell == "RR") {
@@ -83,11 +77,11 @@ void ScoreInfoBoard::refresh() {
 
             // Количество DayoffPreferences у водителя
             int numberShiftPreferences = 0;
-            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 // TODO: switch
-                auto index = busmanTableModel->index(row, column);
-                auto day = busmanTableModel->getDayKind(index);
-                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "RR") {
                     if (day == DayKind::LINE_1_NIGHT
@@ -110,11 +104,11 @@ void ScoreInfoBoard::refresh() {
 
             // Количество ShiftPreferences у водителя ночью
             int numberShiftPreferencesNight = 0;
-            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 // TODO: switch
-                auto index = busmanTableModel->index(row, column);
-                auto day = busmanTableModel->getDayKind(index);
-                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "NN") {
                     if (day == DayKind::LINE_1_NIGHT
@@ -133,11 +127,11 @@ void ScoreInfoBoard::refresh() {
 
             // Количество DayoffPreferences у водителя день
             int numberShiftPreferencesDay = 0;
-            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 // TODO: switch
-                auto index = busmanTableModel->index(row, column);
-                auto day = busmanTableModel->getDayKind(index);
-                auto textCell = busmanTableModel->data(index, BusmanTableModel::WishDayRole).toString();
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
                 if (textCell == "DD") {
                     if (day == DayKind::LINE_1_DAY
@@ -156,10 +150,10 @@ void ScoreInfoBoard::refresh() {
 
             // Количество ночных смен у водителя
             int numberLateDay = 0;
-            for (int column = 0; column < busmanTableModel->columnCount(); column++) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 // TODO: switch
-                auto index = busmanTableModel->index(row, column);
-                auto day = busmanTableModel->getDayKind(index);
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
                 if (day == DayKind::LINE_1_NIGHT
                         || day == DayKind::LINE_2_NIGHT
                         || day == DayKind::LINE_3_NIGHT) {

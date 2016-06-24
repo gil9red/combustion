@@ -9,7 +9,7 @@ namespace Ui {
 
 #include <QMap>
 #include <QLabel>
-#include "busmantablemodel.h"
+#include "scheduler_table_model.h"
 #include "linedaystable.h"
 
 
@@ -34,7 +34,7 @@ class ScoreInfoBoard : public QWidget
             DeviationTargetLateShifts = -8,
         };
 
-        BusmanTableModel* busmanTableModel = nullptr;
+        SchedulerTableModel* schedulerTableModel = nullptr;
         LineDaysTable* lineDaysTable = nullptr;
 
     private:

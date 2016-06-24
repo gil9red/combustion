@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     parserpuzzlefile.cpp \
     busman.cpp \
-    busmantablemodel.cpp \
     linedaystable.cpp \
     verticalschedulerheaderview.cpp \
     linedaystablemodel.cpp \
@@ -24,12 +23,12 @@ SOURCES += main.cpp\
     linedays_celldelegate.cpp \
     scheduler_celldelegate.cpp \
     scoreinfoboard.cpp \
-    schedulertable.cpp
+    schedulertable.cpp \
+    scheduler_table_model.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \
     busman.h \
-    busmantablemodel.h \
     linedaystable.h \
     verticalschedulerheaderview.h \
     linedaystablemodel.h \
@@ -38,7 +37,8 @@ HEADERS  += mainwindow.h \
     scheduler_celldelegate.h \
     scoreinfoboard.h \
     enums.h \
-    schedulertable.h
+    schedulertable.h \
+    scheduler_table_model.h
 
 FORMS    += mainwindow.ui \
     scoreinfoboard.ui

@@ -4,7 +4,7 @@
 
 #include <QTableView>
 #include <QMouseEvent>
-#include "busmantablemodel.h"
+#include "scheduler_table_model.h"
 
 
 class SchedulerTable: public QTableView
@@ -13,7 +13,7 @@ class SchedulerTable: public QTableView
         SchedulerTable();
 
     public:
-        BusmanTableModel model;
+        SchedulerTableModel model;
 
 };
 

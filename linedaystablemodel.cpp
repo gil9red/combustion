@@ -5,7 +5,7 @@
 LineDaysTableModel::LineDaysTableModel()
     : QAbstractTableModel() {
 
-    busmanTableModel = nullptr;
+    schedulerTableModel = nullptr;
 }
 
 int LineDaysTableModel::rowCount(const QModelIndex&) const {
@@ -19,8 +19,8 @@ int LineDaysTableModel::columnCount(const QModelIndex&) const {
         return 0;
     }
 
-    if (busmanTableModel) {
-        return busmanTableModel->columnCount();
+    if (schedulerTableModel) {
+        return schedulerTableModel->columnCount();
     } else {
         return 0;
     }
@@ -34,9 +34,9 @@ QVariant LineDaysTableModel::data(const QModelIndex &index, int role) const {
         auto pair = linesList.at(row).at(column);
 
         if (role == DayKind_Image_Day_Role) {
-            return busmanTableModel->lineDaysIconsMap[pair.first];
+            return schedulerTableModel->lineDaysIconsMap[pair.first];
         } else {
-            return busmanTableModel->lineDaysIconsMap[pair.second];
+            return schedulerTableModel->lineDaysIconsMap[pair.second];
         }
 
     } else if (role == DayKind_Day_Role || role == DayKind_Night_Role) {
@@ -91,16 +91,14 @@ void LineDaysTableModel::sayViewUpdate() {
 void LineDaysTableModel::reset__() {
     clear();
 
-    if (busmanTableModel == 0)
+    if (schedulerTableModel == 0)
         return;
 
-    // TODO:
     for (auto i = 0; i < 3; i++) {
         QList<QPair<DayKind, DayKind>> line;
 
-        for (auto j = 0; j < busmanTableModel->columnCount(); j++) {
-            // TODO:
-            auto pair = busmanTableModel->linesPairDayKindMap[(Lines) i];
+        for (auto j = 0; j < schedulerTableModel->columnCount(); j++) {
+            auto pair = schedulerTableModel->linesPairDayKindMap[(Lines) i];
             line.append(pair);
         }
 
@@ -115,4 +113,125 @@ void LineDaysTableModel::reset__() {
     endInsertColumns();
 
     sayViewUpdate();
+}
+
+Lines LineDaysTableModel::getLine(const QModelIndex& index) throw(std::exception) {
+    if (index.row() >= 3) {
+        throw std::logic_error(QString("Выход за пределы списка. (index.row() >= linesList.length() ; %1 >= %2).")
+                               .arg(index.row()).arg(linesList.length()).toStdString());
+    }
+
+    // TODO: не очень хорошо такое приведение
+    // Линии имеют тот же индекс, что строки, т.е. 0 == Lines::Line_1,
+    // 1 == Line_2 и 2 == Line_3. Этим и пользуемся, чтобы узнать к какой линии
+    // относится индекс
+    return (Lines) index.row();
+}
+
+QList<QPair<DayKind, DayKind>> LineDaysTableModel::getRow(const QModelIndex& index) throw(std::exception) {
+    if (index.row() >= linesList.length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (index.row() >= linesList.length() ; %1 >= %2).")
+                               .arg(index.row()).arg(linesList.length()).toStdString());
+    }
+
+    return linesList[index.row()];
+}
+
+QPair<DayKind, DayKind> LineDaysTableModel::get(const QModelIndex& index) throw(std::exception) {
+    auto row = getRow(index);
+
+    if (index.column() >= row.length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (index.column() >= row.length() ; %1 >= %2).")
+                               .arg(index.column()).arg(row.length()).toStdString());
+    }
+
+    return row[index.column()];
+}
+
+DayKind LineDaysTableModel::getLeft(const QModelIndex& index) throw(std::exception) {
+    return get(index).first;
+}
+
+DayKind LineDaysTableModel::getRight(const QModelIndex& index) throw(std::exception) {
+    return get(index).second;
+}
+
+void LineDaysTableModel::set(const QModelIndex& index, QPair<DayKind, DayKind> pair) throw(std::exception) {
+    set(index.row(), index.column(), pair);
+}
+
+void LineDaysTableModel::set(int row, int column, QPair<DayKind, DayKind> pair) throw(std::exception) {
+    // TODO: дубликат
+    if (row >= linesList.length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
+                               .arg(row).arg(linesList.length()).toStdString());
+    }
+
+    // TODO: дубликат
+    if (column >= linesList.at(row).length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.at(row).length() ; %1 >= %2).")
+                               .arg(column).arg(linesList.at(row).length()).toStdString());
+    }
+
+    linesList[row][column] = pair;
+}
+
+void LineDaysTableModel::setValue(int row, int column, DayKind day) {
+    switch (day) {
+        case DayKind::LINE_1_DAY:
+        case DayKind::LINE_2_DAY:
+        case DayKind::LINE_3_DAY:
+            setLeft(row, column, day);
+            break;
+
+        case DayKind::LINE_1_NIGHT:
+        case DayKind::LINE_2_NIGHT:
+        case DayKind::LINE_3_NIGHT:
+            setRight(row, column, day);
+            break;
+
+        default: {
+
+        }
+    }
+}
+
+void LineDaysTableModel::setLeft(const QModelIndex& index, DayKind day) throw(std::exception) {
+    setLeft(index.row(), index.column(), day);
+}
+
+void LineDaysTableModel::setLeft(int row, int column, DayKind day) throw(std::exception) {
+    // TODO: дубликат
+    if (row >= linesList.length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
+                               .arg(row).arg(linesList.length()).toStdString());
+    }
+
+    // TODO: дубликат
+    if (column >= linesList.at(row).length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (column >= row.length() ; %1 >= %2).")
+                               .arg(column).arg(linesList.at(row).length()).toStdString());
+    }
+
+    linesList[row][column].first = day;
+}
+
+void LineDaysTableModel::setRight(const QModelIndex& index, DayKind day) throw(std::exception) {
+    setRight(index.row(), index.column(), day);
+}
+
+void LineDaysTableModel::setRight(int row, int column, DayKind day) throw(std::exception) {
+    // TODO: дубликат
+    if (row >= linesList.length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (row >= linesList.length() ; %1 >= %2).")
+                               .arg(row).arg(linesList.length()).toStdString());
+    }
+
+    // TODO: дубликат
+    if (column >= linesList.at(row).length()) {
+        throw std::logic_error(QString("Выход за пределы списка. (column >= row.length() ; %1 >= %2).")
+                               .arg(column).arg(linesList.at(row).length()).toStdString());
+    }
+
+    linesList[row][column].second = day;
 }

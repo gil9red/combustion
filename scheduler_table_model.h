@@ -1,5 +1,5 @@
-#ifndef BUSMANTABLEMODEL_H
-#define BUSMANTABLEMODEL_H
+#ifndef SchedulerTableMODEL_H
+#define SchedulerTableMODEL_H
 
 #include <QAbstractTableModel>
 #include "busman.h"
@@ -12,8 +12,7 @@
 #include "enums.h"
 
 
-// TODO: переименовать в SchedulerTableModel
-class BusmanTableModel : public QAbstractTableModel
+class SchedulerTableModel : public QAbstractTableModel
 {
     public:
         enum CustomRole {
@@ -24,7 +23,7 @@ class BusmanTableModel : public QAbstractTableModel
         };
 
     public:
-        BusmanTableModel();
+        SchedulerTableModel();
 
         void load(const QString& fileName) throw (std::exception);
         void saveAs(const QString& fileName) throw (std::exception);
@@ -38,44 +37,11 @@ class BusmanTableModel : public QAbstractTableModel
 
         void sayViewUpdate();
 
-        // TODO: перенести в cpp
-        Busman* get(const QModelIndex& index) {
-            return get(index.row());
-        }
+        Busman* get(const QModelIndex& index);
+        Busman* get(int row);
 
-        // TODO: перенести в cpp
-        Busman* get(int row) {
-            if (row < 0 || row >= busmanList.length()) {
-                return nullptr;
-            }
-
-            return busmanList.at(row);
-        }
-
-        DayKind getDayKind(const QModelIndex& index) throw(std::exception) {
-            Busman* busman = get(index);
-            if (busman == nullptr) {
-                // TODO: дубликат
-                throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
-            }
-
-            auto column = index.column();
-            if (!busman->workingDays.contains(column)) {
-                return DayKind::NONE;
-            }
-
-            return busman->workingDays[column];
-        }
-
-        void setDayKind(const QModelIndex& index, DayKind day) throw(std::exception) {
-            Busman* busman = get(index);
-            if (busman == nullptr) {
-                // TODO: дубликат
-                throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
-            }
-
-            busman->workingDays[index.column()] = day;
-        }
+        DayKind getDayKind(const QModelIndex& index) throw(std::exception);
+        void setDayKind(const QModelIndex& index, DayKind day) throw(std::exception);
 
     private:
         QList<Busman*> busmanList;
@@ -98,4 +64,4 @@ class BusmanTableModel : public QAbstractTableModel
         QMap<DayKind, Lines> dayKindsLinesMap;
 };
 
-#endif // BUSMANTABLEMODEL_H
+#endif // SchedulerTableMODEL_H

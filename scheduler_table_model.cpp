@@ -1,4 +1,4 @@
-#include "busmantablemodel.h"
+#include "scheduler_table_model.h"
 #include <parserpuzzlefile.h>
 #include <QDebug>
 #include <QColor>
@@ -20,7 +20,7 @@ QImage drawBackground(const QImage& im, const QColor& background) {
 }
 
 
-BusmanTableModel::BusmanTableModel() {
+SchedulerTableModel::SchedulerTableModel() {
     isVisibleCellText = true;
 
     QImage sun(":/sun");
@@ -53,7 +53,7 @@ BusmanTableModel::BusmanTableModel() {
     lineDaysIconsMap[DayKind::LINE_3_NIGHT] = drawBackground(moon, linesColorMap[Lines::Line_3]);
 }
 
-void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
+void SchedulerTableModel::load(const QString& fileName) throw (std::exception) {
     clear();
 
     // TODO
@@ -72,7 +72,7 @@ void BusmanTableModel::load(const QString& fileName) throw (std::exception) {
     sayViewUpdate();
 }
 
-void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
+void SchedulerTableModel::saveAs(const QString& fileName) throw (std::exception) {
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         throw std::logic_error(QString("Не найден файл: %1.").arg(fileName).toStdString());
@@ -90,7 +90,6 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
     for (int i = 0; i < busmanList.size(); i++) {
          Busman* busman = busmanList.at(i);
 
-         // TODO: завести словарь
          QString strLines;
          for (auto line: busman->lines) {
              switch (line) {
@@ -121,7 +120,7 @@ void BusmanTableModel::saveAs(const QString& fileName) throw (std::exception) {
     out << "---------------------------------------------------+" << "\n";
 }
 
-void BusmanTableModel::clear() {
+void SchedulerTableModel::clear() {
     if (rowCount() > 0 || columnCount() > 0) {
         // TODO: посмотреть аналоги в Q*View
         // Говорим моделе сбросить данные
@@ -138,16 +137,16 @@ void BusmanTableModel::clear() {
     }
 }
 
-void BusmanTableModel::sayViewUpdate() {
+void SchedulerTableModel::sayViewUpdate() {
     // Говорим представлению обновиться
     emit dataChanged(createIndex(0, 0), createIndex(rowCount() - 1, columnCount() - 1));
 }
 
-int BusmanTableModel::rowCount(const QModelIndex &) const {
+int SchedulerTableModel::rowCount(const QModelIndex &) const {
     return busmanList.length();
 }
 
-int BusmanTableModel::columnCount(const QModelIndex &) const {
+int SchedulerTableModel::columnCount(const QModelIndex &) const {
     if (busmanList.length() > 0) {
         Busman* busman = busmanList.at(0);
         return busman->wishesOnSchedule.length();
@@ -156,7 +155,7 @@ int BusmanTableModel::columnCount(const QModelIndex &) const {
     return 0;
 }
 
-QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
+QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
     const int row = index.row();
     const int column = index.column();
 
@@ -205,4 +204,41 @@ QVariant BusmanTableModel::data(const QModelIndex &index, int role) const {
     }
 
     return QVariant();
+}
+
+Busman* SchedulerTableModel::get(const QModelIndex& index) {
+    return get(index.row());
+}
+
+Busman* SchedulerTableModel::get(int row) {
+    if (row < 0 || row >= busmanList.length()) {
+        return nullptr;
+    }
+
+    return busmanList.at(row);
+}
+
+DayKind SchedulerTableModel::getDayKind(const QModelIndex& index) throw(std::exception) {
+    Busman* busman = get(index);
+    if (busman == nullptr) {
+        // TODO: дубликат
+        throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+    }
+
+    auto column = index.column();
+    if (!busman->workingDays.contains(column)) {
+        return DayKind::NONE;
+    }
+
+    return busman->workingDays[column];
+}
+
+void SchedulerTableModel::setDayKind(const QModelIndex& index, DayKind day) throw(std::exception) {
+    Busman* busman = get(index);
+    if (busman == nullptr) {
+        // TODO: дубликат
+        throw std::logic_error(QString("busman == nullptr, index: %1, %2.").arg(index.row(), index.column()).toStdString());
+    }
+
+    busman->workingDays[index.column()] = day;
 }
