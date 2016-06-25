@@ -192,6 +192,36 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
     // Роль для возврата иконки линии/дня
     } else if (role == DayImageKindRole) {
         if (day != DayKind::NONE) {
+            // Проверим, что подряд ночных смен проставлено не больше 3
+            // Делаем перебор дней у водителя и ищем те, которые подряд поставлены на ночную
+            // смену и если таких наборов больше 3, то следующие дни выделены
+            int lateDaySequenceNumber = 0;
+            for (int i = 0; i < busman->workingDays.length(); i++) {
+                auto day = busman->workingDays[i];
+                switch (day) {
+                    case DayKind::LINE_1_NIGHT:
+                    case DayKind::LINE_2_NIGHT:
+                    case DayKind::LINE_3_NIGHT:
+                        lateDaySequenceNumber++;
+
+                        // Если 3 подряд найдено и текущая ячейка относится к тем
+                        // лишним ночным сменам, выделяем красной рамкой
+                        if (lateDaySequenceNumber > 3 && i == column) {
+                            auto image = lineDaysIconsMap[day].copy();
+                            QPainter painter(&image);
+                            painter.setPen(QPen(Qt::red, 10.0));
+                            painter.drawRect(image.rect());
+                            return image;
+                        }
+                        break;
+
+                    // Последовательность прервана, обнуляем
+                    default:
+                        lateDaySequenceNumber = 0;
+                        break;
+                }
+            }
+
             return lineDaysIconsMap[day];
         }
     }
