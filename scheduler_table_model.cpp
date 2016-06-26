@@ -94,17 +94,17 @@ void SchedulerTableModel::saveAs(const QString& fileName) throw (std::exception)
         QString strLines;
         for (auto line: busman->lines) {
             switch (line) {
-            case Lines::Line_1:
-                strLines += "1";
-                break;
+                case Lines::Line_1:
+                    strLines += "1";
+                    break;
 
-            case Lines::Line_2:
-                strLines += "2";
-                break;
+                case Lines::Line_2:
+                    strLines += "2";
+                    break;
 
-            case Lines::Line_3:
-                strLines += "3";
-                break;
+                case Lines::Line_3:
+                    strLines += "3";
+                    break;
             }
         }
 
@@ -201,29 +201,27 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
             int lateDaySequenceNumber = 0;
             for (int i = 0; i < busman->workingDays.length(); i++) {
                 auto day = busman->workingDays[i];
-                switch (day) {
-                case DayKind::LINE_1_NIGHT:
-                case DayKind::LINE_2_NIGHT:
-                case DayKind::LINE_3_NIGHT:
-                    lateDaySequenceNumber++;
+                switch (day){
+                    case DayKind::LINE_1_NIGHT:
+                    case DayKind::LINE_2_NIGHT:
+                    case DayKind::LINE_3_NIGHT:
+                        lateDaySequenceNumber++;
 
-                    // Если 3 подряд найдено и текущая ячейка относится к тем
-                    // лишним ночным сменам, выделяем красной рамкой
-                    if (lateDaySequenceNumber > 3 && i == column) {
-                        auto image = lineDaysIconsMap[day].copy();
-                        QPainter painter(&image);
-                        painter.setPen(QPen(Qt::red, 10.0));
-                        painter.drawRect(image.rect());
-                        return image;
-                    }
-                    break;
-
+                        // Если 3 подряд найдено и текущая ячейка относится к тем
+                        // лишним ночным сменам, выделяем красной рамкой
+                        if (lateDaySequenceNumber > 3 && i == column) {
+                            auto image = lineDaysIconsMap[day].copy();
+                            QPainter painter(&image);
+                            painter.setPen(QPen(Qt::red, 10.0));
+                            painter.drawRect(image.rect());
+                            return image;
+                        }
+                        break;
                     // Последовательность прервана, обнуляем
-                default:
-                    lateDaySequenceNumber = 0;
-                    break;
+                    default:
+                        lateDaySequenceNumber = 0;
+                        break;
                 }
-
             }
 
             //Проверим если водитель работал в ночную смену и поставили на утро
@@ -232,41 +230,38 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
             int lateNightNumber = 0;
             for (int i = 0; i < busman->workingDays.length(); i++) {
                 auto day = busman->workingDays[i];
-                switch (day) {
-                case DayKind::LINE_1_NIGHT:
-                case DayKind::LINE_2_NIGHT:
-                case DayKind::LINE_3_NIGHT:
-                    lateNightNumber++;
-                    break;
-                default:
-                    lateNightNumber = 0;
-                    break;
+                switch (day){
+                    case DayKind::LINE_1_NIGHT:
+                    case DayKind::LINE_2_NIGHT:
+                    case DayKind::LINE_3_NIGHT:
+                        lateNightNumber++;
+                        break;
+                    default:
+                        lateNightNumber = 0;
+                        break;
                 }
-                switch (day) {
-                case DayKind::LINE_1_DAY:
-                case DayKind::LINE_2_DAY:
-                case DayKind::LINE_3_DAY:
-                    lateDayNumber++;
+                switch (day){
+                    case DayKind::LINE_1_DAY:
+                    case DayKind::LINE_2_DAY:
+                    case DayKind::LINE_3_DAY:
+                        lateDayNumber++;
 
-                    if (lateNightNumber < 2 && lateDayNumber < 2 && i == column) {
-                        auto image = lineDaysIconsMap[day];
-                        QPainter painter(&image);
-                        painter.setPen(QPen(Qt::red, 10.0));
-                        painter.drawRect(image.rect());
-                        return image;
-                    }
-                    break;
-                default:
-                    lateDayNumber = 0;
-                    break;
+                        if (lateNightNumber <= 1 && lateDayNumber <= 1 && i == column) {
+                            auto image = lineDaysIconsMap[day];
+                            QPainter painter(&image);
+                            painter.setPen(QPen(Qt::red, 10.0));
+                            painter.drawRect(image.rect());
+                            return image;
+                        }
+                        break;
+                    default:
+                        lateDayNumber = 0;
+                        break;
                 }
             }
-
             return lineDaysIconsMap[day];
         }
-
     }
-
     return QVariant();
 }
 

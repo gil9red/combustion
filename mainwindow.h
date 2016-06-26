@@ -58,7 +58,6 @@ class MainWindow : public QMainWindow
 
         LineDaysTable lineDaysTable;
         SchedulerTable schedulerTable;
-        Busman busman;
         ScoreInfoBoard scoreInfoBoard;
 
         // Флаг говорит являлся ли последний клик по ячейкам
