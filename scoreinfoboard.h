@@ -64,6 +64,7 @@ class ScoreInfoBoard : public QWidget {
 
         SchedulerTableModel* schedulerTableModel = nullptr;
         LineDaysTable* lineDaysTable = nullptr;
+        Busman* busman = nullptr;
 
     private:
         // Функция подсчитывает случаи метрики

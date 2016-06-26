@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // TODO: перевод
     scoreInfoBoard.schedulerTableModel = &schedulerTable.model;
+    scoreInfoBoard.lineDaysTable = &lineDaysTable;
+    scoreInfoBoard.busman = &busman;
+
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");
     scoreInfoBoardDockWidget->setObjectName("ScoreInfoBoardDockWidget");
     scoreInfoBoardDockWidget->setWidget(&scoreInfoBoard);

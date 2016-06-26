@@ -89,33 +89,33 @@ void SchedulerTableModel::saveAs(const QString& fileName) throw (std::exception)
     out << "\n";
 
     for (int i = 0; i < busmanList.size(); i++) {
-         Busman* busman = busmanList.at(i);
+        Busman* busman = busmanList.at(i);
 
-         QString strLines;
-         for (auto line: busman->lines) {
-             switch (line) {
-                case Lines::Line_1:
-                     strLines += "1";
-                     break;
+        QString strLines;
+        for (auto line: busman->lines) {
+            switch (line) {
+            case Lines::Line_1:
+                strLines += "1";
+                break;
 
-                case Lines::Line_2:
-                     strLines += "2";
-                     break;
+            case Lines::Line_2:
+                strLines += "2";
+                break;
 
-                case Lines::Line_3:
-                     strLines += "3";
-                     break;
-             }
-         }
+            case Lines::Line_3:
+                strLines += "3";
+                break;
+            }
+        }
 
-         out << QString::number(i + 1).rightJustified(2, '0') << "|"
-             << busman->busNum << "|"
-             << strLines.rightJustified(3, '0') << "||";
+        out << QString::number(i + 1).rightJustified(2, '0') << "|"
+            << busman->busNum << "|"
+            << strLines.rightJustified(3, '0') << "||";
 
-         foreach (QString wishDay, busman->wishesOnSchedule) {
-             out << wishDay << "|";
-         }
-         out << "\n";
+        foreach (QString wishDay, busman->wishesOnSchedule) {
+            out << wishDay << "|";
+        }
+        out << "\n";
     }
 
     out << "---------------------------------------------------+" << "\n";
@@ -174,7 +174,7 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
         QString day = busman->wishesOnSchedule.at(column);
         return QBrush(day == "XX" ? Qt::white : Qt::black);
 
-    // Текст в ячейках располагается по центру
+        // Текст в ячейках располагается по центру
     } else if (role == Qt::TextAlignmentRole) {
         return Qt::AlignCenter;
 
@@ -188,8 +188,8 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
         v.setValue(day);
         return v;
 
-    // TODO: нормальное название для той таблицы, серьезно!
-    // Роль для возврата иконки линии/дня
+        // TODO: нормальное название для той таблицы, серьезно!
+        // Роль для возврата иконки линии/дня
     } else if (role == DayImageKindRole) {
         if (day != DayKind::NONE) {
             // Проверим, что подряд ночных смен проставлено не больше 3
@@ -202,31 +202,69 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
             for (int i = 0; i < busman->workingDays.length(); i++) {
                 auto day = busman->workingDays[i];
                 switch (day) {
-                    case DayKind::LINE_1_NIGHT:
-                    case DayKind::LINE_2_NIGHT:
-                    case DayKind::LINE_3_NIGHT:
-                        lateDaySequenceNumber++;
+                case DayKind::LINE_1_NIGHT:
+                case DayKind::LINE_2_NIGHT:
+                case DayKind::LINE_3_NIGHT:
+                    lateDaySequenceNumber++;
 
-                        // Если 3 подряд найдено и текущая ячейка относится к тем
-                        // лишним ночным сменам, выделяем красной рамкой
-                        if (lateDaySequenceNumber > 3 && i == column) {
-                            auto image = lineDaysIconsMap[day].copy();
-                            QPainter painter(&image);
-                            painter.setPen(QPen(Qt::red, 10.0));
-                            painter.drawRect(image.rect());
-                            return image;
-                        }
-                        break;
+                    // Если 3 подряд найдено и текущая ячейка относится к тем
+                    // лишним ночным сменам, выделяем красной рамкой
+                    if (lateDaySequenceNumber > 3 && i == column) {
+                        auto image = lineDaysIconsMap[day].copy();
+                        QPainter painter(&image);
+                        painter.setPen(QPen(Qt::red, 10.0));
+                        painter.drawRect(image.rect());
+                        return image;
+                    }
+                    break;
 
                     // Последовательность прервана, обнуляем
-                    default:
-                        lateDaySequenceNumber = 0;
-                        break;
+                default:
+                    lateDaySequenceNumber = 0;
+                    break;
+                }
+
+            }
+
+            //Проверим если водитель работал в ночную смену и поставили на утро
+            //то водитель будет не доволен
+            int lateDayNumber = 0;
+            int lateNightNumber = 0;
+            for (int i = 0; i < busman->workingDays.length(); i++) {
+                auto day = busman->workingDays[i];
+                switch (day) {
+                case DayKind::LINE_1_NIGHT:
+                case DayKind::LINE_2_NIGHT:
+                case DayKind::LINE_3_NIGHT:
+                    lateNightNumber++;
+                    break;
+                default:
+                    lateNightNumber = 0;
+                    break;
+                }
+                switch (day) {
+                case DayKind::LINE_1_DAY:
+                case DayKind::LINE_2_DAY:
+                case DayKind::LINE_3_DAY:
+                    lateDayNumber++;
+
+                    if (lateNightNumber < 2 && lateDayNumber < 2 && i == column) {
+                        auto image = lineDaysIconsMap[day];
+                        QPainter painter(&image);
+                        painter.setPen(QPen(Qt::red, 10.0));
+                        painter.drawRect(image.rect());
+                        return image;
+                    }
+                    break;
+                default:
+                    lateDayNumber = 0;
+                    break;
                 }
             }
 
             return lineDaysIconsMap[day];
         }
+
     }
 
     return QVariant();
