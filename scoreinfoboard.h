@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class ScoreInfoBoard;
+    class ScoreInfoBoard;
 }
 
 #include <QMap>
@@ -14,67 +14,67 @@ class ScoreInfoBoard;
 
 
 class ScoreInfoBoard : public QWidget {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit ScoreInfoBoard(QWidget *parent = 0);
-    ~ScoreInfoBoard();
+    public:
+        explicit ScoreInfoBoard(QWidget *parent = 0);
+        ~ScoreInfoBoard();
 
-    void refresh();
+        void refresh();
 
-    // Функция подсчета количества очков
-    float calcScore();
+        // Функция подсчета количества очков
+        float calcScore();
 
-public:
-    enum EnumValue {
-        ShiftPreferences          = 3,
-        DayoffPreferences         = 4,
-        UnassignedShifts          = -20,
-        LongRests                 = 5,
-        EarlyAfterLateShifts      = -30,
-        ConsecutiveLateShifts     = -10,
-        DeviationTargetLateShifts = -8,
-    };
+    public:
+        enum EnumValue {
+            ShiftPreferences          = 3,
+            DayoffPreferences         = 4,
+            UnassignedShifts          = -20,
+            LongRests                 = 5,
+            EarlyAfterLateShifts      = -30,
+            ConsecutiveLateShifts     = -10,
+            DeviationTargetLateShifts = -8,
+        };
 
-    struct Data {
-        // TODO: добавить операторы ++/-/+, которые работают с number
+        struct Data {
+            // TODO: добавить операторы ++/-/+, которые работают с number
 
-        // Количество случаев
-        int number = 0;
+            // Количество случаев
+            int number = 0;
 
-        // Отображение значения случая метрики
-        QLabel* labelValue = nullptr;
+            // Отображение значения случая метрики
+            QLabel* labelValue = nullptr;
 
-        // Отображение количества случаев метрики
-        QLabel* labelNumber = nullptr;
+            // Отображение количества случаев метрики
+            QLabel* labelNumber = nullptr;
 
-        // Отображение результата подсчета случаев метрики
-        QLabel* labelResult = nullptr;
+            // Отображение результата подсчета случаев метрики
+            QLabel* labelResult = nullptr;
 
-        Data(int number, QLabel* labelValue, QLabel* labelNumber, QLabel* labelResult) {
-            this->number = number;
-            this->labelValue = labelValue;
-            this->labelNumber = labelNumber;
-            this->labelResult = labelResult;
-        }
-    };
+            Data(int number, QLabel* labelValue, QLabel* labelNumber, QLabel* labelResult) {
+                this->number = number;
+                this->labelValue = labelValue;
+                this->labelNumber = labelNumber;
+                this->labelResult = labelResult;
+            }
+        };
 
-    // Максимальное количество разрешенных у водителей ночных смен.
-    const static int maxGoodDayLateNumber = 4;
+        // Максимальное количество разрешенных у водителей ночных смен.
+        const static int maxGoodDayLateNumber = 4;
 
-    SchedulerTableModel* schedulerTableModel = nullptr;
-    LineDaysTable* lineDaysTable = nullptr;
+        SchedulerTableModel* schedulerTableModel = nullptr;
+        LineDaysTable* lineDaysTable = nullptr;
 
-private:
-    // Функция подсчитывает случаи метрики
-    void analysis();
+    private:
+        // Функция подсчитывает случаи метрики
+        void analysis();
 
-    // После анализа нужно заполнить виджеты
-    void fillForms();
+        // После анализа нужно заполнить виджеты
+        void fillForms();
 
-private:
-    Ui::ScoreInfoBoard *ui;
-    QMap<EnumValue, Data*> enumValueDataMap;
+    private:
+        Ui::ScoreInfoBoard *ui;
+        QMap<EnumValue, Data*> enumValueDataMap;
 };
 
 #endif // SCOREINFOBOARD_H
