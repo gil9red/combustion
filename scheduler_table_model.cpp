@@ -229,15 +229,12 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
 
             // Выделяем ячейку дневной смены, если предыдущим от нее днем
             // будет ночная -- две смены подряд это жестко
-            for (int i = 0; i < busman->workingDays.length(); i++) {
-                // Если текущий день -- дневная смена
-                auto day = busman->workingDays[i];
-                if (isDay(day) && i > 0 && i == column) {
-                    // ... а предыдущий день ночная смена
-                    auto prevDay = busman->workingDays[i - 1];
-                    if (isNight(prevDay)) {
-                        return drawFrame(lineDaysIconsMap[day]);
-                    }
+            // Если текущий день -- дневная смена
+            if (isDay(day) && column > 0) {
+                // ... а предыдущий день ночная смена
+                auto prevDay = busman->workingDays[column - 1];
+                if (isNight(prevDay)) {
+                    return drawFrame(lineDaysIconsMap[day]);
                 }
             }
 
