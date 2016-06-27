@@ -41,10 +41,6 @@ void ScoreInfoBoard::analysis() {
     }
 
     if (schedulerTableModel != nullptr) {
-        // У каждого водителя maxGoodDayLateNumber ночной смены, но не должно превышать maxGoodDayLateNumber
-        // <кол-во водителей> * maxGoodDayLateNumber
-        enumValueDataMap[DeviationTargetLateShifts]->number = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
-
         enumValueDataMap[LongRests]->number = schedulerTableModel->rowCount();
         for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
@@ -124,84 +120,10 @@ void ScoreInfoBoard::analysis() {
             }
 
             if (numberLateDay > 0) {
-                // TODO:
-                if (numberLateDay > maxGoodDayLateNumber) {
-                    enumValueDataMap[DeviationTargetLateShifts]->number -= maxGoodDayLateNumber;
-                    enumValueDataMap[DeviationTargetLateShifts]->number += numberLateDay - maxGoodDayLateNumber;
-                } else {
-                    enumValueDataMap[DeviationTargetLateShifts]->number -= numberLateDay;
-                }
-
-
-                int consecutiveLateShiftsNumber = 0;
-                for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                    auto index = schedulerTableModel->index(row, column);
-                    auto day = schedulerTableModel->getDayKind(index);
-
-                    if (isNight(day)) {
-                        consecutiveLateShiftsNumber++;
-                        // Если 3 подряд найдено и текущая ячейка относится к тем
-                        // лишним ночным сменам, выделяем красной рамкой
-                        if (consecutiveLateShiftsNumber > 3 ) {
-                            enumValueDataMap[ConsecutiveLateShifts]->number += (consecutiveLateShiftsNumber - consecutiveLateShiftsNumber);
-                            enumValueDataMap[ConsecutiveLateShifts]->number++;
-                        }
-
-                    // Последовательность прервана, обнуляем
-                    } else {
-                        consecutiveLateShiftsNumber = 0;
-                    }
-                }
-
-                // TODO:
-                //Проверка если есть три свободные ячеики и после третий занята сменой
-                int longRestsNoneDayNumber = 0;
-                int longRestsNoneNumber = 0;
-                for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                    auto index = schedulerTableModel->index(row, column);
-                    auto day = schedulerTableModel->getDayKind(index);
-                    switch (day){
-                        case DayKind::NONE:
-                            longRestsNoneNumber++;
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (isNight(day)) {
-                        longRestsNoneDayNumber++;
-                        // Если 3 подряд найдено пустых значения и наидена смена
-                        // TODO:
-                        //Проходит только один раз и не повторяет больше
-                        if (longRestsNoneNumber > 2 && longRestsNoneDayNumber < 2 ) {
-                            enumValueDataMap[LongRests]->number++;
-                        }
-                    }
-                }
-
-                //Проверим если водитель работал в ночную смену и поставили на утро
-                //то водитель будет не доволен
-                int earlyAfterLateShiftsDayNumber = 0;
-                int earlyAfterLateShiftsNightNumber = 0;
-                for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                    auto index = schedulerTableModel->index(row, column);
-                    auto day = schedulerTableModel->getDayKind(index);
-
-                    if (isNight(day)) {
-                        earlyAfterLateShiftsNightNumber++;
-                    } else {
-                        earlyAfterLateShiftsNightNumber = 0;
-                    }
-
-                    if (isDay(day)) {
-                        earlyAfterLateShiftsDayNumber++;
-                        if (earlyAfterLateShiftsNightNumber < 2 && earlyAfterLateShiftsDayNumber < 2) {
-                            enumValueDataMap[EarlyAfterLateShifts]->number++;
-                        }
-                    } else {
-                        earlyAfterLateShiftsDayNumber = 0;
-                    }
-                }
+                analysisDeviationTargetLateShifts(numberLateDay);
+                analysisConsecutiveLateShifts(row);
+                analysisLongRests(row);
+                analysisEarlyAfterLateShifts(row);
             }
         }
     }
@@ -210,7 +132,6 @@ void ScoreInfoBoard::analysis() {
         for (int row = 0; row < lineDaysTable->rowCount(); row++) {
             for (int column = 0; column < lineDaysTable->columnCount(); column++) {
                 auto index =  lineDaysTable->model.index(row,column);
-                // TODO:
                 // Вывести общее количество Day и Night
                 auto pair = lineDaysTable->model.get(index);
 
