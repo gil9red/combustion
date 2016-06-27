@@ -159,6 +159,7 @@ class ScoreInfoBoard : public QWidget {
                         enumValueDataMap[LongRests]->number++;
                     }
 
+                    // Последовательность прервана
                     noneSequenceNumber = 0;
                 }
             }
