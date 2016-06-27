@@ -13,6 +13,7 @@ namespace Ui {
 #include "linedaystable.h"
 
 
+// TODO: Функции для индивидуального подсчета очков каждого водителя.
 class ScoreInfoBoard : public QWidget {
         Q_OBJECT
 
@@ -138,24 +139,28 @@ class ScoreInfoBoard : public QWidget {
         // Подсчет LongRests
         // TODO: cpp
         void analysisLongRests(int row) {
-            // TODO:
-            //Проверка если есть три свободные ячеики и после третий занята сменой
-            int longRestsDayNumber = 0;
-            int longRestsNoneNumber = 0;
+            // Проверка что есть три и более свободных дня у водителя перед сменой
+
+            // Содержит количество подряд свободных дней
+            int noneSequenceNumber = 0;
+
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
 
-//                if (isNight(day)) {
-//                    longRestsDayNumber++;
-//                    if (longRestsDayNumber > 0 ) {
-//                        auto index = schedulerTableModel->index(row, column - column);
-//                        auto prevDay = schedulerTableModel->getDayKind(index);
-//                        if (){
-//                            enumValueDataMap[LongRests]->number++;
-//                        }
-//                    }
-//                }
+                // Считаем свободные дни
+                if (day == DayKind::NONE) {
+                    noneSequenceNumber++;
+
+                // Наткнулись на рабочий день
+                } else {
+                    // Свободных дней было от 3 и больше
+                    if (noneSequenceNumber >= 3) {
+                        enumValueDataMap[LongRests]->number++;
+                    }
+
+                    noneSequenceNumber = 0;
+                }
             }
         }
 
