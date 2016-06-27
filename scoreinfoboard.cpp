@@ -51,7 +51,6 @@ void ScoreInfoBoard::analysis() {
                 auto index = schedulerTableModel->index(row, column);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
-                // TODO:
                 if (textCell == "RR") {
                     enumValueDataMap[DayoffPreferences]->number++;
                 }
@@ -64,10 +63,8 @@ void ScoreInfoBoard::analysis() {
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
-                if (textCell == "RR") {
-                    if (day != DayKind::NONE) {
-                        numberShiftPreferences++;
-                    }
+                if (textCell == "RR" && day != DayKind::NONE) {
+                    numberShiftPreferences++;
                 }
             }
 
@@ -85,16 +82,8 @@ void ScoreInfoBoard::analysis() {
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
-                if (textCell == "NN") {
-                        switch(day){
-                        case DayKind::LINE_1_NIGHT:
-                        case DayKind::LINE_2_NIGHT:
-                        case DayKind::LINE_3_NIGHT:
-                            numberShiftPreferencesNight++;
-                            break;
-                        default:
-                            break;
-                    }
+                if (textCell == "NN" && isNight(day)) {
+                    numberShiftPreferencesNight++;
                 }
             }
             // TODO:
@@ -111,16 +100,8 @@ void ScoreInfoBoard::analysis() {
                 auto day = schedulerTableModel->getDayKind(index);
                 auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
 
-                if (textCell == "DD"){
-                        switch(day){
-                        case DayKind::LINE_1_DAY:
-                        case DayKind::LINE_2_DAY:
-                        case DayKind::LINE_3_DAY:
-                            numberShiftPreferencesDay++;
-                            break;
-                        default:
-                            break;
-                    }
+                if (textCell == "DD" && isDay(day)) {
+                    numberShiftPreferencesDay++;
                 }
             }
 
@@ -137,15 +118,8 @@ void ScoreInfoBoard::analysis() {
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
 
-                switch(day){
-                    case DayKind::LINE_1_NIGHT:
-                    case DayKind::LINE_2_NIGHT:
-                    case DayKind::LINE_3_NIGHT:
-                        numberLateDay++;
-                        break;
-
-                    default:
-                        break;
+                if (isNight(day)) {
+                    numberLateDay++;
                 }
             }
 
@@ -164,23 +138,18 @@ void ScoreInfoBoard::analysis() {
                     auto index = schedulerTableModel->index(row, column);
                     auto day = schedulerTableModel->getDayKind(index);
 
-                    switch (day){
-                        case DayKind::LINE_1_NIGHT:
-                        case DayKind::LINE_2_NIGHT:
-                        case DayKind::LINE_3_NIGHT:
-                            consecutiveLateShiftsNumber++;
-                            // Если 3 подряд найдено и текущая ячейка относится к тем
-                            // лишним ночным сменам, выделяем красной рамкой
-                            if (consecutiveLateShiftsNumber > 3 ) {
-                                enumValueDataMap[ConsecutiveLateShifts]->number += (consecutiveLateShiftsNumber - consecutiveLateShiftsNumber);
-                                enumValueDataMap[ConsecutiveLateShifts]->number ++;
-                            }
-                            break;
+                    if (isNight(day)) {
+                        consecutiveLateShiftsNumber++;
+                        // Если 3 подряд найдено и текущая ячейка относится к тем
+                        // лишним ночным сменам, выделяем красной рамкой
+                        if (consecutiveLateShiftsNumber > 3 ) {
+                            enumValueDataMap[ConsecutiveLateShifts]->number += (consecutiveLateShiftsNumber - consecutiveLateShiftsNumber);
+                            enumValueDataMap[ConsecutiveLateShifts]->number++;
+                        }
 
-                            // Последовательность прервана, обнуляем
-                        default:
-                            consecutiveLateShiftsNumber = 0;
-                            break;
+                    // Последовательность прервана, обнуляем
+                    } else {
+                        consecutiveLateShiftsNumber = 0;
                     }
                 }
 
@@ -198,20 +167,15 @@ void ScoreInfoBoard::analysis() {
                         default:
                             break;
                     }
-                    switch (day){
-                        case DayKind::LINE_1_NIGHT:
-                        case DayKind::LINE_2_NIGHT:
-                        case DayKind::LINE_3_NIGHT:
-                            longRestsNoneDayNumber++;
-                            // Если 3 подряд найдено пустых значения и наидена смена
-                            // TODO:
-                            //Проходит только один раз и не повторяет больше
-                            if (longRestsNoneNumber > 2 && longRestsNoneDayNumber < 2 ) {
-                                enumValueDataMap[LongRests]->number ++;
-                            }
-                            break;
-                        default:
-                            break;
+
+                    if (isNight(day)) {
+                        longRestsNoneDayNumber++;
+                        // Если 3 подряд найдено пустых значения и наидена смена
+                        // TODO:
+                        //Проходит только один раз и не повторяет больше
+                        if (longRestsNoneNumber > 2 && longRestsNoneDayNumber < 2 ) {
+                            enumValueDataMap[LongRests]->number++;
+                        }
                     }
                 }
 
@@ -223,28 +187,19 @@ void ScoreInfoBoard::analysis() {
                     auto index = schedulerTableModel->index(row, column);
                     auto day = schedulerTableModel->getDayKind(index);
 
-                    switch (day){
-                        case DayKind::LINE_1_NIGHT:
-                        case DayKind::LINE_2_NIGHT:
-                        case DayKind::LINE_3_NIGHT:
-                            earlyAfterLateShiftsNightNumber++;
-                            break;
-                        default:
-                            earlyAfterLateShiftsNightNumber = 0;
-                            break;
+                    if (isNight(day)) {
+                        earlyAfterLateShiftsNightNumber++;
+                    } else {
+                        earlyAfterLateShiftsNightNumber = 0;
                     }
-                    switch (day){
-                        case DayKind::LINE_1_DAY:
-                        case DayKind::LINE_2_DAY:
-                        case DayKind::LINE_3_DAY:
-                            earlyAfterLateShiftsDayNumber++;
-                            if (earlyAfterLateShiftsNightNumber < 2 && earlyAfterLateShiftsDayNumber < 2) {
-                                enumValueDataMap[EarlyAfterLateShifts]->number ++;
-                            }
-                            break;
-                        default:
-                            earlyAfterLateShiftsDayNumber = 0;
-                            break;
+
+                    if (isDay(day)) {
+                        earlyAfterLateShiftsDayNumber++;
+                        if (earlyAfterLateShiftsNightNumber < 2 && earlyAfterLateShiftsDayNumber < 2) {
+                            enumValueDataMap[EarlyAfterLateShifts]->number++;
+                        }
+                    } else {
+                        earlyAfterLateShiftsDayNumber = 0;
                     }
                 }
             }
