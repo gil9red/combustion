@@ -212,7 +212,7 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
             for (int i = 0; i < busman->workingDays.length(); i++) {
                 auto day = busman->workingDays[i];
 
-                if (isDay(day)) {
+                if (isNight(day)) {
                     lateDaySequenceNumber++;
 
                     // Если 3 подряд найдено и текущая ячейка относится к тем
