@@ -177,22 +177,11 @@ void LineDaysTableModel::set(int row, int column, QPair<DayKind, DayKind> pair) 
 }
 
 void LineDaysTableModel::setValue(int row, int column, DayKind day) {
-    switch (day) {
-        case DayKind::LINE_1_DAY:
-        case DayKind::LINE_2_DAY:
-        case DayKind::LINE_3_DAY:
-            setLeft(row, column, day);
-            break;
+    if (isDay(day)) {
+        setLeft(row, column, day);
 
-        case DayKind::LINE_1_NIGHT:
-        case DayKind::LINE_2_NIGHT:
-        case DayKind::LINE_3_NIGHT:
-            setRight(row, column, day);
-            break;
-
-        default: {
-
-        }
+    } else if (isNight(day)) {
+        setRight(row, column, day);
     }
 }
 

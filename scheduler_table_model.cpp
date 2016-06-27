@@ -22,6 +22,16 @@ QImage drawBackground(const QImage& im, const QColor& background) {
     return image;
 }
 
+// Функция рисует на копии картинки рамку и возвращает ее
+QImage drawFrame(const QImage& im) {
+    auto image = im.copy();
+    QPainter painter(&image);
+    painter.setPen(QPen(Qt::red, 10.0));
+    painter.drawRect(image.rect());
+
+    return image;
+}
+
 
 SchedulerTableModel::SchedulerTableModel() {
     isVisibleCellText = true;
@@ -201,64 +211,36 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
             int lateDaySequenceNumber = 0;
             for (int i = 0; i < busman->workingDays.length(); i++) {
                 auto day = busman->workingDays[i];
-                switch (day){
-                    case DayKind::LINE_1_NIGHT:
-                    case DayKind::LINE_2_NIGHT:
-                    case DayKind::LINE_3_NIGHT:
-                        lateDaySequenceNumber++;
 
-                        // Если 3 подряд найдено и текущая ячейка относится к тем
-                        // лишним ночным сменам, выделяем красной рамкой
-                        if (lateDaySequenceNumber > 3 && i == column) {
-                            auto image = lineDaysIconsMap[day].copy();
-                            QPainter painter(&image);
-                            painter.setPen(QPen(Qt::red, 10.0));
-                            painter.drawRect(image.rect());
-                            return image;
-                        }
-                        break;
-                    // Последовательность прервана, обнуляем
-                    default:
-                        lateDaySequenceNumber = 0;
-                        break;
+                if (isDay(day)) {
+                    lateDaySequenceNumber++;
+
+                    // Если 3 подряд найдено и текущая ячейка относится к тем
+                    // лишним ночным сменам, выделяем красной рамкой
+                    if (lateDaySequenceNumber > 3 && i == column) {
+                        return drawFrame(lineDaysIconsMap[day]);
+                    }
+
+                // Последовательность прервана, обнуляем
+                } else {
+                    lateDaySequenceNumber = 0;
                 }
             }
 
-            //Проверим если водитель работал в ночную смену и поставили на утро
-            //то водитель будет не доволен
-            int lateDayNumber = 0;
-            int lateNightNumber = 0;
+            // Выделяем ячейку дневной смены, если предыдущим от нее днем
+            // будет ночная -- две смены подряд это жестко
             for (int i = 0; i < busman->workingDays.length(); i++) {
+                // Если текущий день -- дневная смена
                 auto day = busman->workingDays[i];
-                switch (day){
-                    case DayKind::LINE_1_NIGHT:
-                    case DayKind::LINE_2_NIGHT:
-                    case DayKind::LINE_3_NIGHT:
-                        lateNightNumber++;
-                        break;
-                    default:
-                        lateNightNumber = 0;
-                        break;
-                }
-                switch (day){
-                    case DayKind::LINE_1_DAY:
-                    case DayKind::LINE_2_DAY:
-                    case DayKind::LINE_3_DAY:
-                        lateDayNumber++;
-
-                        if (lateNightNumber <= 1 && lateDayNumber <= 1 && i == column) {
-                            auto image = lineDaysIconsMap[day];
-                            QPainter painter(&image);
-                            painter.setPen(QPen(Qt::red, 10.0));
-                            painter.drawRect(image.rect());
-                            return image;
-                        }
-                        break;
-                    default:
-                        lateDayNumber = 0;
-                        break;
+                if (isDay(day) && i > 0 && i == column) {
+                    // ... а предыдущий день ночная смена
+                    auto prevDay = busman->workingDays[i - 1];
+                    if (isNight(prevDay)) {
+                        return drawFrame(lineDaysIconsMap[day]);
+                    }
                 }
             }
+
             return lineDaysIconsMap[day];
         }
     }

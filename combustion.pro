@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     scheduler_celldelegate.cpp \
     scoreinfoboard.cpp \
     schedulertable.cpp \
-    scheduler_table_model.cpp
+    scheduler_table_model.cpp \
+    enums.cpp
 
 HEADERS  += mainwindow.h \
     parserpuzzlefile.h \

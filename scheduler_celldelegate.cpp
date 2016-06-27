@@ -56,21 +56,11 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        switch (day) {
-            case DayKind::LINE_1_DAY:
-            case DayKind::LINE_2_DAY:
-            case DayKind::LINE_3_DAY:
-                painter->drawImage(rect.x(), rect.y(), dayImage);
-                break;
+        if (isDay(day)) {
+            painter->drawImage(rect.x(), rect.y(), dayImage);
 
-            case DayKind::LINE_1_NIGHT:
-            case DayKind::LINE_2_NIGHT:
-            case DayKind::LINE_3_NIGHT:
-                painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
-                break;
-
-            default:
-                break;
+        } else if (isNight(day)) {
+            painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
         }
     }
 

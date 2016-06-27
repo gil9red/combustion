@@ -2,9 +2,7 @@
 #define ENUMS_H
 
 
-// Список рабочих дней
-// Варианты значения для рабочего дня:
-// TODO: название лучше более смысловое
+// Варианты рабочего дня
 enum DayKind {
     NONE = 0,
     LINE_1_DAY,
@@ -14,6 +12,10 @@ enum DayKind {
     LINE_3_DAY,
     LINE_3_NIGHT,
 };
+
+bool isDay(DayKind kind);
+bool isNight(DayKind kind);
+
 
 // Регистрация типа для использования в QVariant
 #include <QVariant>
