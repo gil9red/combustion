@@ -100,10 +100,6 @@ class ScoreInfoBoard : public QWidget {
         // Подсчет DeviationTargetLateShifts
         // TODO: cpp
         void analysisDeviationTargetLateShifts(int numberLateDay) {
-            // У каждого водителя maxGoodDayLateNumber ночной смены, но не должно превышать maxGoodDayLateNumber
-            // <кол-во водителей> * maxGoodDayLateNumber
-            enumValueDataMap[DeviationTargetLateShifts]->number = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
-
             // TODO:
             if (numberLateDay > maxGoodDayLateNumber) {
                 enumValueDataMap[DeviationTargetLateShifts]->number -= maxGoodDayLateNumber;

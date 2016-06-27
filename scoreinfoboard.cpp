@@ -41,6 +41,10 @@ void ScoreInfoBoard::analysis() {
     }
 
     if (schedulerTableModel != nullptr) {
+        // У каждого водителя maxGoodDayLateNumber ночной смены, но не должно превышать maxGoodDayLateNumber
+        // <кол-во водителей> * maxGoodDayLateNumber
+        enumValueDataMap[DeviationTargetLateShifts]->number = schedulerTableModel->rowCount() * maxGoodDayLateNumber;
+
         enumValueDataMap[LongRests]->number = schedulerTableModel->rowCount();
         for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
