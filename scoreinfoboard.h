@@ -118,17 +118,16 @@ class ScoreInfoBoard : public QWidget {
             //Проверим если водитель работал в ночную смену и поставили на утро
             //то водитель будет не доволен
             int earlyAfterLateShiftsDayNumber = 0;
-            int earlyAfterLateShiftsNightNumber = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
 
-                if (isDay(day)){
+                if (isDay(day) && column > 0){
                     earlyAfterLateShiftsDayNumber++;
-                    if(earlyAfterLateShiftsDayNumber > 0){
+                    if(earlyAfterLateShiftsDayNumber > 0) {
                         auto index = schedulerTableModel->index(row, column - 1);
                         auto prevDay = schedulerTableModel->getDayKind(index);
-                        if (isNight(prevDay)){
+                        if (isNight(prevDay)) {
                             enumValueDataMap[EarlyAfterLateShifts]->number++;
                         }
                     }
@@ -141,28 +140,22 @@ class ScoreInfoBoard : public QWidget {
         void analysisLongRests(int row) {
             // TODO:
             //Проверка если есть три свободные ячеики и после третий занята сменой
-            int longRestsNoneDayNumber = 0;
+            int longRestsDayNumber = 0;
             int longRestsNoneNumber = 0;
             for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
-                switch (day){
-                    case DayKind::NONE:
-                        longRestsNoneNumber++;
-                        break;
-                    default:
-                        break;
-                }
 
-                if (isNight(day)) {
-                    longRestsNoneDayNumber++;
-                    // Если 3 подряд найдено пустых значения и наидена смена
-                    // TODO:
-                    //Проходит только один раз и не повторяет больше
-                    if (longRestsNoneNumber > 2 && longRestsNoneDayNumber < 2 ) {
-                        enumValueDataMap[LongRests]->number++;
-                    }
-                }
+//                if (isNight(day)) {
+//                    longRestsDayNumber++;
+//                    if (longRestsDayNumber > 0 ) {
+//                        auto index = schedulerTableModel->index(row, column - column);
+//                        auto prevDay = schedulerTableModel->getDayKind(index);
+//                        if (){
+//                            enumValueDataMap[LongRests]->number++;
+//                        }
+//                    }
+//                }
             }
         }
 
