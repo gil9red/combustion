@@ -22,11 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     lineDaysTable.viewport()->installEventFilter(this);
     schedulerTable.viewport()->installEventFilter(this);
 
-    // TODO: перевод
     scoreInfoBoard.schedulerTableModel = &schedulerTable.model;
     scoreInfoBoard.lineDaysTable = &lineDaysTable;
-    scoreInfoBoard.busman = &busman;
 
+    // TODO: перевод
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");
     scoreInfoBoardDockWidget->setObjectName("ScoreInfoBoardDockWidget");
     scoreInfoBoardDockWidget->setWidget(&scoreInfoBoard);
