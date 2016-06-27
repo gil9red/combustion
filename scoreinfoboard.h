@@ -89,7 +89,6 @@ class ScoreInfoBoard : public QWidget {
                         enumValueDataMap[ConsecutiveLateShifts]->number += (consecutiveLateShiftsNumber - consecutiveLateShiftsNumber);
                         enumValueDataMap[ConsecutiveLateShifts]->number++;
                     }
-
                 // Последовательность прервана, обнуляем
                 } else {
                     consecutiveLateShiftsNumber = 0;
@@ -124,21 +123,17 @@ class ScoreInfoBoard : public QWidget {
                 auto index = schedulerTableModel->index(row, column);
                 auto day = schedulerTableModel->getDayKind(index);
 
-                if (isNight(day)) {
-                    earlyAfterLateShiftsNightNumber++;
-                } else {
-                    earlyAfterLateShiftsNightNumber = 0;
-                }
-
-                if (isDay(day)) {
+                if (isDay(day)){
                     earlyAfterLateShiftsDayNumber++;
-                    if (earlyAfterLateShiftsNightNumber < 2 && earlyAfterLateShiftsDayNumber < 2) {
-                        enumValueDataMap[EarlyAfterLateShifts]->number++;
+                    if(earlyAfterLateShiftsDayNumber > 0){
+                        auto index = schedulerTableModel->index(row, column - 1);
+                        auto prevDay = schedulerTableModel->getDayKind(index);
+                        if (isNight(prevDay)){
+                            enumValueDataMap[EarlyAfterLateShifts]->number++;
+                        }
                     }
-                } else {
-                    earlyAfterLateShiftsDayNumber = 0;
-                }
-            }
+                 }
+             }
         }
 
         // Подсчет LongRests
