@@ -82,7 +82,6 @@ MainWindow::MainWindow(QWidget *parent) :
         lineDaysTable.delegate.selectedSide = Side::None;
 
         auto busman = schedulerTable.model.get(index);
-
         int column = index.column();
 
         for (int row = 0; row < lineDaysTable.rowCount(); row++) {
@@ -90,14 +89,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
             // Выбор ячеек с подходящей линией маршрута
             Lines line = lineDaysTable.model.getLine(indexView);
-            bool has_line = busman->lines.contains(line);
+            bool hasLine = busman->lines.contains(line);
 
             // Значений уже нет
             bool isEmpty = lineDaysTable.model.getLeft(indexView) == DayKind::NONE
                     && lineDaysTable.model.getRight(indexView) == DayKind::NONE;
 
             // Выделение ячейки если совпадает линия маршрута и значения в ячейке есть
-            if (has_line && !isEmpty) {
+            if (hasLine && !isEmpty) {
                 lineDaysTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
             }
         }
