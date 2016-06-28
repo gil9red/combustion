@@ -57,23 +57,7 @@ void ScoreInfoBoard::analysis() {
         }
     }
 
-    if (lineDaysTable != nullptr) {
-        for (int row = 0; row < lineDaysTable->rowCount(); row++) {
-            for (int column = 0; column < lineDaysTable->columnCount(); column++) {
-                auto index =  lineDaysTable->model.index(row,column);
-                // Вывести общее количество Day и Night
-                auto pair = lineDaysTable->model.get(index);
-
-                if (pair.first != DayKind::NONE) {
-                    enumValueDataMap[UnassignedShifts]->number++;
-                }
-
-                if (pair.second != DayKind::NONE) {
-                    enumValueDataMap[UnassignedShifts]->number++;
-                }
-            }
-        }
-    }
+    analysisUnassignedShifts();
 }
 
 void ScoreInfoBoard::fillForms() {
