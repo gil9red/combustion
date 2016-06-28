@@ -116,7 +116,12 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->actionOpen, QAction::triggered, this, open);
-    connect(ui->actionSaveAs, QAction::triggered, this, saveAs);
+
+    // TODO: remove
+    // TODO: remove saveAs
+    // TODO: remove actionSaveAs
+    ui->actionSaveAs->setVisible(false);
+//    connect(ui->actionSaveAs, QAction::triggered, this, saveAs);
 
     // TODO: реализовать. Это menuBar'ы хранящие в себе действия для изменения
     // видимости toolBar'ов и dockWidget'ов
