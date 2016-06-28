@@ -161,6 +161,79 @@ class ScoreInfoBoard : public QWidget {
             }
         }
 
+        // Подсчет DayoffPreferences
+        // TODO: cpp
+        void analysisDayoffPreferences(int row) {
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+                auto index = schedulerTableModel->index(row, column);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+                if (textCell == "RR") {
+                    enumValueDataMap[DayoffPreferences]->number++;
+                }
+            }
+
+            // Количество DayoffPreferences у водителя
+            int numberShiftPreferences = 0;
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+                if (textCell == "RR" && day != DayKind::NONE) {
+                    numberShiftPreferences++;
+                }
+            }
+
+            // TODO:
+            if (numberShiftPreferences > 0) {
+                enumValueDataMap[DayoffPreferences]->number -= numberShiftPreferences;
+            } else {
+                enumValueDataMap[DayoffPreferences]->number += numberShiftPreferences;
+            }
+        }
+
+        // Подсчет ShiftPreferences
+        // TODO: cpp
+        void analysisShiftPreferences(int row) {
+            // Количество ShiftPreferences у водителя ночью
+            int numberShiftPreferencesNight = 0;
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+                if (textCell == "NN" && isNight(day)) {
+                    numberShiftPreferencesNight++;
+                }
+            }
+            // TODO:
+            if (numberShiftPreferencesNight > 0) {
+                enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesNight;
+            } else {
+                enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesNight;
+            }
+
+            // Количество DayoffPreferences у водителя день
+            int numberShiftPreferencesDay = 0;
+            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+                auto index = schedulerTableModel->index(row, column);
+                auto day = schedulerTableModel->getDayKind(index);
+                auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+                if (textCell == "DD" && isDay(day)) {
+                    numberShiftPreferencesDay++;
+                }
+            }
+
+            // TODO:
+            if (numberShiftPreferencesDay > 0) {
+                enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesDay;
+            } else {
+                enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesDay;
+            }
+        }
+
         // После анализа нужно заполнить виджеты
         void fillForms();
 
