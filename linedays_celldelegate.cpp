@@ -80,19 +80,15 @@ void LineDays_CellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     initStyleOption(&itemOption, index);
 
     // Обработка при выделении ячейки делегата
-    if (itemOption.state & QStyle::State_Selected && index == mIndex && selectedSide != Side::None) {
-        QRect& rect = itemOption.rect;
-        switch (selectedSide) {
-            case Side::Left:
+    if (itemOption.state & QStyle::State_Selected) {
+        if (index == mIndex && selectedSide != Side::None) {
+            QRect& rect = itemOption.rect;
+            if (selectedSide == Side::Left) {
                 rect.setWidth(rect.width() / 2);
-                break;
 
-            case Side::Right:
+            } else {
                 rect.setX(rect.x() + rect.width() / 2);
-                break;
-
-            default:
-                break;
+            }
         }
 
         QColor color = itemOption.palette.color(QPalette::Highlight);

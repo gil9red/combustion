@@ -56,7 +56,54 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setCentralWidget(centralWidget);
 
-    connect(&lineDaysTable, &QTableView::clicked, this, selectSchedulerCell);
+    // Выделение в таблице расписания доступные для установки ячейки
+    connect(&lineDaysTable, &QTableView::clicked, this, [=](const QModelIndex& index) {
+        // Очищение выделения
+        schedulerTable.selectionModel()->clearSelection();
+
+        int column = index.column();
+
+        for (int row = 0; row < schedulerTable.rowCount(); row++) {
+            auto indexView = schedulerTable.model.index(row, column);
+
+            // Выделение ячейки
+            if (isValidSetDay(index, indexView)) {
+                schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
+            }
+        }
+    });
+
+    // Выделение в таблице маршрутов на линиях доступные ячейки
+    connect(&schedulerTable, &QTableView::clicked, this, [=](const QModelIndex& index) {
+        // Очищение выделения
+        lineDaysTable.selectionModel()->clearSelection();
+
+        // TODO: костыль
+        lineDaysTable.delegate.selectedSide = Side::None;
+
+        auto busman = schedulerTable.model.get(index);
+
+        int column = index.column();
+
+        for (int row = 0; row < lineDaysTable.rowCount(); row++) {
+            auto indexView = lineDaysTable.model.index(row, column);
+
+            // Выбор ячеек с подходящей линией маршрута
+            Lines line = lineDaysTable.model.getLine(indexView);
+            bool has_line = busman->lines.contains(line);
+
+            // Значений уже нет
+            bool isEmpty = lineDaysTable.model.getLeft(indexView) == DayKind::NONE
+                    && lineDaysTable.model.getRight(indexView) == DayKind::NONE;
+
+            // Выделение ячейки если совпадает линия маршрута и значения в ячейке есть
+            if (has_line && !isEmpty) {
+                lineDaysTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
+            }
+        }
+    });
+
+
 
     // Соединяем горинонтальный ползунок таблицы с расписанием с горизонтальным ползунком таблицы линий
     connect(schedulerTable.horizontalScrollBar(), QAbstractSlider::valueChanged,
@@ -262,23 +309,6 @@ bool MainWindow::isValidIndexes(const QModelIndex& topIndex, const QModelIndex& 
     // Проверка того, что столбцы одинаковые
     isValid = isValid && topIndex.column() == bottomIndex.column();
     return isValid;
-}
-
-// Функция выделяет в таблице расписания доступные для установки ячейки
-void MainWindow::selectSchedulerCell(const QModelIndex& index) {
-    // Очищение выделения
-    schedulerTable.selectionModel()->clearSelection();
-
-    int column = index.column();
-
-    for (int row = 0; row < schedulerTable.rowCount(); row++) {
-        auto indexView = schedulerTable.model.index(row, column);
-
-        // Выделение ячейки
-        if (isValidSetDay(index, indexView)) {
-            schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
-        }
-    }
 }
 
 // Служит продвинутым аналогом сигнала clicked, который раньше отлавливался от таблиц.

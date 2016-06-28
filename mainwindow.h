@@ -50,9 +50,6 @@ class MainWindow : public QMainWindow
         // Проверка индексов ячеек таблиц
         bool isValidIndexes(const QModelIndex& topIndex, const QModelIndex& bottomIndex);
 
-        // Функция выделяет в таблице расписания доступные для установки ячейки
-        void selectSchedulerCell(const QModelIndex& index);
-
     private:
         Ui::MainWindow *ui;
 
