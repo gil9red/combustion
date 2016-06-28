@@ -50,26 +50,10 @@ void ScoreInfoBoard::analysis() {
         for (int row = 0; row < schedulerTableModel->rowCount(); row++) {
             analysisDayoffPreferences(row);
             analysisShiftPreferences(row);
-
-            // Количество ночных смен у водителя
-            int numberLateDay = 0;
-            for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
-                auto index = schedulerTableModel->index(row, column);
-                auto day = schedulerTableModel->getDayKind(index);
-
-                if (isNight(day)) {
-                    numberLateDay++;
-                }
-            }
-
-            // TODO: тут место подозрительное, работает при наличии у водителя
-            // ночных смен, что кажется не совсем правильным
-            if (numberLateDay > 0) {
-                analysisDeviationTargetLateShifts(numberLateDay);
-                analysisConsecutiveLateShifts(row);
-                analysisLongRests(row);
-                analysisEarlyAfterLateShifts(row);
-            }
+            analysisDeviationTargetLateShifts(row);
+            analysisConsecutiveLateShifts(row);
+            analysisLongRests(row);
+            analysisEarlyAfterLateShifts(row);
         }
     }
 
