@@ -60,6 +60,188 @@ void ScoreInfoBoard::analysis() {
     analysisUnassignedShifts();
 }
 
+void ScoreInfoBoard::analysisConsecutiveLateShifts(int row) {
+    if (schedulerTableModel == nullptr) {
+        return;
+    }
+
+    int consecutiveLateShiftsNumber = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+
+        if (isNight(day)) {
+            consecutiveLateShiftsNumber++;
+            // Если 3 подряд найдено и текущая ячейка относится к тем
+            // лишним ночным сменам, выделяем красной рамкой
+            if (consecutiveLateShiftsNumber > 3 ) {
+                enumValueDataMap[ConsecutiveLateShifts]->number += (consecutiveLateShiftsNumber - consecutiveLateShiftsNumber);
+                enumValueDataMap[ConsecutiveLateShifts]->number++;
+            }
+        // Последовательность прервана, обнуляем
+        } else {
+            consecutiveLateShiftsNumber = 0;
+        }
+    }
+}
+
+void ScoreInfoBoard::analysisDeviationTargetLateShifts(int row) {
+    // Количество ночных смен у водителя
+    int numberLateDay = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+
+        if (isNight(day)) {
+            numberLateDay++;
+        }
+    }
+
+    // TODO:
+    if (numberLateDay > maxGoodDayLateNumber) {
+        enumValueDataMap[DeviationTargetLateShifts]->number -= maxGoodDayLateNumber;
+        enumValueDataMap[DeviationTargetLateShifts]->number += numberLateDay - maxGoodDayLateNumber;
+    } else {
+        enumValueDataMap[DeviationTargetLateShifts]->number -= numberLateDay;
+    }
+}
+
+void ScoreInfoBoard::analysisEarlyAfterLateShifts(int row) {
+    //Проверим если водитель работал в ночную смену и поставили на утро
+    //то водитель будет не доволен
+    int earlyAfterLateShiftsDayNumber = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+
+        if (isDay(day) && column > 0){
+            earlyAfterLateShiftsDayNumber++;
+            if(earlyAfterLateShiftsDayNumber > 0) {
+                auto index = schedulerTableModel->index(row, column - 1);
+                auto prevDay = schedulerTableModel->getDayKind(index);
+                if (isNight(prevDay)) {
+                    enumValueDataMap[EarlyAfterLateShifts]->number++;
+                }
+            }
+         }
+     }
+}
+
+void ScoreInfoBoard::analysisLongRests(int row) {
+    // Проверка что есть три и более свободных дня у водителя перед сменой
+
+    // Содержит количество подряд свободных дней
+    int noneSequenceNumber = 0;
+
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+
+        // Считаем свободные дни
+        if (day == DayKind::NONE) {
+            noneSequenceNumber++;
+
+        // Наткнулись на рабочий день
+        } else {
+            // Свободных дней было от 3 и больше
+            if (noneSequenceNumber >= 3) {
+                enumValueDataMap[LongRests]->number++;
+            }
+
+            // Последовательность прервана
+            noneSequenceNumber = 0;
+        }
+    }
+}
+
+void ScoreInfoBoard::analysisDayoffPreferences(int row) {
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+        if (textCell == "RR") {
+            enumValueDataMap[DayoffPreferences]->number++;
+        }
+    }
+
+    // Количество DayoffPreferences у водителя
+    int numberShiftPreferences = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+        auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+        if (textCell == "RR" && day != DayKind::NONE) {
+            numberShiftPreferences++;
+        }
+    }
+
+    // TODO:
+    if (numberShiftPreferences > 0) {
+        enumValueDataMap[DayoffPreferences]->number -= numberShiftPreferences;
+    } else {
+        enumValueDataMap[DayoffPreferences]->number += numberShiftPreferences;
+    }
+}
+
+void ScoreInfoBoard::analysisShiftPreferences(int row) {
+    // Количество ShiftPreferences у водителя ночью
+    int numberShiftPreferencesNight = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+        auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+        if (textCell == "NN" && isNight(day)) {
+            numberShiftPreferencesNight++;
+        }
+    }
+    // TODO:
+    if (numberShiftPreferencesNight > 0) {
+        enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesNight;
+    } else {
+        enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesNight;
+    }
+
+    // Количество DayoffPreferences у водителя день
+    int numberShiftPreferencesDay = 0;
+    for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
+        auto index = schedulerTableModel->index(row, column);
+        auto day = schedulerTableModel->getDayKind(index);
+        auto textCell = schedulerTableModel->data(index, SchedulerTableModel::WishDayRole).toString();
+
+        if (textCell == "DD" && isDay(day)) {
+            numberShiftPreferencesDay++;
+        }
+    }
+
+    // TODO:
+    if (numberShiftPreferencesDay > 0) {
+        enumValueDataMap[ShiftPreferences]->number += numberShiftPreferencesDay;
+    } else {
+        enumValueDataMap[ShiftPreferences]->number -= numberShiftPreferencesDay;
+    }
+}
+
+void ScoreInfoBoard::analysisUnassignedShifts() {
+    if (lineDaysTable != nullptr) {
+        for (int row = 0; row < lineDaysTable->rowCount(); row++) {
+            for (int column = 0; column < lineDaysTable->columnCount(); column++) {
+                auto index =  lineDaysTable->model.index(row,column);
+                auto pair = lineDaysTable->model.get(index);
+
+                if (pair.first != DayKind::NONE) {
+                    enumValueDataMap[UnassignedShifts]->number++;
+                }
+
+                if (pair.second != DayKind::NONE) {
+                    enumValueDataMap[UnassignedShifts]->number++;
+                }
+            }
+        }
+    }
+}
+
 void ScoreInfoBoard::fillForms() {
     for (auto key: enumValueDataMap.keys()) {
         auto data = enumValueDataMap[key];
