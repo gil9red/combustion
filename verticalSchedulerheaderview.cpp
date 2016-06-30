@@ -75,6 +75,49 @@ void VerticalSchedulerHeaderView::paintSection(QPainter* painter, const QRect& r
                 painter->drawText(x, y, width, height, Qt::AlignCenter, strLine);
             }
 
+
+            // Рисование индикатора количества ночных смен
+            auto x_number_lates = rect.x() + rect.width() - width - vert_indent;
+            painter->setPen(Qt::NoPen);
+
+            const auto max_number_late = 4;
+
+            // TODO: дубликат. Аналог есть в scoreinfoboard
+            auto number_late = 0;
+            for (auto day: busman->workingDays) {
+                if (isNight(day)) {
+                    number_late++;
+                }
+            }
+
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(Qt::yellow);
+            painter->setBrush(number_late <= max_number_late ? Qt::yellow : Qt::red);
+            painter->drawRect(x_number_lates, rect.y() + vert_indent, width, height);
+
+            painter->setBrush(number_late <= max_number_late ? Qt::green : Qt::red);
+            auto indent_led_strip = 2;
+            auto height_led_strip = height / (max_number_late + 1) - indent_led_strip / (max_number_late + 1);
+            auto y_led_strip = rect.y() + vert_indent + height - height_led_strip;
+
+            // Рисование полос индикатора
+            for (int i = 1; i <= number_late; i++) {
+                painter->drawRect(x_number_lates, y_led_strip, width, height_led_strip);
+
+                y_led_strip -= indent_led_strip;
+                y_led_strip -= height_led_strip;
+
+                if (i >= max_number_late) {
+                    break;
+                }
+            }
+
+            // Рисование количества ночных смен на индикаторе
+            painter->setPen(Qt::black);
+            painter->drawText(x_number_lates, rect.y() + vert_indent, width, height,
+                              Qt::AlignHCenter | Qt::AlignBottom,
+                              QString::number(number_late));
+
             painter->restore();
 
             return;

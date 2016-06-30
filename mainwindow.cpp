@@ -146,7 +146,7 @@ void MainWindow::load(const QString& fileName) {
 
     // Ширина колонок
     static const int width_columns = 60;
-    static const int width_vertical_header = 90;
+    static const int width_vertical_header = 110;
 
     auto schedulerHHeader = schedulerTable.horizontalHeader();
     auto schedulerVHeader = schedulerTable.verticalHeader();
@@ -241,6 +241,10 @@ void MainWindow::updateStates() {
 
     // Обновляем виджет с очками
     scoreInfoBoard.refresh();
+
+    // Просим вертикальный заголовок обновиться. В во время написания этого коммента
+    // это было нужно для обновления индикатора количества ночных смен
+    schedulerTable.verticalHeader()->viewport()->update();
 
     // TODO: неиспользуется
 //    ui->actionSelectSun->setEnabled(false);
