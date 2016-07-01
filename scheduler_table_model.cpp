@@ -290,114 +290,28 @@ bool SchedulerTableModel::columnInLongRests(int row, int column) const {
         if (day == DayKind::NONE) {
             noneSequenceNumber++;
 
+            // Свободных дней было от 3 и больше
             if (noneSequenceNumber >= 3 && i >= columnCount() - 1) {
-                if (indexes.length() == 0) {
-                    indexes << 0;
+                for (int j = noneSequenceNumber - 1; j >= 0; j--) {
+                    indexes << i - j;
                 }
-
-                indexes << i;
-                qDebug() << indexes;
             }
 
         // Наткнулись на рабочий день
         } else {
             // Свободных дней было от 3 и больше
             if (noneSequenceNumber >= 3) {
-                indexes << i;
-                qDebug() << indexes;
+                for (int j = noneSequenceNumber; j > 0; j--) {
+                    indexes << i - j;
+                }
             }
 
             // Последовательность прервана
             noneSequenceNumber = 0;
         }
     }
-    qDebug() << indexes;
 
-//    QList<QPair<int, int>> indexes;
-
-//    // Содержит количество подряд свободных дней
-//    int noneSequenceNumber = 0;
-
-//    auto pair = qMakePair(-1, -1);
-//    indexes.append(pair);
-
-//    for (int i = 0; i < columnCount(); i++) {
-//        auto day = getDayKind(index(row, i));
-
-//        // Считаем свободные дни
-//        if (day == DayKind::NONE) {
-//            if (noneSequenceNumber + 1 < columnCount()) {
-//                noneSequenceNumber++;
-//            }
-
-//            // Если достигли конца столбцов
-//            if (noneSequenceNumber >= 3 && i >= columnCount() - 1) {
-//                if (indexes.length() == 1) {
-//                    qDebug() << noneSequenceNumber;
-//                    indexes.last().first = i - noneSequenceNumber;
-//                }
-
-//                indexes.last().second = i;
-
-//                qDebug() << i;
-//            }
-
-//        } else {
-//            if (noneSequenceNumber >= 3) {
-//                if (indexes.length() > 1) {
-//                    indexes.last().first = i - noneSequenceNumber;
-//                } else {
-//                    indexes.last().first = i;
-//                }
-
-//                indexes.last().second = i;
-//                indexes.append(qMakePair(i, -1));
-//                qDebug() << i;
-//            }
-//        }
-//    }
-
-////    for (int i = 0; i < columnCount(); i++) {
-////        auto day = getDayKind(index(row, i));
-
-////        // Считаем свободные дни
-////        if (day == DayKind::NONE) {
-////            if (indexes.last().first == 0 && indexes.last().second == -1) {
-////                indexes.last().second = i;
-////            } else {
-////                indexes.append(qMakePair(i, -1));
-////            }
-
-////            noneSequenceNumber++;
-
-////            // Если достигли конца столбцов
-////            if (noneSequenceNumber >= 3 || i >= columnCount() - 1) {
-////                indexes.last().second = i;
-////            }
-
-////        // Наткнулись на рабочий день
-////        } else {
-//////            if (noneSequenceNumber >= 3)
-//////            if (row == 0)
-//////            qDebug() << day << noneSequenceNumber << row << i << column;
-////            // Свободных дней было от 3 и больше, и указанная колонка
-////            // попала в последовательность, или достигли конца столбцов
-////            if (noneSequenceNumber >= 3) {
-//////                indexes.last().second = i;
-//////                qDebug() << true;
-//////                return true;
-////            }
-
-////            // Последовательность прервана
-////            noneSequenceNumber = 0;
-////        }
-////    }
-
-//    qDebug() << indexes;
-
-//    qDebug() << false;
-    return false;
-
+    return indexes.contains(column);
 }
 
 bool SchedulerTableModel::columnInLongRests(const QModelIndex& index) const {
