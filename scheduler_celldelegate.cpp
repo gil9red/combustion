@@ -48,19 +48,19 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         QImage dayImage = index.model()->data(index, SchedulerTableModel::DayImageKindRole).value<QImage>();
         QRect rect = option.rect;
 
-        // Отступ между иконками в ячейке
-        auto indent = 2;
-        auto size = qMin(rect.size().width(), rect.size().height()) - indent / 2;
+        // Отступ иконки в ячейке
+        auto indent = 4;
+        auto size = qMin(rect.size().width(), rect.size().height()) - indent * 2;
 
         if (!dayImage.isNull()) {
             dayImage = dayImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         if (isDay(day)) {
-            painter->drawImage(rect.x(), rect.y(), dayImage);
+            painter->drawImage(rect.x() + indent, rect.y() + indent, dayImage);
 
         } else if (isNight(day)) {
-            painter->drawImage(rect.x() + size + indent, rect.y(), dayImage);
+            painter->drawImage(rect.x() + size + indent + indent * 2, rect.y() + indent, dayImage);
         }
     }
 
