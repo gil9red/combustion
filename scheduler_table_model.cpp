@@ -244,11 +244,11 @@ QVariant SchedulerTableModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-Busman* SchedulerTableModel::get(const QModelIndex& index) {
+Busman* SchedulerTableModel::get(const QModelIndex& index) const {
     return get(index.row());
 }
 
-Busman* SchedulerTableModel::get(int row) {
+Busman* SchedulerTableModel::get(int row) const {
     if (row < 0 || row >= busmanList.length()) {
         return nullptr;
     }
@@ -256,7 +256,7 @@ Busman* SchedulerTableModel::get(int row) {
     return busmanList.at(row);
 }
 
-DayKind SchedulerTableModel::getDayKind(const QModelIndex& index) throw(std::exception) {
+DayKind SchedulerTableModel::getDayKind(const QModelIndex& index) const throw(std::exception) {
     Busman* busman = get(index);
     if (busman == nullptr) {
         throw std::logic_error(BusmanIsNullMessage.arg(index.row(), index.column()).toStdString());
@@ -273,4 +273,46 @@ void SchedulerTableModel::setDayKind(const QModelIndex& index, DayKind day) thro
     }
 
     busman->workingDays[index.column()] = day;
+}
+
+bool SchedulerTableModel::columnInLongRests(int row, int column) const {
+    // TODO: Собирать индексы в список и проверять по ним
+//    // Содержит количество подряд свободных дней
+//    int noneSequenceNumber = 0;
+
+//    for (int i = 0; i < columnCount(); i++) {
+//        auto day = getDayKind(index(row, i));
+
+//        // Считаем свободные дни
+//        if (day == DayKind::NONE) {
+//            noneSequenceNumber++;
+
+//            // Если достигли конца столбцов
+//            if (noneSequenceNumber >= 3 && i >= columnCount() - 1) {
+//                return true;
+//            }
+
+//        // Наткнулись на рабочий день
+//        } else {
+////            if (noneSequenceNumber >= 3)
+//            if (row == 0)
+//            qDebug() << day << noneSequenceNumber << row << i << column;
+//            // Свободных дней было от 3 и больше, и указанная колонка
+//            // попала в последовательность, или достигли конца столбцов
+//            if (noneSequenceNumber >= 3 && i == column) {
+//                qDebug() << true;
+//                return true;
+//            }
+
+//            // Последовательность прервана
+//            noneSequenceNumber = 0;
+//        }
+//    }
+
+//    qDebug() << false;
+    return false;
+}
+
+bool SchedulerTableModel::columnInLongRests(const QModelIndex& index) const {
+    return columnInLongRests(index.row(), index.column());
 }

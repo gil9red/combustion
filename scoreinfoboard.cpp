@@ -133,6 +133,8 @@ void ScoreInfoBoard::analysisLongRests(int row) {
     // Содержит количество подряд свободных дней
     int noneSequenceNumber = 0;
 
+    // TODO: проверить возможный баг: если ход идет до 14-го дня
+    // не встречая рабочих дней, должен выделиться или нет?
     for (int column = 0; column < schedulerTableModel->columnCount(); column++) {
         auto index = schedulerTableModel->index(row, column);
         auto day = schedulerTableModel->getDayKind(index);

@@ -64,6 +64,19 @@ void SchedulerCellDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         }
     }
 
+    // Если ячейка входит в LongRests ячейки, подрисуем снизу линию, подчеркивая ячейку
+    const auto schedulerTableModel = dynamic_cast <const SchedulerTableModel*> (index.model());
+    if (schedulerTableModel && schedulerTableModel->columnInLongRests(index)) {
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor(255, 128, 0));
+
+        const auto heightLine = 4;
+        auto rect = viewOption.rect;
+        rect.setY(rect.y() + rect.height() - heightLine);
+        rect.setHeight(heightLine);
+        painter->drawRect(rect);
+    }
+
     painter->restore();
 
     // Цвет выделения полупрозрачный, чтобы были видно что в ячейке

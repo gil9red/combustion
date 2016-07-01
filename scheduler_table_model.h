@@ -37,11 +37,16 @@ class SchedulerTableModel : public QAbstractTableModel
 
         void sayViewUpdate();
 
-        Busman* get(const QModelIndex& index);
-        Busman* get(int row);
+        Busman* get(const QModelIndex& index) const;
+        Busman* get(int row) const;
 
-        DayKind getDayKind(const QModelIndex& index) throw(std::exception);
+        DayKind getDayKind(const QModelIndex& index) const throw(std::exception);
         void setDayKind(const QModelIndex& index, DayKind day) throw(std::exception);
+
+        // Возвращает true, если указанный день попадает в последовательность
+        // в которой у водителя перед сменой есть три и более свободных дня
+        bool columnInLongRests(int row, int column) const;
+        bool columnInLongRests(const QModelIndex& index) const;
 
     private:
         QList<Busman*> busmanList;
