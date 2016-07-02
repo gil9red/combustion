@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     try {
         MainWindow w;
         w.show();
-        w.load("../combustion/INFO/given_pussle.txt");
+        w.load(":/default_puzzle");
 
         return a.exec();
 

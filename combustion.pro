@@ -44,8 +44,5 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     scoreinfoboard.ui
 
-DISTFILES += \
-    INFO/given_pussle.txt
-
 RESOURCES += \
     resource.qrc

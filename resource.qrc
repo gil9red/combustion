@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file alias="moon">icons/png/moon.png</file>
         <file alias="sun">icons/png/sun.png</file>
+        <file alias="default_puzzle">INFO/given_pussle.txt</file>
     </qresource>
 </RCC>
