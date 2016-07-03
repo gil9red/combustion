@@ -132,6 +132,8 @@ void ScoreInfoBoard::analysisLongRests(int row) {
 
     // Содержит количество подряд свободных дней
     int noneSequenceNumber = 0;
+    // Водитель может отдыхать только три раза
+    int noneDayoffSequenceNumber = 0;
 
     // TODO: проверить возможный баг: если ход идет до 14-го дня
     // не встречая рабочих дней, должен выделиться или нет?
@@ -147,11 +149,14 @@ void ScoreInfoBoard::analysisLongRests(int row) {
         } else {
             // Свободных дней было от 3 и больше
             if (noneSequenceNumber >= 3) {
-                enumValueDataMap[LongRests]->number++;
-            }
+                noneDayoffSequenceNumber++;
 
-            // Последовательность прервана
-            noneSequenceNumber = 0;
+                if(noneDayoffSequenceNumber <= 2){
+                    enumValueDataMap[LongRests]->number++;
+                }
+            }
+                // Последовательность прервана
+                noneSequenceNumber = 0;
         }
     }
 }
