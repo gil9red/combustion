@@ -325,7 +325,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
         return false;
     }
 
-    if (event->type() == QEvent::MouseButtonRelease) {
+    if (event->type() == QEvent::MouseButtonRelease) {        
         auto mouseEvent = static_cast <QMouseEvent*> (event);
         auto pos = mouseEvent->pos();
 
@@ -336,6 +336,9 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
 
         // TODO: разобраться с дубликатами
         if (mouseEvent->button() == Qt::LeftButton) {
+            lastClickTable = currClickTable;
+            currClickTable = (QWidget*) obj;
+
             auto topIndex = lineDaysTable.currentIndex();
             auto bottomIndex = schedulerTable.currentIndex();
 
@@ -343,8 +346,14 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
             // для выделения ячеек таблицы расписания
             bool enabled = isValidSetDay(topIndex, bottomIndex);
 
-            isLastSchedulerTableClickedCell = obj == schedulerTable.viewport();
-            if (isLastSchedulerTableClickedCell && enabled) {
+            // Флаг говорит о том, что сначала был клик по ячейке таблицы сверху,
+            // потом снизу
+            bool isLineDays2SchedulerClick = lastClickTable == lineDaysTable.viewport() && currClickTable == schedulerTable.viewport();
+
+//            // Флаг говорит о том, что два клика по ячейкам были у таблицы расписания
+//            bool isScheduler2SchedulerClick = lastClickTable == schedulerTable.viewport() && currClickTable == schedulerTable.viewport();
+
+            if (isLineDays2SchedulerClick && enabled) {
                 // Получаем пару значений выбранной ячейки таблицы сверху
                 auto days = lineDaysTable.model.get(topIndex);
 
