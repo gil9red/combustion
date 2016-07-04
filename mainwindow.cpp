@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
             auto indexView = schedulerTable.model.index(row, column);
 
             // Выделение ячейки
-            if (isValidSetDay(index, indexView)) {
+            if (isValidSetDayBetweenTables(index, indexView)) {
                 schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
             }
         }
@@ -101,20 +101,16 @@ MainWindow::MainWindow(QWidget *parent) :
             }
         }
 
-//        // Выделение ячеек с днем, имеющего такую же линию, как в текущей
-//        auto day = schedulerTable.model.getDayKind(index);
-//        if (day != DayKind::NONE) {
-//            for (int row = 0; row < schedulerTable.rowCount(); row++) {
-//                auto indexView = schedulerTable.model.index(row, column);
-//                auto busmanIndex = schedulerTable.model.get(indexView);
-
-//                // Линия дня текущего ячейки
-//                auto line = schedulerTable.model.dayKindsLinesMap[day];
-//                if (busmanIndex->lines.contains(line) && busmanIndex->wishesOnSchedule[column] != "XX") {
-//                    schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
-//                }
-//            }
-//        }
+        // Выделение ячеек с днем, имеющего такую же линию, как в текущей
+        auto day = schedulerTable.model.getDayKind(index);
+        if (day != DayKind::NONE) {
+            for (int row = 0; row < schedulerTable.rowCount(); row++) {
+                auto indexView = schedulerTable.model.index(row, column);
+                if (isValidSetDayWithinScheduleTable(index, indexView)) {
+                    schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
+                }
+            }
+        }
     });
 
     // Соединяем горинонтальный ползунок таблицы с расписанием с горизонтальным ползунком таблицы линий
@@ -284,7 +280,7 @@ void MainWindow::updateStates() {
 //    }
 }
 
-bool MainWindow::isValidSetDay(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
+bool MainWindow::isValidSetDayBetweenTables(const QModelIndex& indexTop, const QModelIndex& indexBottom) {
     // Проверяем, что проверка по индекса проходит
     if (!isValidIndexes(indexTop, indexBottom)) {
         return false;
@@ -313,7 +309,6 @@ bool MainWindow::isValidSetDay(const QModelIndex& indexTop, const QModelIndex& i
 
     auto text = busman->wishesOnSchedule[column];
 
-    // TODO: проверить
     // В эти дни у водителей гарантированные выходные
     if (text == "XX") {
         return false;
@@ -357,14 +352,16 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
 
             // Проверка возможности вставки значения -- тоже самое используется
             // для выделения ячеек таблицы расписания
-            bool enabled = isValidSetDay(topIndex, bottomIndex);
+            bool enabled = isValidSetDayBetweenTables(topIndex, bottomIndex);
 
             // Флаг говорит о том, что сначала был клик по ячейке таблицы сверху,
             // потом снизу
             bool isLineDays2SchedulerClick = lastClickTable == lineDaysTable.viewport() && currClickTable == schedulerTable.viewport();
 
-//            // Флаг говорит о том, что два клика по ячейкам были у таблицы расписания
-//            bool isScheduler2SchedulerClick = lastClickTable == schedulerTable.viewport() && currClickTable == schedulerTable.viewport();
+            // Флаг говорит о том, что два клика по ячейкам были у таблицы расписания
+            bool isScheduler2SchedulerClick = lastClickTable == schedulerTable.viewport() && currClickTable == schedulerTable.viewport();
+            lastClickIndexScheduleTable = currClickIndexScheduleTable;
+            currClickIndexScheduleTable = schedulerTable.currentIndex();
 
             if (isLineDays2SchedulerClick && enabled) {
                 // Получаем пару значений выбранной ячейки таблицы сверху
@@ -415,6 +412,19 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
                     // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
                     schedulerTable.model.sayViewUpdate();
                     lineDaysTable.model.sayViewUpdate();
+                }
+
+            } else if (isScheduler2SchedulerClick) {
+                // TODO: сделать и для случая заполненной ячейки, чтобы бы обмен
+                // Выполняем перенос внутри столбца в пустую ячейку
+                if (isValidSetDayWithinScheduleTable(lastClickIndexScheduleTable, currClickIndexScheduleTable)) {
+                    auto day = schedulerTable.model.getDayKind(lastClickIndexScheduleTable);
+
+                    schedulerTable.model.setDayKind(lastClickIndexScheduleTable, DayKind::NONE);
+                    schedulerTable.model.setDayKind(currClickIndexScheduleTable, day);
+
+                    // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                    schedulerTable.model.sayViewUpdate();
                 }
             }
 
