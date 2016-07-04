@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
             auto indexView = lineDaysTable.model.index(row, column);
 
             // Выбор ячеек с подходящей линией маршрута
-            Lines line = lineDaysTable.model.getLine(indexView);
+            auto line = lineDaysTable.model.getLine(indexView);
             bool hasLine = busman->lines.contains(line);
 
             // Значений уже нет
@@ -100,9 +100,22 @@ MainWindow::MainWindow(QWidget *parent) :
                 lineDaysTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
             }
         }
+
+//        // Выделение ячеек с днем, имеющего такую же линию, как в текущей
+//        auto day = schedulerTable.model.getDayKind(index);
+//        if (day != DayKind::NONE) {
+//            for (int row = 0; row < schedulerTable.rowCount(); row++) {
+//                auto indexView = schedulerTable.model.index(row, column);
+//                auto busmanIndex = schedulerTable.model.get(indexView);
+
+//                // Линия дня текущего ячейки
+//                auto line = schedulerTable.model.dayKindsLinesMap[day];
+//                if (busmanIndex->lines.contains(line) && busmanIndex->wishesOnSchedule[column] != "XX") {
+//                    schedulerTable.selectionModel()->select(indexView, QItemSelectionModel::Select);
+//                }
+//            }
+//        }
     });
-
-
 
     // Соединяем горинонтальный ползунок таблицы с расписанием с горизонтальным ползунком таблицы линий
     connect(schedulerTable.horizontalScrollBar(), QAbstractSlider::valueChanged,
