@@ -134,7 +134,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //        self.ui.menuTools.addAction(tool.toggleViewAction())
 
     updateStates();
-    read_settings();
+    readSettings();
 }
 
 MainWindow::~MainWindow() {
@@ -205,13 +205,13 @@ void MainWindow::saveAs() {
     schedulerTable.model.saveAs(fileName);
 }
 
-void MainWindow::read_settings() {
+void MainWindow::readSettings() {
     QSettings config("config",  QSettings::IniFormat);
     restoreState(config.value("MainWindow_State").toByteArray());
     restoreGeometry(config.value("MainWindow_Geometry").toByteArray());
 }
 
-void MainWindow::write_settings() {
+void MainWindow::writeSettings() {
     QSettings config("config",  QSettings::IniFormat);
     config.setValue("MainWindow_State", saveState());
     config.setValue("MainWindow_Geometry", saveGeometry());
@@ -430,6 +430,6 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void MainWindow::closeEvent(QCloseEvent*) {
-    write_settings();
+    writeSettings();
     qApp->quit();
 }

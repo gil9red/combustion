@@ -31,8 +31,8 @@ class MainWindow : public QMainWindow
         void open();
         void saveAs();
 
-        void read_settings();
-        void write_settings();
+        void readSettings();
+        void writeSettings();
 
         // Служит продвинутым аналогом сигнала clicked, который раньше отлавливался от таблиц.
         bool eventFilter(QObject* obj, QEvent* event);
