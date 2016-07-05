@@ -392,6 +392,12 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
                     schedulerTable.model.sayViewUpdate();
                     lineDaysTable.model.sayViewUpdate();
 
+                    // TODO: дублирование
+                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                    // при последовательных кликах
+                    lastClickTable = nullptr;
+                    currClickTable = nullptr;
+
                 } else if (enabledRight) {
                     // Убираем значение, которое забрали
                     lineDaysTable.model.setRight(topIndex, DayKind::NONE);
@@ -412,19 +418,31 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
                     // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
                     schedulerTable.model.sayViewUpdate();
                     lineDaysTable.model.sayViewUpdate();
+
+                    // TODO: дублирование
+                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                    // при последовательных кликах
+                    lastClickTable = nullptr;
+                    currClickTable = nullptr;
                 }
 
             } else if (isScheduler2SchedulerClick) {
-                // TODO: сделать и для случая заполненной ячейки, чтобы бы обмен
-                // Выполняем перенос внутри столбца в пустую ячейку
+                // Выполняем перенос внутри столбца между ячейками
                 if (isValidSetDayWithinScheduleTable(lastClickIndexScheduleTable, currClickIndexScheduleTable)) {
-                    auto day = schedulerTable.model.getDayKind(lastClickIndexScheduleTable);
+                    auto day1 = schedulerTable.model.getDayKind(lastClickIndexScheduleTable);
+                    auto day2 = schedulerTable.model.getDayKind(currClickIndexScheduleTable);
 
-                    schedulerTable.model.setDayKind(lastClickIndexScheduleTable, DayKind::NONE);
-                    schedulerTable.model.setDayKind(currClickIndexScheduleTable, day);
+                    schedulerTable.model.setDayKind(lastClickIndexScheduleTable, day2);
+                    schedulerTable.model.setDayKind(currClickIndexScheduleTable, day1);
 
                     // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
                     schedulerTable.model.sayViewUpdate();
+
+                    // TODO: дублирование
+                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                    // при последовательных кликах
+                    lastClickTable = nullptr;
+                    currClickTable = nullptr;
                 }
             }
 

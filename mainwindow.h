@@ -63,21 +63,33 @@ class MainWindow : public QMainWindow
 
             auto day1 = schedulerTable.model.getDayKind(index1);
 
+            // Чтобы нельзя было после клика на пустую ячейку, поменять ее
+            // на другую
+            if (day1 == DayKind::NONE) {
+                return false;
+            }
+
+            auto day2 = schedulerTable.model.getDayKind(index2);
+
             // Линия дня текущего ячейки
-            auto line = schedulerTable.model.dayKindsLinesMap[day1];
+            auto line1 = schedulerTable.model.dayKindsLinesMap[day1];
+            auto line2 = schedulerTable.model.dayKindsLinesMap[day2];
+
+            auto busman2 = schedulerTable.model.get(index2);
+
+            // В XX однозначно нельзя ничего вставлять
+            if (busman2->wishesOnSchedule[index2.column()] == "XX") {
+                return false;
+            }
 
             // Проверяем, что в ячейке index2 есть такая же линия как index1
-            auto busman2 = schedulerTable.model.get(index2);
-            bool hasLine = busman2->lines.contains(line);
+            // и что ячейка пустая
+            if (day2 == DayKind::NONE && busman2->lines.contains(line1)) {
+                return true;
+            }
 
-            // Проверка, что ячейка index2 является рабочим днем, т.е. не "XX"
-            bool isWorkingDay2 = busman2->wishesOnSchedule[index2.column()] != "XX";
-
-            // TODO: пока можно внутри столбдца таблицы расписания только в пустые ячейки
-            // но условие нужно убрать, когда возможность вставки в занятые ячейки будет сделана
-            bool isNoneDay2 = schedulerTable.model.getDayKind(index2) == DayKind::NONE;
-
-            return hasLine && isWorkingDay2 && isNoneDay2;
+            // Если вторая ячейка не пустая и линии ячеек одинаковые
+            return day2 != DayKind::NONE && line1 == line2;
         }
 
     private:
