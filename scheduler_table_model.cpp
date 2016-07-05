@@ -272,6 +272,12 @@ void SchedulerTableModel::setDayKind(const QModelIndex& index, DayKind day) thro
         throw std::logic_error(BusmanIsNullMessage.arg(index.row(), index.column()).toStdString());
     }
 
+    // TODO: добавить проверку того, что линия дня соответствует линиям водителя
+    auto line = dayKindsLinesMap[day];
+    if (!busman->lines.contains(line)) {
+        throw std::logic_error(QString("Нельзя вставить значение в ячейку: не соответствие линий маршрута. index: %1, %2.").arg(index.row(), index.column()).toStdString());
+    }
+
     busman->workingDays[index.column()] = day;
 }
 

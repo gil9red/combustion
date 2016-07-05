@@ -50,47 +50,12 @@ class MainWindow : public QMainWindow
         // Проверка индексов ячеек таблиц
         bool isValidIndexes(const QModelIndex& topIndex, const QModelIndex& bottomIndex);
 
-        // TODO: cpp
         // Функция проверяет возможность вставки значения в пределах столбца таблицы
         // расписания. Например, делаем клик на ячейке и в том же столбце кликаем на
         // другую ячейку с такими же линиями маршрута и значение переносится во вторую
         // ячейку.
         // Проверка осуществляется относительно ячейки index1 к ячейке index2
-        bool isValidSetDayWithinScheduleTable(const QModelIndex& index1, const QModelIndex& index2) {
-            if (!index1.isValid() || !index2.isValid()) {
-                return false;
-            }
-
-            auto day1 = schedulerTable.model.getDayKind(index1);
-
-            // Чтобы нельзя было после клика на пустую ячейку, поменять ее
-            // на другую
-            if (day1 == DayKind::NONE) {
-                return false;
-            }
-
-            auto day2 = schedulerTable.model.getDayKind(index2);
-
-            // Линия дня текущего ячейки
-            auto line1 = schedulerTable.model.dayKindsLinesMap[day1];
-            auto line2 = schedulerTable.model.dayKindsLinesMap[day2];
-
-            auto busman2 = schedulerTable.model.get(index2);
-
-            // В XX однозначно нельзя ничего вставлять
-            if (busman2->wishesOnSchedule[index2.column()] == "XX") {
-                return false;
-            }
-
-            // Проверяем, что в ячейке index2 есть такая же линия как index1
-            // и что ячейка пустая
-            if (day2 == DayKind::NONE && busman2->lines.contains(line1)) {
-                return true;
-            }
-
-            // Если вторая ячейка не пустая и линии ячеек одинаковые
-            return day2 != DayKind::NONE && line1 == line2;
-        }
+        bool isValidSetDayWithinScheduleTable(const QModelIndex& index1, const QModelIndex& index2);
 
     private:
         Ui::MainWindow *ui;
