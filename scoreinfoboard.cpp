@@ -231,11 +231,11 @@ void ScoreInfoBoard::analysisShiftPreferences(int row) {
 }
 
 void ScoreInfoBoard::analysisUnassignedShifts() {
-    if (lineDaysTable != nullptr) {
-        for (int row = 0; row < lineDaysTable->rowCount(); row++) {
-            for (int column = 0; column < lineDaysTable->columnCount(); column++) {
-                auto index =  lineDaysTable->model.index(row,column);
-                auto pair = lineDaysTable->model.get(index);
+    if (lineDaysTableModel != nullptr) {
+        for (int row = 0; row < lineDaysTableModel->rowCount(); row++) {
+            for (int column = 0; column < lineDaysTableModel->columnCount(); column++) {
+                auto index =  lineDaysTableModel->index(row,column);
+                auto pair = lineDaysTableModel->get(index);
 
                 if (pair.first != DayKind::NONE) {
                     enumValueDataMap[UnassignedShifts]->number++;

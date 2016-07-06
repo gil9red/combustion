@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     schedulerTable.viewport()->installEventFilter(this);
 
     scoreInfoBoard.schedulerTableModel = &schedulerTable.model;
-    scoreInfoBoard.lineDaysTable = &lineDaysTable;
+    scoreInfoBoard.lineDaysTableModel = &lineDaysTable.model;
 
     // TODO: перевод
     auto scoreInfoBoardDockWidget = new QDockWidget("Score Info");

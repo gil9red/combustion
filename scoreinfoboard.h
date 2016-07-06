@@ -64,7 +64,7 @@ class ScoreInfoBoard : public QWidget {
         const static int maxGoodDayLateNumber = 4;
 
         SchedulerTableModel* schedulerTableModel = nullptr;
-        LineDaysTable* lineDaysTable = nullptr;
+        LineDaysTableModel* lineDaysTableModel = nullptr;
 
     private:
         // Функция подсчитывает случаи метрики
