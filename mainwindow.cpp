@@ -7,6 +7,7 @@
 #include <QSettings>
 #include "verticalschedulerheaderview.h"
 #include <QDockWidget>
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -369,147 +370,158 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
         return false;
     }
 
-    if (event->type() == QEvent::MouseButtonRelease) {        
-        auto mouseEvent = static_cast <QMouseEvent*> (event);
-        auto pos = mouseEvent->pos();
+    try {
+        if (event->type() == QEvent::MouseButtonRelease) {
+            auto mouseEvent = static_cast <QMouseEvent*> (event);
+            auto pos = mouseEvent->pos();
 
-        // Проверяем, что клик произошел в какую-нибудь ячейку
-        if (!lineDaysTable.indexAt(pos).isValid() && !schedulerTable.indexAt(pos).isValid()) {
-            return false;
-        }
-
-        // TODO: разобраться с дубликатами
-        if (mouseEvent->button() == Qt::LeftButton) {
-            lastClickTable = currClickTable;
-            currClickTable = (QWidget*) obj;
-
-            auto topIndex = lineDaysTable.currentIndex();
-            auto bottomIndex = schedulerTable.currentIndex();
-
-            // Проверка возможности вставки значения -- тоже самое используется
-            // для выделения ячеек таблицы расписания
-            bool enabled = isValidSetDayBetweenTables(topIndex, bottomIndex);
-
-            // Флаг говорит о том, что сначала был клик по ячейке таблицы сверху,
-            // потом снизу
-            bool isLineDays2SchedulerClick = lastClickTable == lineDaysTable.viewport() && currClickTable == schedulerTable.viewport();
-
-            // Флаг говорит о том, что два клика по ячейкам были у таблицы расписания
-            bool isScheduler2SchedulerClick = lastClickTable == schedulerTable.viewport() && currClickTable == schedulerTable.viewport();
-            lastClickIndexScheduleTable = currClickIndexScheduleTable;
-            currClickIndexScheduleTable = schedulerTable.currentIndex();
-
-            if (isLineDays2SchedulerClick && enabled) {
-                // Получаем пару значений выбранной ячейки таблицы сверху
-                auto days = lineDaysTable.model.get(topIndex);
-
-                // Проверяем выбранные стороны и что в них есть значения
-                bool enabledLeft = lineDaysTable.delegate.selectedSide == Side::Left && days.first != DayKind::NONE;
-                bool enabledRight = lineDaysTable.delegate.selectedSide == Side::Right && days.second != DayKind::NONE;
-
-                if (enabledLeft) {
-                    // Убираем значение, которое забрали
-                    lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
-
-                    auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-                    if (bottomCellDay != DayKind::NONE) {
-                        // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-                        // TODO:
-                        // По дню получаем его строку в таблице выше
-                        int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-                        lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-                    }
-
-                    // Вставляем значение в ячейку таблицы
-                    schedulerTable.model.setDayKind(bottomIndex, days.first);
-
-                    // TODO: дубликат
-                    // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-                    schedulerTable.model.sayViewUpdate();
-                    lineDaysTable.model.sayViewUpdate();
-
-                    // TODO: дублирование
-                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
-                    // при последовательных кликах
-                    lastClickTable = nullptr;
-                    currClickTable = nullptr;
-
-                } else if (enabledRight) {
-                    // Убираем значение, которое забрали
-                    lineDaysTable.model.setRight(topIndex, DayKind::NONE);
-
-                    auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
-                    if (bottomCellDay != DayKind::NONE) {
-                        // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
-                        // TODO:
-                        // По дню получаем его строку в таблице выше
-                        int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
-                        lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
-                    }
-
-                    // Вставляем значение в ячейку таблицы
-                    schedulerTable.model.setDayKind(bottomIndex, days.second);
-
-                    // TODO: дубликат
-                    // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-                    schedulerTable.model.sayViewUpdate();
-                    lineDaysTable.model.sayViewUpdate();
-
-                    // TODO: дублирование
-                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
-                    // при последовательных кликах
-                    lastClickTable = nullptr;
-                    currClickTable = nullptr;
-                }
-
-            } else if (isScheduler2SchedulerClick) {
-                // Выполняем перенос внутри столбца между ячейками
-                if (isValidSetDayWithinScheduleTable(lastClickIndexScheduleTable, currClickIndexScheduleTable)) {
-                    auto day1 = schedulerTable.model.getDayKind(lastClickIndexScheduleTable);
-                    auto day2 = schedulerTable.model.getDayKind(currClickIndexScheduleTable);
-
-                    schedulerTable.model.setDayKind(lastClickIndexScheduleTable, day2);
-                    schedulerTable.model.setDayKind(currClickIndexScheduleTable, day1);
-
-                    // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-                    schedulerTable.model.sayViewUpdate();
-
-                    // TODO: дублирование
-                    // Очищаем, чтобы исключить постоянное перемещение внутри столбца
-                    // при последовательных кликах
-                    lastClickTable = nullptr;
-                    currClickTable = nullptr;
-                }
-            }
-
-            updateStates();
-
-            // Только правый клик по таблице расписания
-        } else if (obj == schedulerTable.viewport() && mouseEvent->button() == Qt::RightButton) {
-            auto bottomIndex = schedulerTable.currentIndex();
-
-            auto day = schedulerTable.model.getDayKind(bottomIndex);
-            if (day == DayKind::NONE) {
+            // Проверяем, что клик произошел в какую-нибудь ячейку
+            if (!lineDaysTable.indexAt(pos).isValid() && !schedulerTable.indexAt(pos).isValid()) {
                 return false;
             }
 
-            // TODO: clear
-            schedulerTable.model.setDayKind(bottomIndex, DayKind::NONE);
+            // TODO: разобраться с дубликатами
+            if (mouseEvent->button() == Qt::LeftButton) {
+                lastClickTable = currClickTable;
+                currClickTable = (QWidget*) obj;
 
-            // TODO:
-            int row = (int) schedulerTable.model.dayKindsLinesMap[day];
-            int column = bottomIndex.column();
+                auto topIndex = lineDaysTable.currentIndex();
+                auto bottomIndex = schedulerTable.currentIndex();
 
-            lineDaysTable.model.setValue(row, column, day);
+                // Проверка возможности вставки значения -- тоже самое используется
+                // для выделения ячеек таблицы расписания
+                bool enabled = isValidSetDayBetweenTables(topIndex, bottomIndex);
 
-            // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
-            schedulerTable.model.sayViewUpdate();
-            lineDaysTable.model.sayViewUpdate();
+                // Флаг говорит о том, что сначала был клик по ячейке таблицы сверху,
+                // потом снизу
+                bool isLineDays2SchedulerClick = lastClickTable == lineDaysTable.viewport() && currClickTable == schedulerTable.viewport();
 
-            updateStates();
+                // Флаг говорит о том, что два клика по ячейкам были у таблицы расписания
+                bool isScheduler2SchedulerClick = lastClickTable == schedulerTable.viewport() && currClickTable == schedulerTable.viewport();
+                lastClickIndexScheduleTable = currClickIndexScheduleTable;
+                currClickIndexScheduleTable = schedulerTable.currentIndex();
+
+                if (isLineDays2SchedulerClick && enabled) {
+                    // Получаем пару значений выбранной ячейки таблицы сверху
+                    auto days = lineDaysTable.model.get(topIndex);
+
+                    // Проверяем выбранные стороны и что в них есть значения
+                    bool enabledLeft = lineDaysTable.delegate.selectedSide == Side::Left && days.first != DayKind::NONE;
+                    bool enabledRight = lineDaysTable.delegate.selectedSide == Side::Right && days.second != DayKind::NONE;
+
+                    if (enabledLeft) {
+                        // Убираем значение, которое забрали
+                        lineDaysTable.model.setLeft(topIndex, DayKind::NONE);
+
+                        auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
+                        if (bottomCellDay != DayKind::NONE) {
+                            // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                            // TODO:
+                            // По дню получаем его строку в таблице выше
+                            int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
+                            lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+                        }
+
+                        // Вставляем значение в ячейку таблицы
+                        schedulerTable.model.setDayKind(bottomIndex, days.first);
+
+                        // TODO: дубликат
+                        // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                        schedulerTable.model.sayViewUpdate();
+                        lineDaysTable.model.sayViewUpdate();
+
+                        // TODO: дублирование
+                        // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                        // при последовательных кликах
+                        lastClickTable = nullptr;
+                        currClickTable = nullptr;
+
+                    } else if (enabledRight) {
+                        // Убираем значение, которое забрали
+                        lineDaysTable.model.setRight(topIndex, DayKind::NONE);
+
+                        auto bottomCellDay = schedulerTable.model.getDayKind(bottomIndex);
+                        if (bottomCellDay != DayKind::NONE) {
+                            // Возврат значения в таблицу выше, которое находилось в ячейке таблице ниже
+                            // TODO:
+                            // По дню получаем его строку в таблице выше
+                            int row = (int) schedulerTable.model.dayKindsLinesMap[bottomCellDay];
+                            lineDaysTable.model.setValue(row, topIndex.column(), bottomCellDay);
+                        }
+
+                        // Вставляем значение в ячейку таблицы
+                        schedulerTable.model.setDayKind(bottomIndex, days.second);
+
+                        // TODO: дубликат
+                        // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                        schedulerTable.model.sayViewUpdate();
+                        lineDaysTable.model.sayViewUpdate();
+
+                        // TODO: дублирование
+                        // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                        // при последовательных кликах
+                        lastClickTable = nullptr;
+                        currClickTable = nullptr;
+                    }
+
+                } else if (isScheduler2SchedulerClick) {
+                    // Выполняем перенос внутри столбца между ячейками
+                    if (isValidSetDayWithinScheduleTable(lastClickIndexScheduleTable, currClickIndexScheduleTable)) {
+                        auto day1 = schedulerTable.model.getDayKind(lastClickIndexScheduleTable);
+                        auto day2 = schedulerTable.model.getDayKind(currClickIndexScheduleTable);
+
+                        schedulerTable.model.setDayKind(lastClickIndexScheduleTable, day2);
+                        schedulerTable.model.setDayKind(currClickIndexScheduleTable, day1);
+
+                        // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                        schedulerTable.model.sayViewUpdate();
+
+                        // TODO: дублирование
+                        // Очищаем, чтобы исключить постоянное перемещение внутри столбца
+                        // при последовательных кликах
+                        lastClickTable = nullptr;
+                        currClickTable = nullptr;
+                    }
+                }
+
+                updateStates();
+
+                // Только правый клик по таблице расписания
+            } else if (obj == schedulerTable.viewport() && mouseEvent->button() == Qt::RightButton) {
+                auto bottomIndex = schedulerTable.currentIndex();
+
+                auto day = schedulerTable.model.getDayKind(bottomIndex);
+                if (day == DayKind::NONE) {
+                    return false;
+                }
+
+                // TODO: clear
+                schedulerTable.model.setDayKind(bottomIndex, DayKind::NONE);
+
+                // TODO:
+                int row = (int) schedulerTable.model.dayKindsLinesMap[day];
+                int column = bottomIndex.column();
+
+                lineDaysTable.model.setValue(row, column, day);
+
+                // TODO: перерисовывать лучше только изменившуюся ячейку, а не всю таблицу
+                schedulerTable.model.sayViewUpdate();
+                lineDaysTable.model.sayViewUpdate();
+
+                updateStates();
+            }
+
+            return false;
         }
 
-        return false;
+    } catch (const std::exception& e) {
+        // Если дать исключению пройти дальше, то это вызовет падение
+        // с ошибкой "Invalid parameter passed to C runtime function.".
+        // Уверен, проблема связанная с Qt.
+        QString text = QString("ERROR: %1.").arg(e.what());
+        QMessageBox::critical(NULL, QString(), text);
+        qCritical() << text;
+        qApp->quit();
     }
 
     return QMainWindow::eventFilter(obj, event);

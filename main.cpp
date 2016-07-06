@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
         return a.exec();
 
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         QString text = QString("ERROR: %1.").arg(e.what());
         QMessageBox::critical(NULL, QString(), text);
         qCritical() << text;
